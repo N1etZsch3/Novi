@@ -39,7 +39,7 @@ public class UserAccountControllerTest {
         request.setNickname("Tester");
 
         // 2. 模拟 POST 请求
-        mockMvc.perform(post("/api/v1/users/register") // 你的 Controller 路径
+        mockMvc.perform(post("/api/v1/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))) // 3. 将 DTO 转为 JSON 作为请求体
                 
@@ -77,7 +77,7 @@ public class UserAccountControllerTest {
                 .content(objectMapper.writeValueAsString(request2)))
 
                 // 期望被 GlobalExceptionHandler 捕获并返回错误
-                .andExpect(status().isOk()) // 假设你的G.E.H.返回200
+                .andExpect(status().isOk()) // 假设G.E.H.返回200
                 .andExpect(jsonPath("$.code").value(0)) // 期望 Result.code == 0
                 .andExpect(jsonPath("$.msg").value("用户名已存在")); // 期望是 Service 抛出的错误信息
     }
