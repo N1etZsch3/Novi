@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Component
@@ -86,7 +85,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
         response.setContentType("application/json;charset=UTF-8");
         
-        // 返回一个符合你 Result 结构的错误信息，但状态码是 401
+        // 返回一个错误信息，状态码是 401
         Result errorResult = Result.error(message);
         
         // 使用 ObjectMapper 将 Result 对象转为 JSON 字符串写入响应

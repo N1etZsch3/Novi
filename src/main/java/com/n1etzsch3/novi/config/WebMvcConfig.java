@@ -23,7 +23,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/v1/users/login", // 登录
                         "/api/v1/users/register",      // 注册
                         "/error"              // Spring Boot 默认错误页
-                        // (你还可以添加 /swagger-ui/**, /v3/api-docs/** 等文档路径)
                 );
     }
 }
