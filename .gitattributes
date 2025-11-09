@@ -1,0 +1,15 @@
+# 将所有文本文件（auto）在提交时转换为 LF
+* text=auto eol=lf
+
+# 明确指定 Java 和 XML/Properties 文件为文本，并使用 LF
+*.java       text eol=lf
+*.xml        text eol=lf
+*.properties text eol=lf
+*.md         text eol=lf
+.gitignore   text eol=lf
+.gitattributes text eol=lf
+
+# 明确指定二进制文件，防止 Git 干扰它们
+*.jar        binary
+*.png        binary
+*.jpg        binary
