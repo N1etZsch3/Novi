@@ -1,9 +1,8 @@
 package com.n1etzsch3.novi.service;
 
-import com.n1etzsch3.novi.pojo.dto.LoginRequest;
-import com.n1etzsch3.novi.pojo.dto.LoginRespond;
-import com.n1etzsch3.novi.pojo.dto.UserProfileDto;
-import com.n1etzsch3.novi.pojo.dto.registrationRequest;
+import com.n1etzsch3.novi.pojo.dto.*;
+
+import java.util.Map;
 
 public interface UserAccountService {
 
@@ -12,5 +11,12 @@ public interface UserAccountService {
     LoginRespond login(LoginRequest loginRequest);
 
 
-    UserProfileDto getUserDetailsByUsername(String username);
+    UserProfileDto getUserDetailsById(Long userId);
+
+    void updateUserProfile(Long userId, UserProfileUpdateRequest updateRequest);
+
+    Map<String, Object> getUserPreferences(Long userId);
+
+    Map<String, Object> updateUserPreferences(Long userId, Map<String, Object> preferences);
+
 }

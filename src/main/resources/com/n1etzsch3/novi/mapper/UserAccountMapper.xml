@@ -17,4 +17,28 @@
         select * from user_account where email = #{email}
     </select>
 
+    <select id="findById" resultType="com.n1etzsch3.novi.pojo.entity.UserAccount">
+        select * from user_account where id = #{id}
+    </select>
+
+    <select id="findPreferencesById" resultType="java.util.Map">
+        select user_account.preferences from user_account where id = #{userId}
+    </select>
+
+    <update id="updateUser">
+        update user_account
+        set nickname = #{nickname},
+            email = #{email},
+            updated_at = #{updatedAt}
+        where id = #{id}
+    </update>
+
+    <update id="updatePreferences">
+        update user_account
+        set preferences  = #{preferences, jdbcType=JSON},
+            updated_at = NOW()
+        where id = #{userId}
+    </update>
+
+
 </mapper>

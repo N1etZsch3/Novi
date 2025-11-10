@@ -2,10 +2,7 @@ package com.n1etzsch3.novi.service.impl;
 
 import com.n1etzsch3.novi.exception.BusinessException;
 import com.n1etzsch3.novi.mapper.UserAccountMapper;
-import com.n1etzsch3.novi.pojo.dto.LoginRequest;
-import com.n1etzsch3.novi.pojo.dto.LoginRespond;
-import com.n1etzsch3.novi.pojo.dto.UserProfileDto;
-import com.n1etzsch3.novi.pojo.dto.registrationRequest;
+import com.n1etzsch3.novi.pojo.dto.*;
 import com.n1etzsch3.novi.pojo.entity.UserAccount;
 import com.n1etzsch3.novi.service.UserAccountService;
 import com.n1etzsch3.novi.utils.JwtUtils;
@@ -15,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -55,6 +54,8 @@ public class UserAccountServiceImpl implements UserAccountService {
         userAccount.setHashedPassword(passwordEncoder.encode(registrationRequest.getPassword()));
         userAccount.setNickname(registrationRequest.getNickname());
         userAccount.setEmail(registrationRequest.getEmail());
+        userAccount.setCreatedAt(LocalDateTime.now());
+        userAccount.setUpdatedAt(LocalDateTime.now());
 
         userAccountMapper.addUser(userAccount);
 
@@ -92,14 +93,16 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     /**
-     * 根据用户名获取用户详情
-     * @param username 用户名
+     * 根据用户ID获取用户详情
+     * @param userId 用户ID
      * @return 用户资料DTO
      */
     @Override
-    public UserProfileDto getUserDetailsByUsername(String username) {
-        UserAccount userAccount = userAccountMapper.findByUsername(username);
+    public UserProfileDto getUserDetailsById(Long userId) {
+        // 使用 findById
+        UserAccount userAccount = userAccountMapper.findById(userId);
         if (userAccount == null) {
+            // 这种情况理论上不应发生，因为Token是有效的
             throw new BusinessException("用户不存在");
         }
 
@@ -111,7 +114,64 @@ public class UserAccountServiceImpl implements UserAccountService {
         userProfileDto.setCreatedAt(userAccount.getCreatedAt());
         userProfileDto.setUpdatedAt(userAccount.getUpdatedAt());
 
-        log.info("获取用户详情: {}", username);
+        log.info("获取用户详情: {}", userAccount.getUsername());
         return userProfileDto;
+    }
+
+    /**
+     * 更新用户资料
+     * @param userId 用户ID
+     * @param updateRequest 更新请求
+     */
+    @Override
+    public void updateUserProfile(Long userId, UserProfileUpdateRequest updateRequest) {
+        // 1.通过id查找用户
+        UserAccount userAccount = userAccountMapper.findById(userId);
+        if (updateRequest.getNickname() == null) {
+            throw new BusinessException("用户不存在");
+        }
+
+        // 2.更新用户资料
+        userAccount.setNickname(updateRequest.getNickname());
+        userAccount.setEmail(updateRequest.getEmail());
+        userAccount.setUpdatedAt(LocalDateTime.now());
+
+        // 3.保存更新
+        userAccountMapper.updateUser(userAccount);
+
+    }
+
+    /**
+     * 获取用户偏好
+     */
+    @Override
+    public Map<String, Object> getUserPreferences(Long userId) {
+        Map<String, Object> preferences = userAccountMapper.findPreferencesById(userId);
+
+        // 如果用户从未设置过偏好，数据库可能返回 null
+        if (preferences == null) {
+            log.info("用户 {} 尚无偏好设置，返回空Map", userId);
+            return Collections.emptyMap(); // 返回一个空Map，而不是 null
+        }
+
+        log.info("成功获取用户 {} 的偏好设置", userId);
+        return preferences;
+    }
+
+    /**
+     * 更新用户偏好
+     */
+    @Override
+    public Map<String, Object> updateUserPreferences(Long userId, Map<String, Object> preferences) {
+        if (preferences == null) {
+            // 防止客户端发送 null，导致 JSON 字段被清空
+            throw new BusinessException("偏好设置不能为空");
+        }
+
+        userAccountMapper.updatePreferences(userId, preferences);
+        log.info("成功更新用户 {} 的偏好设置", userId);
+
+        // 按照API文档，返回更新后的偏好
+        return preferences;
     }
 }

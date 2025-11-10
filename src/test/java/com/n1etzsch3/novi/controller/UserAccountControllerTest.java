@@ -2,6 +2,7 @@ package com.n1etzsch3.novi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n1etzsch3.novi.pojo.dto.LoginRequest;
+import com.n1etzsch3.novi.pojo.dto.Result;
 import com.n1etzsch3.novi.pojo.dto.registrationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
 @SpringBootTest // 1. 这是一个完整的 Spring Boot 测试
@@ -170,5 +176,161 @@ public class UserAccountControllerTest {
                 .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.msg").value("用户名或密码错误"));
     }
+
+    /**
+     * 测试获取当前用户资料 (需要鉴权)
+     */
+    @Test
+    public void testGetCurrentUserProfileSuccess() throws Exception {
+        // --- 1. 注册一个新用户 ---
+        registrationRequest request = new registrationRequest();
+        request.setUsername("profile_user");
+        request.setPassword("ProfilePass123!");
+        request.setEmail("profile@example.com");
+        request.setNickname("ProfileTester");
+
+        mockMvc.perform(post("/api/v1/users/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1));
+
+        // --- 2. 登录该用户以获取 Token ---
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("profile_user");
+        loginRequest.setPassword("ProfilePass123!");
+
+        String responseString = mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.data.token").exists())
+                .andReturn().getResponse().getContentAsString();
+
+        // 2.1 解析响应，获取 Token
+        // (注意：这里我们假设你已经创建了 LoginRespond.java)
+        Result result = objectMapper.readValue(responseString, Result.class);
+        // ObjectMapper 会将 data 转为 LinkedHashMap，我们需要手动转一下
+        String token = (String) ((java.util.LinkedHashMap) result.getData()).get("token");
+
+
+        // --- 3. 携带 Token 访问 /me 接口 ---
+        mockMvc.perform(get("/api/v1/users/me") // 使用 GET
+                        .header("Authorization", "Bearer " + token)) // 必须携带 Token
+
+                // --- 4. 验证响应 ---
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.data.username").value("profile_user"))
+                .andExpect(jsonPath("$.data.email").value("profile@example.com"))
+                .andExpect(jsonPath("$.data.nickname").value("ProfileTester"))
+                .andExpect(jsonPath("$.data.id").exists())
+                .andExpect(jsonPath("$.data.createdAt").exists());
+    }
+
+    /**
+     * 测试未携带 Token 访问受保护接口
+     */
+    @Test
+    public void testGetCurrentUserProfileFailsNoToken() throws Exception {
+        mockMvc.perform(get("/api/v1/users/me")) // 不带 Header
+                // 期望 401 Unauthorized (由 JwtAuthInterceptor 返回)
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.msg").value("INVALID_TOKEN"));
+    }
+
+    /**
+     * 辅助方法：注册并登录一个用户，返回 Token
+     */
+    private String getAuthTokenForTest(String username, String password) throws Exception {
+        // 1. 注册
+        registrationRequest request = new registrationRequest();
+        request.setUsername(username);
+        request.setPassword(password);
+        request.setEmail(username + "@example.com");
+        request.setNickname("Test " + username);
+
+        mockMvc.perform(post("/api/v1/users/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        // 2. 登录
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername(username);
+        loginRequest.setPassword(password);
+
+        String responseString = mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        // 3. 解析 Token
+        // (注意: Result.data 会被 Jackson 解析为 LinkedHashMap)
+        Map<String, Object> data = (Map<String, Object>) objectMapper.readValue(responseString, Result.class).getData();
+        return (String) data.get("token");
+    }
+
+    /**
+     * 测试：成功更新和获取用户偏好
+     */
+    @Test
+    public void testUpdateAndGetPreferencesSuccess() throws Exception {
+        // 1. 获取一个有效 Token
+        String token = getAuthTokenForTest("pref_user", "PrefPass123!");
+
+        // 2. 检查初始偏好 (应为空)
+        mockMvc.perform(get("/api/v1/users/me/preferences")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.data").isEmpty()); // 期望是一个空Map {}
+
+        // 3. 准备新的偏好数据
+        Map<String, Object> newPreferences = new HashMap<>();
+        newPreferences.put("personality", "witty");
+        newPreferences.put("voice", "female_A");
+        newPreferences.put("response_length", "concise");
+
+        // 4. 发送 PUT 请求更新偏好
+        mockMvc.perform(put("/api/v1/users/me/preferences") // 使用 PUT
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newPreferences)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.data.personality").value("witty"));
+
+        // 5. 再次 GET 请求，验证数据是否已持久化
+        mockMvc.perform(get("/api/v1/users/me/preferences")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.data.personality").value("witty"))
+                .andExpect(jsonPath("$.data.voice").value("female_A"));
+    }
+
+    /**
+     * 测试：未授权访问偏好接口
+     */
+    @Test
+    public void testPreferencesEndpointsFailNoToken() throws Exception {
+        // 1. 测试 GET
+        mockMvc.perform(get("/api/v1/users/me/preferences"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.msg").value("INVALID_TOKEN"));
+
+        // 2. 测试 PUT
+        Map<String, Object> prefs = Map.of("personality", "witty");
+        mockMvc.perform(put("/api/v1/users/me/preferences")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(prefs)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.msg").value("INVALID_TOKEN"));
+    }
+
 
 }
