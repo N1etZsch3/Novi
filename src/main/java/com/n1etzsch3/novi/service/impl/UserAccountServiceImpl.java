@@ -1,5 +1,7 @@
 package com.n1etzsch3.novi.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n1etzsch3.novi.exception.BusinessException;
 import com.n1etzsch3.novi.mapper.UserAccountMapper;
 import com.n1etzsch3.novi.pojo.dto.*;
@@ -28,6 +30,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * 用户注册
@@ -185,14 +190,22 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public Map<String, Object> updateUserPreferences(Long userId, Map<String, Object> preferences) {
         if (preferences == null) {
-            // 防止客户端发送 null，导致 JSON 字段被清空
             throw new BusinessException("偏好设置不能为空");
         }
 
-        userAccountMapper.updatePreferences(userId, preferences);
-        log.info("成功更新用户 {} 的偏好设置", userId);
+        try {
+            // 4. 在 Service 层手动序列化为 JSON 字符串
+            String preferencesString = objectMapper.writeValueAsString(preferences);
 
-        // 按照API文档，返回更新后的偏好
-        return preferences;
-    }
-}
+            // 5. 将序列化后的字符串传递给 Mapper
+            userAccountMapper.updatePreferences(userId, preferencesString);
+
+            log.info("成功更新用户 {} 的偏好设置", userId);
+            return preferences;
+
+        } catch (JsonProcessingException e) {
+            // 6. 如果序列化失败，抛出业务异常
+            log.error("JSON 序列化偏好设置失败: {}", e.getMessage());
+            throw new BusinessException("偏好设置格式无效");
+        }
+    }}

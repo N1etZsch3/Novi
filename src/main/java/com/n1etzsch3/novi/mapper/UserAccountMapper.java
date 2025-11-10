@@ -44,6 +44,5 @@ public interface UserAccountMapper {
     /**
      * 更新用户偏好设置
      */
-    void updatePreferences(@Param("userId") Long userId, @Param("preferences") Map<String, Object> preferences);
-
+    void updatePreferences(@Param("userId") Long userId, @Param("preferences") String preferences);
 }
