@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n1etzsch3.novi.pojo.dto.LoginRequest;
 import com.n1etzsch3.novi.pojo.dto.Result;
 import com.n1etzsch3.novi.pojo.dto.UserProfileUpdateRequest;
-import com.n1etzsch3.novi.pojo.dto.registrationRequest;
+import com.n1etzsch3.novi.pojo.dto.RegistrationRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ public class UserAccountControllerTest {
     // --- 辅助方法：用于注册和登录 ---
     private String registerAndLogin(String user, String pass, String email, String nickname) throws Exception {
         // 1. 注册
-        registrationRequest regRequest = new registrationRequest();
+        RegistrationRequest regRequest = new RegistrationRequest();
         regRequest.setUsername(user);
         regRequest.setPassword(pass);
         regRequest.setEmail(email);
@@ -78,7 +78,7 @@ public class UserAccountControllerTest {
         @Test
         @DisplayName("成功注册")
         public void testRegisterSuccess() throws Exception {
-            registrationRequest request = new registrationRequest();
+            RegistrationRequest request = new RegistrationRequest();
             request.setUsername("test_user_01");
             request.setPassword("ValidPass123!");
             request.setEmail("test01@example.com");
@@ -99,7 +99,7 @@ public class UserAccountControllerTest {
             registerAndLogin("duplicate_user", "ValidPass123!", "duplicate@example.com", "Dup");
 
             // 第二次注册 (失败)
-            registrationRequest request2 = new registrationRequest();
+            RegistrationRequest request2 = new RegistrationRequest();
             request2.setUsername("duplicate_user"); // 相同的用户名
             request2.setPassword("AnotherPass123!");
             request2.setEmail("another@example.com");
@@ -119,7 +119,7 @@ public class UserAccountControllerTest {
             registerAndLogin("user1", "ValidPass123!", "email_conflict@example.com", "User1");
 
             // 第二次注册 (失败)
-            registrationRequest request2 = new registrationRequest();
+            RegistrationRequest request2 = new RegistrationRequest();
             request2.setUsername("user2");
             request2.setPassword("AnotherPass123!");
             request2.setEmail("email_conflict@example.com"); // 相同的邮箱
@@ -135,7 +135,7 @@ public class UserAccountControllerTest {
         @Test
         @DisplayName("失败：输入校验 - 密码过弱")
         public void testRegisterFailsWeakPassword() throws Exception {
-            registrationRequest request = new registrationRequest();
+            RegistrationRequest request = new RegistrationRequest();
             request.setUsername("weak_pass_user");
             request.setPassword("12345678"); // 密码过弱
             request.setEmail("weak@example.com");
@@ -151,7 +151,7 @@ public class UserAccountControllerTest {
         @Test
         @DisplayName("失败：输入校验 - 邮箱格式错误")
         public void testRegisterFailsInvalidEmail() throws Exception {
-            registrationRequest request = new registrationRequest();
+            RegistrationRequest request = new RegistrationRequest();
             request.setUsername("invalid_email_user");
             request.setPassword("ValidPass123!");
             request.setEmail("not-an-email"); // 格式错误

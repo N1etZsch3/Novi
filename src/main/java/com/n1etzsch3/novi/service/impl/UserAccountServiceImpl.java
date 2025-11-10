@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -39,7 +40,7 @@ public class UserAccountServiceImpl implements UserAccountService {
      * @param registrationRequest 用户注册请求
      */
     @Override
-    public void registerUser(registrationRequest registrationRequest) {
+    public void registerUser(RegistrationRequest registrationRequest) {
 
         // 1.检查用户名是否存在
         UserAccount existingUser = userAccountMapper.findByUsername(registrationRequest.getUsername());
@@ -171,17 +172,30 @@ public class UserAccountServiceImpl implements UserAccountService {
             throw new BusinessException("用户不存在");
         }
 
-        // 3. 从实体中获取 preferences
-        Map<String, Object> preferences = userAccount.getPreferences();
+        // 3. 从实体中获取 preferences (现在是 JSON 字符串)
+        String preferencesString = userAccount.getPreferences();
 
-        // 4. 如果用户从未设置过偏好，数据库可能返回 null
-        if (preferences == null) {
+        // 4. 如果字符串为空或null，返回空Map
+        if (!StringUtils.hasText(preferencesString)) {
             log.info("用户 {} 尚无偏好设置，返回空Map", userId);
-            return Collections.emptyMap(); // 返回一个空Map，而不是 null
+            return Collections.emptyMap();
         }
 
-        log.info("成功获取用户 {} 的偏好设置", userId);
-        return preferences;
+        // 5. 【新增】手动反序列化 JSON 字符串为 Map
+        try {
+            Map<String, Object> preferencesMap = objectMapper.readValue(
+                    preferencesString,
+                    new TypeReference<Map<String, Object>>() {}
+            );
+
+            log.info("成功获取并反序列化用户 {} 的偏好设置", userId);
+            return preferencesMap;
+
+        } catch (JsonProcessingException e) {
+            log.error("JSON 反序列化用户偏好设置失败: {}", e.getMessage());
+            // 即使反序列化失败，也应返回空Map而不是抛出异常
+            return Collections.emptyMap();
+        }
     }
 
     /**
@@ -197,7 +211,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             // 4. 在 Service 层手动序列化为 JSON 字符串
             String preferencesString = objectMapper.writeValueAsString(preferences);
 
-            // 5. 将序列化后的字符串传递给 Mapper
+            // 5. 将序列化后的字符串传递给 Mapper (这部分代码无需更改)
             userAccountMapper.updatePreferences(userId, preferencesString);
 
             log.info("成功更新用户 {} 的偏好设置", userId);
@@ -208,4 +222,6 @@ public class UserAccountServiceImpl implements UserAccountService {
             log.error("JSON 序列化偏好设置失败: {}", e.getMessage());
             throw new BusinessException("偏好设置格式无效");
         }
-    }}
+    }
+
+}

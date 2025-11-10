@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class registrationRequest {
+public class RegistrationRequest {
 
     @NotBlank(message = "用户名不能为空")
     @Size(min = 4, max = 20, message = "用户名长度必须在4到20之间")

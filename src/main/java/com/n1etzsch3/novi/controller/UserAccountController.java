@@ -27,7 +27,7 @@ public class UserAccountController {
      * @param registrationRequest 注册请求体
      */
     @PostMapping("/register") // 路径现在是 /api/v1/users/register
-    public Result register(@Validated @RequestBody registrationRequest registrationRequest) {
+    public Result register(@Validated @RequestBody RegistrationRequest registrationRequest) {
 
         userAccountService.registerUser(registrationRequest);
 

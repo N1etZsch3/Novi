@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface UserAccountService {
 
-    void registerUser(registrationRequest registrationRequest);
+    void registerUser(RegistrationRequest registrationRequest);
 
     LoginRespond login(LoginRequest loginRequest);
 

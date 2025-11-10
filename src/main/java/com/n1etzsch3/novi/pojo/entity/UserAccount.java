@@ -42,13 +42,8 @@ public class UserAccount {
     @Column(unique = true, length = 100)
     private String email;
 
-    /**
-     * 存储用户偏好, 例如: {"personality": "witty", "voice": "female_A"}
-     * 使用 Hibernate 6+ 的原生JSON支持
-     */
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")
-    private Map<String, Object> preferences = new HashMap<>();
+    private String preferences;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
