@@ -1,6 +1,7 @@
 package com.n1etzsch3.novi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.n1etzsch3.novi.pojo.dto.LoginRequest;
 import com.n1etzsch3.novi.pojo.dto.registrationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class UserAccountControllerTest {
         mockMvc.perform(post("/api/v1/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))) // 3. 将 DTO 转为 JSON 作为请求体
-                
+
                 // 4. 验证响应
                 .andExpect(status().isOk()) // 期望 HTTP 状态码 200
                 .andExpect(jsonPath("$.code").value(1)) // 期望 Result.code == 1
@@ -59,7 +60,7 @@ public class UserAccountControllerTest {
         request1.setUsername("duplicate_user");
         request1.setPassword("Password123!");
         request1.setEmail("duplicate@example.com");
-        
+
         mockMvc.perform(post("/api/v1/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request1)))
@@ -81,4 +82,93 @@ public class UserAccountControllerTest {
                 .andExpect(jsonPath("$.code").value(0)) // 期望 Result.code == 0
                 .andExpect(jsonPath("$.msg").value("用户名已存在")); // 期望是 Service 抛出的错误信息
     }
+
+    /**
+     * 辅助方法：注册一个用于登录测试的用户
+     */
+    private void registerUserForLoginTest() throws Exception {
+        registrationRequest request = new registrationRequest();
+        request.setUsername("login_user");
+        request.setPassword("LoginPass123!");
+        request.setEmail("login@example.com");
+
+        mockMvc.perform(post("/api/v1/users/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1));
+    }
+
+    /**
+     * 测试成功登录
+     */
+    @Test
+    public void testLoginSuccess() throws Exception {
+        // 1. 先注册一个用户
+        registerUserForLoginTest();
+
+        // 2. 准备登录请求
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("login_user");
+        loginRequest.setPassword("LoginPass123!");
+
+        // 3. 模拟登录
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+
+                // 4. 验证响应
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.data.userId").exists()) // 检查 userId 是否存在
+                .andExpect(jsonPath("$.data.token").exists()); // 检查 token 是否存在
+    }
+
+    /**
+     * 测试密码错误
+     */
+    @Test
+    public void testLoginFailsWrongPassword() throws Exception {
+        // 1. 先注册一个用户
+        registerUserForLoginTest();
+
+        // 2. 准备登录请求 (密码错误)
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("login_user");
+        loginRequest.setPassword("WrongPassword!"); // 错误的密码
+
+        // 3. 模拟登录
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+
+                // 4. 验证业务异常
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.msg").value("用户名或密码错误"));
+    }
+
+    /**
+     * 测试用户不存在
+     */
+    @Test
+    public void testLoginFailsUserNotFound() throws Exception {
+        // (不需要注册用户)
+
+        // 1. 准备登录请求 (用户不存在)
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("non_existing_user");
+        loginRequest.setPassword("AnyPassword");
+
+        // 2. 模拟登录
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+
+                // 3. 验证业务异常
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.msg").value("用户名或密码错误"));
+    }
+
 }

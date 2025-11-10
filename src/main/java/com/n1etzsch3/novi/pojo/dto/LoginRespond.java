@@ -5,15 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class registrationRequest {
-
-    private String username;
-    private String nickname;
-    private String password;
-    private String email;
-
+@AllArgsConstructor
+public class LoginRespond {
+    private String token;
+    private Integer userId;
 }
