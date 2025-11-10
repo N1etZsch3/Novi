@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -125,20 +126,31 @@ public class UserAccountServiceImpl implements UserAccountService {
      */
     @Override
     public void updateUserProfile(Long userId, UserProfileUpdateRequest updateRequest) {
-        // 1.通过id查找用户
+        // 1. 通过id查找用户
         UserAccount userAccount = userAccountMapper.findById(userId);
-        if (updateRequest.getNickname() == null) {
+        if (userAccount == null) {
             throw new BusinessException("用户不存在");
         }
 
-        // 2.更新用户资料
+        // 2. 检查Email冲突
+        // 只有当Email被修改 且 与原Email不同时，才检查冲突
+        if (StringUtils.hasText(updateRequest.getEmail()) && !updateRequest.getEmail().equals(userAccount.getEmail())) {
+            UserAccount emailConflict = userAccountMapper.findByEmailAndNotId(updateRequest.getEmail(), userId);
+            if (emailConflict != null) {
+                throw new BusinessException("该邮箱已被其他用户注册");
+            }
+            userAccount.setEmail(updateRequest.getEmail());
+        }
+
+        // 3. 更新昵称
         userAccount.setNickname(updateRequest.getNickname());
-        userAccount.setEmail(updateRequest.getEmail());
+
+        // 4. 更新时间戳
         userAccount.setUpdatedAt(LocalDateTime.now());
 
-        // 3.保存更新
+        // 5. 保存更新
         userAccountMapper.updateUser(userAccount);
-
+        log.info("用户资料更新成功: {}", userAccount.getUsername());
     }
 
     /**
@@ -146,9 +158,18 @@ public class UserAccountServiceImpl implements UserAccountService {
      */
     @Override
     public Map<String, Object> getUserPreferences(Long userId) {
-        Map<String, Object> preferences = userAccountMapper.findPreferencesById(userId);
+        // 1. 使用 findById 获取完整的用户对象
+        UserAccount userAccount = userAccountMapper.findById(userId);
 
-        // 如果用户从未设置过偏好，数据库可能返回 null
+        // 2. 检查用户是否存在
+        if (userAccount == null) {
+            throw new BusinessException("用户不存在");
+        }
+
+        // 3. 从实体中获取 preferences
+        Map<String, Object> preferences = userAccount.getPreferences();
+
+        // 4. 如果用户从未设置过偏好，数据库可能返回 null
         if (preferences == null) {
             log.info("用户 {} 尚无偏好设置，返回空Map", userId);
             return Collections.emptyMap(); // 返回一个空Map，而不是 null

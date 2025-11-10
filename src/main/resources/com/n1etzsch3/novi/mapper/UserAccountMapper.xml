@@ -21,8 +21,8 @@
         select * from user_account where id = #{id}
     </select>
 
-    <select id="findPreferencesById" resultType="java.util.Map">
-        select user_account.preferences from user_account where id = #{userId}
+    <select id="findByEmailAndNotId" resultType="com.n1etzsch3.novi.pojo.entity.UserAccount">
+        select * from user_account where email = #{email} and id != #{id}
     </select>
 
     <update id="updateUser">
@@ -35,7 +35,7 @@
 
     <update id="updatePreferences">
         update user_account
-        set preferences  = #{preferences, jdbcType=JSON},
+        set preferences  = #{preferences},
             updated_at = NOW()
         where id = #{userId}
     </update>

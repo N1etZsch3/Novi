@@ -6,7 +6,7 @@ spring:
   application:
     name: Novi
   datasource:
-    url: jdbc:mysql://49.235.238.143:3306/novi
+    url: jdbc:mysql://49.235.238.143:3306/novi?useUnicode=true&characterEncoding=UTF-8
     username: Novi-Admin
     password: Novi-Admin-PassWord!
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -7,6 +7,7 @@ import com.n1etzsch3.novi.utils.JwtUtils;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -21,15 +22,12 @@ public class UserAccountController {
     @Autowired
     UserAccountService userAccountService;
 
-    @Autowired
-    JwtUtils jwtUtils;
-
     /**
      * 用户注册
      * @param registrationRequest 注册请求体
      */
     @PostMapping("/register") // 路径现在是 /api/v1/users/register
-    public Result register(@RequestBody registrationRequest registrationRequest) {
+    public Result register(@Validated @RequestBody registrationRequest registrationRequest) {
 
         userAccountService.registerUser(registrationRequest);
 
@@ -42,7 +40,7 @@ public class UserAccountController {
      * @param loginRequest 登录请求体
      */
     @PostMapping("/login") // 路径现在是 /api/v1/users/login
-    public Result login(@RequestBody LoginRequest loginRequest) {
+    public Result login(@Validated @RequestBody LoginRequest loginRequest) {
         LoginRespond loginRespond = userAccountService.login(loginRequest);
 
         log.info("用户登录成功");
@@ -51,35 +49,27 @@ public class UserAccountController {
 
     /**
      * 获取当前用户资料
-     * @param authorizationHeader 鉴权
      */
     @GetMapping("/me")  // 路径现在是 /api/v1/users/me
-    public Result getCurrentUser(@RequestHeader("Authorization") String authorizationHeader) {
+    public Result getCurrentUser() {
         Long userId = LoginUserContext.getUserId();
-        if (userId == null) {
-            throw new BusinessException("无法获取用户信息，请重新登录");
-        }
 
         UserProfileDto userProfileDto = userAccountService.getUserDetailsById(userId);
-
         log.info("获取当前用户资料成功: {}", userProfileDto.getUsername());
         return Result.success(userProfileDto);
     }
 
     /**
      * 更新当前用户资料
-     * @param authorizationHeader 鉴权
      */
     @PutMapping("/me")  // 路径现在是 /api/v1/users/me
-    public Result updateCurrentUser(@RequestHeader("Authorization") String authorizationHeader,
-                                    @RequestBody UserProfileUpdateRequest updateRequest) {
+    public Result updateCurrentUser(@Validated @RequestBody UserProfileUpdateRequest updateRequest) { // 添加 @Validated
         Long userId = LoginUserContext.getUserId();
-        if (userId == null) {
-            throw new BusinessException("无法获取用户信息，请重新登录");
-        }
 
         userAccountService.updateUserProfile(userId, updateRequest);
         log.info("更新当前用户资料成功: {}", userId);
+
+        // 按照文档，返回更新后的完整用户信息
         return Result.success(userAccountService.getUserDetailsById(userId));
     }
 

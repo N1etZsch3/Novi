@@ -32,14 +32,14 @@ public interface UserAccountMapper {
     UserAccount findById(Long id);
 
     /**
+     * 查找邮箱，但排除指定的用户ID (用于更新资料时检查冲突)
+     */
+    UserAccount findByEmailAndNotId(@Param("email") String email, @Param("id") Long id);
+
+    /**
      * 更新用户信息
      */
     void updateUser(UserAccount userAccount);
-
-    /**
-     * 根据用户ID查询偏好设置
-     */
-    Map<String, Object> findPreferencesById(Long userId);
 
     /**
      * 更新用户偏好设置

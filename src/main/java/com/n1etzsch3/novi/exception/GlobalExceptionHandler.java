@@ -2,17 +2,22 @@ package com.n1etzsch3.novi.exception;
 
 import com.n1etzsch3.novi.pojo.dto.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
-     * 1. 捕获自定义的【业务异常】(例如 "用户名已存在")
-     * 这是我们期望的、由用户操作不当引起的异常
+     * 捕获自定义的【业务异常】(例如 "用户名已存在")
+     * 这是期望的、由用户操作不当引起的异常
      */
     @ExceptionHandler(BusinessException.class)
     public Result handleBusinessException(BusinessException e) {
@@ -23,8 +28,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 2. 捕获【数据库冲突异常】
-     * 这是一个"兜底"，以防我们 Service 层的检查(if) 遗漏了某个唯一键
+     * 2捕获【数据库冲突异常】
+     * 这是一个"兜底"，以防 Service 层的检查(if) 遗漏了某个唯一键
      */
     @ExceptionHandler(DuplicateKeyException.class)
     public Result handleDuplicateKeyException(DuplicateKeyException e) {
@@ -34,7 +39,24 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 3. 捕获所有【未知的服务器异常】(例如 NullPointerException)
+     * 新增：捕获 @Validated 校验失败的异常
+     * 这会在 DTO 校验失败时触发
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result handleValidationExceptions(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+
+        // 将所有错误信息收集成一个字符串
+        String errorMessage = bindingResult.getFieldErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining("; "));
+
+        log.warn("参数校验失败: {}", errorMessage);
+        return Result.error(errorMessage);
+    }
+
+    /**
+     * 捕获所有【未知的服务器异常】(例如 NullPointerException)
      */
     @ExceptionHandler(Exception.class)
     public Result handleAllExceptions(Exception e) {
