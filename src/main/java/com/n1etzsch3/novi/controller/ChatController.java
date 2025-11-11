@@ -6,6 +6,7 @@ import com.n1etzsch3.novi.pojo.dto.Result;
 import com.n1etzsch3.novi.service.ChatService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,8 @@ public class ChatController {
 
     @Autowired
     private ChatService chatService;
+    @Autowired
+    private ChatClient chatClient;
 
     /**
      * 发送消息 (核心聊天接口)
@@ -38,6 +41,14 @@ public class ChatController {
 
         // 返回响应
         return Result.success(response);
+    }
+
+    @GetMapping("/test")
+    public Result testEndpoint(@RequestParam String message) {
+        return Result.success(chatClient.prompt()
+                .user(message)
+                .call()
+                .content());
     }
 
 }

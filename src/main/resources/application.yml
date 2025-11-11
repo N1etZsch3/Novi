@@ -10,6 +10,16 @@ spring:
     username: Novi-Admin
     password: Novi-Admin-PassWord!
     driver-class-name: com.mysql.cj.jdbc.Driver
+  #配置SpringAI
+  ai:
+    openai:
+      api-key: sk-ce75de2a5c9b45ff9412b0397b877c32
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      chat:
+        options:
+          model: qwen3-max
+
+
 
 mybatis:
   configuration:
@@ -38,6 +48,10 @@ novi:
 logging:
   level:
     org.springframework.jdbc.support.JdbcTransactionManager: DEBUG
+
+
+
+
 
 
 # 配置云对象存储服务
