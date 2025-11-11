@@ -116,12 +116,6 @@
             <artifactId>spring-ai-starter-model-openai</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.openai</groupId>
-            <artifactId>openai-java</artifactId>
-            <version>0.32.0</version>
-        </dependency>
-
     </dependencies>
 
     <dependencyManagement>

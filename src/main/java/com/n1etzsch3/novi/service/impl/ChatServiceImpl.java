@@ -27,6 +27,8 @@ public class ChatServiceImpl implements ChatService {
                 .call()
                 .content();
 
+        log.info("AI 回复用户 {} 在会话 {} 的消息: {}", userId, request.getSessionId(), AIResponse);
+
         return new ChatResponse(AIResponse, request.getSessionId());
     }
 }

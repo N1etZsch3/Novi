@@ -43,12 +43,4 @@ public class ChatController {
         return Result.success(response);
     }
 
-    @GetMapping("/test")
-    public Result testEndpoint(@RequestParam String message) {
-        return Result.success(chatClient.prompt()
-                .user(message)
-                .call()
-                .content());
-    }
-
 }
