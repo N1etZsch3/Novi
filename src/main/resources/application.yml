@@ -26,6 +26,7 @@ spring:
         options:
           model: max-32k
         completions-path: /chat/completions
+        memory:
 
 
 mybatis:

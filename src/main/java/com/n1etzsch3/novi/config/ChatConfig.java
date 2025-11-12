@@ -1,16 +1,37 @@
 package com.n1etzsch3.novi.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor; // <-- 导入
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory; // <-- 导入
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory; // <-- 导入
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ChatConfig {
 
+    /**
+     * 创建 ChatClient bean, 现已配置持久化内存
+     *
+     * @param openAiChatModel 自动配置的 AI 模型
+     * @param noviChatMemoryRepository 自动配置的 JDBC 内存存储库
+     */
     @Bean
-    public ChatClient chatClient(OpenAiChatModel openAiChatModel) {
+    public ChatClient chatClient(OpenAiChatModel openAiChatModel,
+                                 @Qualifier("noviChatMemoryRepository") ChatMemoryRepository noviChatMemoryRepository) { // <-- 注入存储库
+
+        // 1. 使用 JDBC 存储库创建一个 ChatMemory 实例
+        // 我们使用 MessageWindowChatMemory 来保留最近 N 条消息, 例如 20 条
+        ChatMemory chatMemory = MessageWindowChatMemory.builder()
+                // 【修改点】使用您自定义的 Repository
+                .chatMemoryRepository(noviChatMemoryRepository)
+                .maxMessages(20)
+                .build();
+
         return ChatClient.builder(openAiChatModel)
                 .defaultSystem("""
                         你是Novi，一个AI挚友。
@@ -26,7 +47,8 @@ public class ChatConfig {
                             * (示例: 如果[记忆]说“用户喜欢Saindali”，当用户提到这个名字时，你应该表现出你“记得”这件事。)
                         
                         2.  **遵循个性 (关键)：**
-                            你还会收到用户的 [个性偏好] (Personality Preference)（例如：“witty”风趣幽默，“gentle”温柔体贴）。你必须严格遵循这个偏好来调整你回复的语气、风格和措辞。
+                            你还会收到用户的 [个性偏好] (Personality Preference)（例如：“witty”风趣幽
+                        幽默，“gentle”温柔体贴）。你必须严格遵循这个偏好来调整你回复的语气、风格和措辞。
                         
                         3.  **使用昵称：**
                             你会得知用户希望你如何称呼他/她 (用户的 [昵称])。请在对话中像朋友聊天一样自然地使用这个称呼。
@@ -44,7 +66,10 @@ public class ChatConfig {
                         6.  **核心目标：**
                             你的每一次回复都应该加强你作为“挚友”的身份。你的目标是让用户感觉到被倾听、被理解和被记住。""")
                 .defaultAdvisors(
-                        new SimpleLoggerAdvisor()
+                        new SimpleLoggerAdvisor(),
+                        // 2. 添加 MessageChatMemoryAdvisor
+                        // 这个 Advisor 将在每次调用时自动从 ChatMemory (及其 JDBC 存储库) 加载/保存消息
+                        MessageChatMemoryAdvisor.builder(chatMemory).build()
                 )
                 .build();
     }
