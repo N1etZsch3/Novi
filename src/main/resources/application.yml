@@ -6,20 +6,26 @@ spring:
   application:
     name: Novi
   datasource:
-    url: jdbc:mysql://49.235.238.143:3306/novi?useUnicode=true&characterEncoding=UTF-8
-    username: Novi-Admin
-    password: Novi-Admin-PassWord!
+    # 1. 使用环境变量设置完整的 URL
+    url: ${SPRING_DATASOURCE_URL}
+
+    # 2. 使用环境变量设置用户名
+    username: ${SPRING_DATASOURCE_USERNAME}
+
+    # 3. 使用环境变量设置密码
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
     driver-class-name: com.mysql.cj.jdbc.Driver
   ai:
     openai:
-          api-key: bWKFlDkttpuUmyZmtHqw:MhoHyByQfVuYCCuxfIjL
-          base-url: https://spark-api-open.xf-yun.com/v1
-          chat:
-            options:
-              model: lite
-            completions-path: /chat/completions
+      # 4. 使用环境变量设置 API Key
+      api-key: ${SPARK_API_KEY}
 
-
+      base-url: https://spark-api-open.xf-yun.com/v1
+      chat:
+        options:
+          model: max-32k
+        completions-path: /chat/completions
 
 
 mybatis:
