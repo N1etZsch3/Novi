@@ -11,6 +11,7 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Repository
 @AllArgsConstructor
+@Primary
 public class NoviMemoryRepository implements ChatMemoryRepository {
 
     private final ChatMemoryMapper chatMemoryMapper;
