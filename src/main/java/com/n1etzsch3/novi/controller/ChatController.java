@@ -22,8 +22,6 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-
-
     /**
      * 发送消息 (核心聊天接口)
      * 阻塞式调用，等待 AI 回复后返回
