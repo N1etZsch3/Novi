@@ -28,14 +28,23 @@ public class ChatServiceImpl implements ChatService {
     public ChatResponse handleCallMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
 
+        // --- 修复 2a：添加 sessionId 管理 ---
+        final String sessionIdToUse = request.getSessionId() != null
+                ? request.getSessionId()
+                : UUID.randomUUID().toString();
+
+        log.info("AI 回复用户 {} 在会话 {} 的消息 (阻塞式): {}", userId, sessionIdToUse, userMessage);
+
         String AIResponse = chatClient.prompt()
                 .user(userMessage)
+                // --- 修复 2a：将会话 ID 传递给 Advisor ---
+                .advisors(advisorSpec -> advisorSpec
+                        .param(ChatMemory.CONVERSATION_ID, sessionIdToUse))
                 .call()
                 .content();
 
-        log.info("AI 回复用户 {} 在会话 {} 的消息: {}", userId, request.getSessionId(), AIResponse);
-
-        return new ChatResponse(AIResponse, request.getSessionId());
+        // --- 修复 2a：返回正确的（可能是新生成的）sessionId ---
+        return new ChatResponse(AIResponse, sessionIdToUse);
     }
 
     /**
