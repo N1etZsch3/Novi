@@ -1,14 +1,18 @@
 package com.n1etzsch3.novi.repository;
 
+import com.n1etzsch3.novi.mapper.ChatMemoryMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-// @TODO 实现持久化存储
-@Repository("noviChatMemoryRepository") // 将其注册为 Bean
-public class NoviChatMemoryRepository implements ChatMemoryRepository {
+@Repository
+@AllArgsConstructor
+public class NoviMemoryRepository implements ChatMemoryRepository {
+
+    private final ChatMemoryMapper chatMemoryMapper;
 
     @Override
     public List<String> findConversationIds() {

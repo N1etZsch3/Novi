@@ -1,7 +1,6 @@
 package com.n1etzsch3.novi.mapper;
 
 import com.n1etzsch3.novi.pojo.entity.UserAccount;
-import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
