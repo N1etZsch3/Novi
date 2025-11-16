@@ -158,7 +158,7 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
                 .user(user)
                 .sessionId(sessionId)
                 .role(role)
-                .content(textContent) // <-- 已修正
+                .content(textContent)
                 .timestamp(LocalDateTime.now()) // 由 MyBatis 插入
                 .build();
     }
