@@ -1,5 +1,7 @@
 package com.n1etzsch3.novi.config;
 
+import com.n1etzsch3.novi.repository.NoviMemoryRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -12,7 +14,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@AllArgsConstructor
 public class ChatConfig {
+
+    private final NoviMemoryRepository noviMemoryRepository;
 
     /**
      * 创建 ChatClient bean, 现已配置持久化内存
@@ -22,6 +27,7 @@ public class ChatConfig {
     public ChatClient chatClient(OpenAiChatModel openAiChatModel) {
 
         MessageWindowChatMemory messageWindowChatMemory = MessageWindowChatMemory.builder()
+                .chatMemoryRepository(noviMemoryRepository)
                 .build();
 
         MessageChatMemoryAdvisor memoryAdvisor = MessageChatMemoryAdvisor.builder(messageWindowChatMemory)
