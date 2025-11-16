@@ -6,7 +6,6 @@ import com.n1etzsch3.novi.pojo.dto.ChatRequest;
 import com.n1etzsch3.novi.pojo.dto.ChatResponse;
 import com.n1etzsch3.novi.pojo.dto.StreamEvent;
 import com.n1etzsch3.novi.service.ChatService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -23,22 +22,14 @@ import java.util.UUID;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatClient chatClient;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper; // <-- 注入 ObjectMapper
 
     @Override
     public ChatResponse handleCallMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
 
-        final String sessionIdToUse = request.getSessionId() != null
-                ? request.getSessionId()
-                : UUID.randomUUID().toString();
-
-        // 阻塞式调用不需要修改，因为 JwtAuthInterceptor 已经设置了 ThreadLocal，
-        // 并且这个调用链在同一个 T1 线程中执行。
         String AIResponse = chatClient.prompt()
                 .user(userMessage)
-                .advisors(advisorSpec -> advisorSpec
-                        .param(ChatMemory.CONVERSATION_ID, sessionIdToUse))
                 .call()
                 .content();
 
@@ -48,68 +39,51 @@ public class ChatServiceImpl implements ChatService {
     }
 
     /**
-     * 处理流式消息 (已重构)
-     * 1. 移除了手动的 ThreadLocal set/clear (方案B会自动处理)
-     * 2. 增加了 onErrorResume (健壮性修复)
+     * 处理流式消息 (修改后)
+     * * @return 一个 Flux<String>，其中每个 String 都是一个序列化后的 StreamEvent JSON
      */
     @Override
     public Flux<String> handleStreamMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
         log.info("收到用户 {} 在会话 {} 的消息: {}，流式调用", userId, request.getSessionId(), userMessage);
 
+        // --- 1. 会话 ID 管理 ---
+        // 确保有一个 sessionId。如果请求中没有，就创建一个。
         final String sessionIdToUse = request.getSessionId() != null
                 ? request.getSessionId()
                 : UUID.randomUUID().toString();
 
+        // --- 2. 创建元数据事件 ---
+        // 这是将发送的第一个事件，告诉客户端 sessionId。
         StreamEvent metadataEvent = StreamEvent.metadata(sessionIdToUse);
         Flux<StreamEvent> metadataStream = Flux.just(metadataEvent);
 
 
-        // --- 3. 【修改】创建 AI 内容流 (使用 Flux.defer) ---
-        Flux<StreamEvent> contentStream = Flux.defer(() -> {
+        // --- 3. 创建 AI 内容流 ---
+        Flux<StreamEvent> contentStream = chatClient.prompt()
+                .user(userMessage)
+                .advisors(advisorSpec -> advisorSpec
+                        .param(ChatMemory.CONVERSATION_ID, sessionIdToUse))
+                .stream()
+                .content() // 这返回 Flux<String> (AI 的内容块)
+                .map(StreamEvent::content); // 将每个 String 块 转换为 StreamEvent.content(chunk)
 
-            // *** 关键修复 (A) 和 (B) 已移除 ***
-            // LoginUserContext.setUserId(userId); // <-- 已移除，由方案B自动处理
-            // log.info(...) // <-- 已移除
+        log.info(contentStream.toString());
 
-            // chatClient 的调用现在将由 context-propagation "自动装配" ThreadLocal
-            return chatClient.prompt()
-                    .user(userMessage)
-                    .advisors(advisorSpec -> advisorSpec
-                            .param(ChatMemory.CONVERSATION_ID, sessionIdToUse))
-                    .stream()
-                    .content()
-                    .map(StreamEvent::content); // 将每个 String 块 转换为 StreamEvent.content(chunk)
-
-        });
-        // .doFinally(...) // <-- 已移除，由 JwtAuthInterceptor 和 Accessor 自动清理
-
-        // --- 4. 拼接流，序列化，并添加健壮性修复 (onErrorResume) ---
+        // --- 4. 拼接流，并序列化为 JSON 字符串 ---
+        // Flux.concat 确保 metadataStream 首先被发送，然后才是 contentStream
         return Flux.concat(metadataStream, contentStream)
                 .<String>handle((event, sink) -> {
                     try {
+                        // 将 StreamEvent 对象 序列化为 JSON 字符串
                         sink.next(objectMapper.writeValueAsString(event));
                     } catch (JsonProcessingException e) {
+                        // 如果序列化失败，抛出一个运行时异常，这将终止流
                         log.error("序列化 StreamEvent 失败", e);
                         sink.error(new RuntimeException("Stream serialization error", e));
                     }
                 })
-                // --- 【新增】研究报告第四部分：健壮性修复 ---
-                .onErrorResume(e -> {
-                    // 捕获所有上游异常 (包括 NoviMemoryRepository 的 NPE 或 AI 模型的错误)
-                    log.error("流式处理中发生严重错误，用户: {}", userId, e);
-
-                    // 将异常转换为一个 StreamEvent.error 事件
-                    // 这样客户端就不会卡住，而是能收到一个明确的错误提示
-                    StreamEvent errorEvent = StreamEvent.error("服务器在处理您的请求时遇到问题，请稍后再试。");
-                    try {
-                        // 返回包含错误事件的单个Flux，然后正常结束
-                        return Flux.just(objectMapper.writeValueAsString(errorEvent));
-                    } catch (JsonProcessingException jsonEx) {
-                        // 如果连序列化错误事件都失败了，只能返回一个空流
-                        return Flux.empty();
-                    }
-                })
-                .doOnComplete(() -> log.info("用户 {} 的流式响应序列化完成，会话: {}", userId, sessionIdToUse));
+                .doOnError(e -> log.error("流式处理中发生错误，用户: {}", userId, e))
+                .doOnComplete(() -> log.info("用户 {} 的流式响应完成，会话: {}", userId, sessionIdToUse));
     }
 }

@@ -5,6 +5,7 @@ import com.n1etzsch3.novi.pojo.dto.ChatResponse;
 import com.n1etzsch3.novi.pojo.dto.Result;
 import com.n1etzsch3.novi.service.ChatService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
+import com.n1etzsch3.novi.utils.UserIdThreadLocalAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.util.context.Context;
 
 @RequiredArgsConstructor
 @RestController
@@ -61,13 +63,23 @@ public class ChatController {
         Long userId = LoginUserContext.getUserId();
         if (userId == null) {
             // 理论上拦截器会处理，但作为双重检查
-            // 对于流式端点，我们返回一个带有错误信号的 Flux
             log.warn("流式调用失败：INVALID_TOKEN，会话: {}", request.getSessionId());
-            return Flux.error(new RuntimeException("INVALID_TOKEN"));
         }
 
         // 逻辑委派给 Service
-        return chatService.handleStreamMessage(userId, request);
+        Flux<String> stream = chatService.handleStreamMessage(userId, request);
+
+        // --- 3. 【最终修复】 ---
+        // 我们不再使用 .contextCapture()，因为它在 ThreadLocal 被清除后才运行
+        // 我们在 T1 线程 (Servlet 线程) 中，
+        // 立即、显式地将 userId 写入 Flux 的 Context。
+        //
+        // 键名 ("novi.userId") 必须与你的 UserIdThreadLocalAccessor.KEY
+        //
+        // 保持一致。
+        return stream.contextWrite(Context.of(
+                UserIdThreadLocalAccessor.KEY, userId
+        ));
     }
 
 }
