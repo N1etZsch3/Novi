@@ -5,7 +5,6 @@ import com.n1etzsch3.novi.pojo.dto.ChatResponse;
 import com.n1etzsch3.novi.pojo.dto.Result;
 import com.n1etzsch3.novi.service.ChatService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
-import com.n1etzsch3.novi.utils.UserIdThreadLocalAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,9 +76,7 @@ public class ChatController {
         // 键名 ("novi.userId") 必须与你的 UserIdThreadLocalAccessor.KEY
         //
         // 保持一致。
-        return stream.contextWrite(Context.of(
-                UserIdThreadLocalAccessor.KEY, userId
-        ));
+        return stream;
     }
 
 }
