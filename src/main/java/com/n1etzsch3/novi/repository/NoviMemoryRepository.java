@@ -35,6 +35,7 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
     @Override
     public List<String> findConversationIds() {
         Long userId = LoginUserContext.getUserId();
+        log.info(userId.toString());
         if (userId == null) {
             log.warn("NoviMemoryRepository.findConversationIds: 未找到用户ID，返回空列表");
             return Collections.emptyList();
@@ -72,6 +73,7 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
     @Override
     public void saveAll(String conversationId, List<Message> messages) {
         Long userId = LoginUserContext.getUserId();
+        log.info(userId.toString());
         if (userId == null) {
             log.error("NoviMemoryRepository.saveAll: 无法保存消息，未找到用户ID");
             // 在这种情况下，我们不能继续，因为 user_id 是 chat_message 表的 NOT NULL 字段
