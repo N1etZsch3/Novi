@@ -14,4 +14,7 @@ public interface ChatSessionMapper {
 
     int updateLastActiveTime(String finalSessionId);
 
+    int countByUserIdAndSessionId(Long userId, String sessionId);
+
+    void softDeleteSession(String sessionId, Long userId);
 }

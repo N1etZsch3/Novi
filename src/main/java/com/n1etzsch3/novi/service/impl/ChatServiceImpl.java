@@ -37,13 +37,18 @@ public class ChatServiceImpl implements ChatService {
     }
 
     /**
-     * 核心方法：获取或创建会话 (并同步到数据库)
+     * 【内部记录类】用于同时传递 SessionId 和 Title
      */
-    private String getOrCreateSession(Long userId, String requestedSessionId, String messageContent) {
-        // 1. 判断是否是新会话 (使用 StringUtils 以防空字符串)
-        boolean isNewSession = !StringUtils.hasText(requestedSessionId);
+    private record SessionInfo(String sessionId, String title) {}
 
+    /**
+     * 辅助方法：获取或创建会话
+     * 【优化】：返回值从 String 改为 SessionInfo
+     */
+    private SessionInfo getOrCreateSession(Long userId, String requestedSessionId, String messageContent) {
+        boolean isNewSession = !StringUtils.hasText(requestedSessionId);
         String finalSessionId = isNewSession ? UUID.randomUUID().toString() : requestedSessionId;
+        String finalTitle = null; // 用于返回给前端的标题
 
         if (isNewSession) {
             // --- 创建新会话 ---
@@ -52,82 +57,83 @@ public class ChatServiceImpl implements ChatService {
             session.setUserId(userId);
 
             // 生成标题：取前 20 个字
-            // @TODO：调用AI，总结性生成一个标题
-            String title = messageContent != null && messageContent.length() > 20 ?
+            finalTitle = messageContent != null && messageContent.length() > 20 ?
                     messageContent.substring(0, 20) + "..." : messageContent;
-            session.setTitle(title);
+            session.setTitle(finalTitle);
 
             chatSessionMapper.createSession(session);
-            log.info("创建新会话 (DB): {}, 标题: {}", finalSessionId, title);
+            log.info("创建新会话 (DB): {}, 标题: {}", finalSessionId, finalTitle);
         } else {
             // --- 更新旧会话时间 ---
-            // 这里判断 update 的影响行数，如果为0说明前端传的 ID 数据库里没有
             int rows = chatSessionMapper.updateLastActiveTime(finalSessionId);
             if (rows == 0) {
-                // 容错处理：如果数据库没这个 ID，就当作新会话创建
+                // 容错：如果数据库没这个 ID，重建
                 log.warn("会话 {} 在数据库不存在，重新创建", finalSessionId);
+                finalTitle = "恢复的会话";
                 ChatSession session = new ChatSession();
                 session.setId(finalSessionId);
                 session.setUserId(userId);
-                session.setTitle("恢复的会话");
+                session.setTitle(finalTitle);
                 chatSessionMapper.createSession(session);
+            } else {
+                // 旧会话存在，虽然我们没改标题，但为了前端方便，
+                // 这里可以选择去查一下标题返回，或者直接返回 null 让前端保持原样。
+                // 这里简单起见，返回 null，表示标题未变更。
+                finalTitle = null;
             }
         }
 
-        return finalSessionId;
+        return new SessionInfo(finalSessionId, finalTitle);
     }
 
+    // --- 阻塞式调用 ---
     @Override
     public ChatResponse handleCallMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
 
-        // 1. 获取或创建 sessionId (同步数据库)
-        String sessionIdToUse = getOrCreateSession(userId, request.getSessionId(), userMessage);
+        // 1. 获取 SessionInfo (包含 ID 和 Title)
+        SessionInfo sessionInfo = getOrCreateSession(userId, request.getSessionId(), userMessage);
+        String sessionIdToUse = sessionInfo.sessionId();
 
-        // 2. 构建复合键 (userId:sessionId) 用于 AI 上下文
+        // 2. 复合键逻辑
         final String compositeKey = createCompositeKey(userId, sessionIdToUse);
 
-        log.info("阻塞式调用 - 用户: {}, 会话: {}", userId, sessionIdToUse);
-
+        // 3. AI 调用
         String AIResponse = chatClient.prompt()
                 .user(userMessage)
-                .advisors(advisorSpec -> advisorSpec
-                        // 关键：传递复合键，确保 ChatMemory 能解析出 userId
-                        .param(ChatMemory.CONVERSATION_ID, compositeKey))
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, compositeKey))
                 .call()
                 .content();
 
-        return new ChatResponse(AIResponse, sessionIdToUse);
+        // 4. 【关键】返回包含 title 的响应
+        return new ChatResponse(AIResponse, sessionIdToUse, sessionInfo.title());
     }
 
+    // --- 流式调用 ---
     @Override
     public Flux<String> handleStreamMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
 
-        // --- 修正点 1：调用 getOrCreateSession ---
-        // 之前这里直接生成了 UUID，导致没有入库。现在统一逻辑。
-        final String sessionIdToUse = getOrCreateSession(userId, request.getSessionId(), userMessage);
+        // 1. 获取 SessionInfo (包含 ID 和 Title)
+        SessionInfo sessionInfo = getOrCreateSession(userId, request.getSessionId(), userMessage);
+        String sessionIdToUse = sessionInfo.sessionId();
 
-        // --- 修正点 2：构建复合键 ---
+        // 2. 复合键逻辑
         final String compositeKey = createCompositeKey(userId, sessionIdToUse);
 
-        log.info("流式调用 - 用户: {}, 会话: {}, 复合键: {}", userId, sessionIdToUse, compositeKey);
-
-        // 1. 创建元数据事件 (告诉前端真实的 sessionId)
-        StreamEvent metadataEvent = StreamEvent.metadata(sessionIdToUse);
+        // 3. 【关键】创建元数据事件，带上 title
+        StreamEvent metadataEvent = StreamEvent.metadata(sessionIdToUse, sessionInfo.title());
         Flux<StreamEvent> metadataStream = Flux.just(metadataEvent);
 
-        // 2. 创建 AI 内容流
+        // 4. AI 内容流 (保持不变)
         Flux<StreamEvent> contentStream = chatClient.prompt()
                 .user(userMessage)
-                .advisors(advisorSpec -> advisorSpec
-                        // 关键：传递复合键给 ChatMemoryAdvisor
-                        .param(ChatMemory.CONVERSATION_ID, compositeKey))
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, compositeKey))
                 .stream()
                 .content()
                 .map(StreamEvent::content);
 
-        // 3. 拼接并序列化
+        // 5. 拼接 (保持不变)
         return Flux.concat(metadataStream, contentStream)
                 .<String>handle((event, sink) -> {
                     try {

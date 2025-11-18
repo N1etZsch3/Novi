@@ -7,6 +7,7 @@ import java.util.List;
 public interface ChatSessionService {
     List<ChatSession> getUserSessions(Long userId);
 
+    void validateSessionOwner(String sessionId, Long userId);
 
-
+    void deleteSession(String sessionId, Long userId);
 }

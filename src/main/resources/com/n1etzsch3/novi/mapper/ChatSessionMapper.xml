@@ -22,4 +22,16 @@
     <select id="findById" resultType="com.n1etzsch3.novi.pojo.entity.ChatSession">
         SELECT * FROM chat_session WHERE id = #{sessionId}
     </select>
+
+    <select id="countByUserIdAndSessionId" resultType="int">
+        SELECT COUNT(*) FROM chat_session
+        WHERE id = #{sessionId} AND user_id = #{userId}
+    </select>
+
+    <update id="softDeleteSession">
+        UPDATE chat_session
+        SET is_deleted = 1
+        WHERE id = #{sessionId} AND user_id = #{userId}
+    </update>
+
 </mapper>

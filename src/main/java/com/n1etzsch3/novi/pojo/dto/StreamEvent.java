@@ -8,43 +8,32 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL) // 关键：如果某字段为null，不序列化
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StreamEvent {
-    
-    /**
-     * 事件类型：
-     * "METADATA" - 元数据事件，包含 sessionId 等
-     * "CONTENT" - 内容块
-     * "ERROR"   - 错误事件
-     */
+
     private String eventType;
-
-    /**
-     * 会话ID (只在 METADATA 事件中发送)
-     */
     private String sessionId;
-
-    /**
-     * AI 回复的内容块 (只在 CONTENT 事件中发送)
-     */
     private String content;
-
-    /**
-     * 错误信息 (只在 ERROR 事件中发送)
-     */
     private String errorMessage;
 
-    // --- 静态工厂方法，使创建更清晰 ---
+    // 新增标题字段
+    private String title;
 
-    public static StreamEvent metadata(String sessionId) {
-        return new StreamEvent("METADATA", sessionId, null, null);
+    // --- 静态工厂方法 ---
+
+    /**
+     * 元数据事件：现在包含 sessionId 和 title
+     */
+    public static StreamEvent metadata(String sessionId, String title) {
+        // 参数顺序必须与字段声明顺序一致：eventType, sessionId, content, errorMessage, title
+        return new StreamEvent("METADATA", sessionId, null, null, title);
     }
 
     public static StreamEvent content(String content) {
-        return new StreamEvent("CONTENT", null, content, null);
+        return new StreamEvent("CONTENT", null, content, null, null);
     }
 
     public static StreamEvent error(String errorMessage) {
-        return new StreamEvent("ERROR", null, null, errorMessage);
+        return new StreamEvent("ERROR", null, null, errorMessage, null);
     }
 }
