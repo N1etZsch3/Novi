@@ -8,6 +8,7 @@ import com.n1etzsch3.novi.pojo.dto.*;
 import com.n1etzsch3.novi.pojo.entity.UserAccount;
 import com.n1etzsch3.novi.service.UserAccountService;
 import com.n1etzsch3.novi.utils.JwtUtils;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,19 +22,17 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class UserAccountServiceImpl implements UserAccountService {
 
-    @Autowired
-    UserAccountMapper userAccountMapper;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final UserAccountMapper userAccountMapper;
 
-    @Autowired
-    JwtUtils jwtUtils;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final JwtUtils jwtUtils;
+
+    private final ObjectMapper objectMapper;
 
     /**
      * 用户注册

@@ -29,7 +29,11 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        
+
+        if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
+            return true;
+        }
+
         // 1. 从请求头获取 Token
         String token = request.getHeader(headerName);
         log.info("Request URI: {}, Token: {}", request.getRequestURI(), token);

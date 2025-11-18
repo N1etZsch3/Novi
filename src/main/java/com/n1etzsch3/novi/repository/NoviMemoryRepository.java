@@ -23,6 +23,12 @@ import java.util.stream.Collectors;
 @Repository
 @AllArgsConstructor
 @Primary
+/**
+ * 开发测试版 MessageWindowChatMemory 实现
+ * 基于 Novi 的数据库和 MyBatis 映射器
+ * 用于MessageWindowMemory 持久化聊天记录
+ * @Note: 此实现与 LoginUserContext 绑定
+ */
 public class NoviMemoryRepository implements ChatMemoryRepository {
 
     private final ChatMemoryMapper chatMemoryMapper;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.n1etzsch3.novi.mapper.ChatSessionMapper">
+
+    <insert id="createSession">
+        INSERT INTO chat_session (id, user_id, title, created_at, updated_at)
+        VALUES (#{id}, #{userId}, #{title}, NOW(), NOW())
+    </insert>
+
+    <select id="findByUserId" resultType="com.n1etzsch3.novi.pojo.entity.ChatSession">
+        SELECT * FROM chat_session
+        WHERE user_id = #{userId} AND is_deleted = 0
+        ORDER BY updated_at DESC
+    </select>
+
+    <update id="updateLastActiveTime">
+        UPDATE chat_session SET updated_at = NOW() WHERE id = #{sessionId}
+    </update>
+
+    <select id="findById" resultType="com.n1etzsch3.novi.pojo.entity.ChatSession">
+        SELECT * FROM chat_session WHERE id = #{sessionId}
+    </select>
+</mapper>

@@ -2,9 +2,11 @@ package com.n1etzsch3.novi.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.n1etzsch3.novi.mapper.ChatSessionMapper;
 import com.n1etzsch3.novi.pojo.dto.ChatRequest;
 import com.n1etzsch3.novi.pojo.dto.ChatResponse;
 import com.n1etzsch3.novi.pojo.dto.StreamEvent;
+import com.n1etzsch3.novi.pojo.entity.ChatSession;
 import com.n1etzsch3.novi.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +14,9 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import org.springframework.util.StringUtils; // 建议引入这个工具类
 
 import java.util.UUID;
-
 
 @Service
 @Slf4j
@@ -22,77 +24,120 @@ import java.util.UUID;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatClient chatClient;
-    private final ObjectMapper objectMapper; // <-- 注入 ObjectMapper
+    private final ObjectMapper objectMapper;
+    private final ChatSessionMapper chatSessionMapper;
+
+    /**
+     * 辅助方法：创建复合键
+     * 格式: "userId:sessionId"
+     * 作用: 解决 Stream 流式异步调用中 ThreadLocal 无法传递 userId 的问题
+     */
+    private String createCompositeKey(Long userId, String sessionId) {
+        return userId + ":" + sessionId;
+    }
+
+    /**
+     * 核心方法：获取或创建会话 (并同步到数据库)
+     */
+    private String getOrCreateSession(Long userId, String requestedSessionId, String messageContent) {
+        // 1. 判断是否是新会话 (使用 StringUtils 以防空字符串)
+        boolean isNewSession = !StringUtils.hasText(requestedSessionId);
+
+        String finalSessionId = isNewSession ? UUID.randomUUID().toString() : requestedSessionId;
+
+        if (isNewSession) {
+            // --- 创建新会话 ---
+            ChatSession session = new ChatSession();
+            session.setId(finalSessionId);
+            session.setUserId(userId);
+
+            // 生成标题：取前 20 个字
+            // @TODO：调用AI，总结性生成一个标题
+            String title = messageContent != null && messageContent.length() > 20 ?
+                    messageContent.substring(0, 20) + "..." : messageContent;
+            session.setTitle(title);
+
+            chatSessionMapper.createSession(session);
+            log.info("创建新会话 (DB): {}, 标题: {}", finalSessionId, title);
+        } else {
+            // --- 更新旧会话时间 ---
+            // 这里判断 update 的影响行数，如果为0说明前端传的 ID 数据库里没有
+            int rows = chatSessionMapper.updateLastActiveTime(finalSessionId);
+            if (rows == 0) {
+                // 容错处理：如果数据库没这个 ID，就当作新会话创建
+                log.warn("会话 {} 在数据库不存在，重新创建", finalSessionId);
+                ChatSession session = new ChatSession();
+                session.setId(finalSessionId);
+                session.setUserId(userId);
+                session.setTitle("恢复的会话");
+                chatSessionMapper.createSession(session);
+            }
+        }
+
+        return finalSessionId;
+    }
 
     @Override
     public ChatResponse handleCallMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
 
-        // --- 修复 2a：添加 sessionId 管理 ---
-        final String sessionIdToUse = request.getSessionId() != null
-                ? request.getSessionId()
-                : UUID.randomUUID().toString();
+        // 1. 获取或创建 sessionId (同步数据库)
+        String sessionIdToUse = getOrCreateSession(userId, request.getSessionId(), userMessage);
 
-        log.info("AI 回复用户 {} 在会话 {} 的消息 (阻塞式): {}", userId, sessionIdToUse, userMessage);
+        // 2. 构建复合键 (userId:sessionId) 用于 AI 上下文
+        final String compositeKey = createCompositeKey(userId, sessionIdToUse);
+
+        log.info("阻塞式调用 - 用户: {}, 会话: {}", userId, sessionIdToUse);
 
         String AIResponse = chatClient.prompt()
                 .user(userMessage)
-                // --- 修复 2a：将会话 ID 传递给 Advisor ---
                 .advisors(advisorSpec -> advisorSpec
-                        .param(ChatMemory.CONVERSATION_ID, sessionIdToUse))
+                        // 关键：传递复合键，确保 ChatMemory 能解析出 userId
+                        .param(ChatMemory.CONVERSATION_ID, compositeKey))
                 .call()
                 .content();
 
-        // --- 修复 2a：返回正确的（可能是新生成的）sessionId ---
         return new ChatResponse(AIResponse, sessionIdToUse);
     }
 
-    /**
-     * 处理流式消息 (修改后)
-     * * @return 一个 Flux<String>，其中每个 String 都是一个序列化后的 StreamEvent JSON
-     */
     @Override
     public Flux<String> handleStreamMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
-        log.info("收到用户 {} 在会话 {} 的消息: {}，流式调用", userId, request.getSessionId(), userMessage);
 
-        // --- 1. 会话 ID 管理 ---
-        // 确保有一个 sessionId。如果请求中没有，就创建一个。
-        final String sessionIdToUse = request.getSessionId() != null
-                ? request.getSessionId()
-                : UUID.randomUUID().toString();
+        // --- 修正点 1：调用 getOrCreateSession ---
+        // 之前这里直接生成了 UUID，导致没有入库。现在统一逻辑。
+        final String sessionIdToUse = getOrCreateSession(userId, request.getSessionId(), userMessage);
 
-        // --- 2. 创建元数据事件 ---
-        // 这是将发送的第一个事件，告诉客户端 sessionId。
+        // --- 修正点 2：构建复合键 ---
+        final String compositeKey = createCompositeKey(userId, sessionIdToUse);
+
+        log.info("流式调用 - 用户: {}, 会话: {}, 复合键: {}", userId, sessionIdToUse, compositeKey);
+
+        // 1. 创建元数据事件 (告诉前端真实的 sessionId)
         StreamEvent metadataEvent = StreamEvent.metadata(sessionIdToUse);
         Flux<StreamEvent> metadataStream = Flux.just(metadataEvent);
 
-
-        // --- 3. 创建 AI 内容流 ---
+        // 2. 创建 AI 内容流
         Flux<StreamEvent> contentStream = chatClient.prompt()
                 .user(userMessage)
                 .advisors(advisorSpec -> advisorSpec
-                        .param(ChatMemory.CONVERSATION_ID, sessionIdToUse))
+                        // 关键：传递复合键给 ChatMemoryAdvisor
+                        .param(ChatMemory.CONVERSATION_ID, compositeKey))
                 .stream()
-                .content() // 这返回 Flux<String> (AI 的内容块)
-                .map(StreamEvent::content); // 将每个 String 块 转换为 StreamEvent.content(chunk)
+                .content()
+                .map(StreamEvent::content);
 
-        log.info(contentStream.toString());
-
-        // --- 4. 拼接流，并序列化为 JSON 字符串 ---
-        // Flux.concat 确保 metadataStream 首先被发送，然后才是 contentStream
+        // 3. 拼接并序列化
         return Flux.concat(metadataStream, contentStream)
                 .<String>handle((event, sink) -> {
                     try {
-                        // 将 StreamEvent 对象 序列化为 JSON 字符串
                         sink.next(objectMapper.writeValueAsString(event));
                     } catch (JsonProcessingException e) {
-                        // 如果序列化失败，抛出一个运行时异常，这将终止流
-                        log.error("序列化 StreamEvent 失败", e);
+                        log.error("序列化失败", e);
                         sink.error(new RuntimeException("Stream serialization error", e));
                     }
                 })
-                .doOnError(e -> log.error("流式处理中发生错误，用户: {}", userId, e))
-                .doOnComplete(() -> log.info("用户 {} 的流式响应完成，会话: {}", userId, sessionIdToUse));
+                .doOnError(e -> log.error("流式处理错误, 用户: {}", userId, e))
+                .doOnComplete(() -> log.info("流式响应完成, 会话: {}", sessionIdToUse));
     }
 }

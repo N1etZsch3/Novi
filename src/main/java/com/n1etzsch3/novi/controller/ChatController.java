@@ -20,8 +20,7 @@ import reactor.util.context.Context;
 @Slf4j
 public class ChatController {
 
-    @Autowired
-    private ChatService chatService;
+    private final ChatService chatService;
 
     /**
      * 发送消息 (核心聊天接口)
@@ -69,12 +68,10 @@ public class ChatController {
         Flux<String> stream = chatService.handleStreamMessage(userId, request);
 
         // --- 3. 【最终修复】 ---
-        // 我们不再使用 .contextCapture()，因为它在 ThreadLocal 被清除后才运行
-        // 我们在 T1 线程 (Servlet 线程) 中，
+        // 不再使用 .contextCapture()，因为它在 ThreadLocal 被清除后才运行
+        // 在 T1 线程 (Servlet 线程) 中，
         // 立即、显式地将 userId 写入 Flux 的 Context。
-        //
-        // 键名 ("novi.userId") 必须与你的 UserIdThreadLocalAccessor.KEY
-        //
+        // 键名 ("novi.userId") 必须与 UserIdThreadLocalAccessor.KEY
         // 保持一致。
         return stream;
     }

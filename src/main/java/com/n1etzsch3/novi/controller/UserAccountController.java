@@ -5,6 +5,7 @@ import com.n1etzsch3.novi.pojo.dto.*;
 import com.n1etzsch3.novi.service.UserAccountService;
 import com.n1etzsch3.novi.utils.JwtUtils;
 import com.n1etzsch3.novi.utils.LoginUserContext;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -16,11 +17,12 @@ import java.util.Map;
 // 2. 使用 @RequestMapping 设置基础路径
 @RestController
 @RequestMapping("/api/v1/users")
+@AllArgsConstructor
 @Slf4j
 public class UserAccountController {
 
-    @Autowired
-    UserAccountService userAccountService;
+
+    private final UserAccountService userAccountService;
 
     /**
      * 用户注册
