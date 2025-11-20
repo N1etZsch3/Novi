@@ -6,6 +6,7 @@ import com.n1etzsch3.novi.mapper.ChatSessionMapper;
 import com.n1etzsch3.novi.mapper.UserAccountMapper;
 import com.n1etzsch3.novi.pojo.dto.ChatRequest;
 import com.n1etzsch3.novi.pojo.dto.ChatResponse;
+import com.n1etzsch3.novi.pojo.dto.NoviPersonaSettings;
 import com.n1etzsch3.novi.pojo.dto.StreamEvent;
 import com.n1etzsch3.novi.pojo.entity.ChatSession;
 import com.n1etzsch3.novi.pojo.entity.UserAccount;
@@ -155,27 +156,79 @@ public class ChatServiceImpl implements ChatService {
     private Message buildSystemMessage(Long userId, String userMessage) {
         // 1. 获取用户信息
         UserAccount user = userAccountMapper.findById(userId);
-        String nickname = (user.getNickname() != null) ? user.getNickname() : "老铁";
 
-        // 2. 获取用户偏好 (后续可改为从 DB 获取)
+        // 2. 获取用户偏好
+        NoviPersonaSettings settings = userPreferenceService.getPersonaSettings(userId);
+        if (settings == null) {
+            settings = new NoviPersonaSettings(); // 兜底
+        }
 
-        // String personality = "随性、说话直爽、有点小幽默";
-        String personality = String.valueOf(userPreferenceService.getPersonaSettings(userId));
-        log.info("用户 {} 的人设: {}", userId, personality);
+        // 3. 确定称呼 (逻辑：偏好设置中的称呼 > 账号昵称 > "老铁")
+        String nickname = StringUtils.hasText(settings.getUserAddressName())
+                ? settings.getUserAddressName()
+                : (StringUtils.hasText(user.getNickname()) ? user.getNickname() : "老铁");
 
-        // 3. 获取记忆
-        // TODO : 实现记忆检索逻辑
+        // 4. 构建自然语言的人设描述 (将配置项转换为 Prompt)
+        String personalityDesc = buildPersonalityDescription(settings);
+
+        log.info("用户 {} 的最终人设 Prompt: {}", userId, personalityDesc);
+
+        // 5. 获取记忆 (TODO: 接入向量数据库或检索逻辑)
         String memories = "（暂无特殊记忆，就像平时一样闲聊）";
 
-        // 4. 构建并返回 System Message
+        // 6. 构建并返回 System Message
         SystemPromptTemplate systemTemplate = new SystemPromptTemplate(systemPromptResource);
         Map<String, Object> promptVars = Map.of(
                 "nickname", nickname,
-                "personality", personality,
+                "personality", personalityDesc,
                 "current_time", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")),
                 "memories", memories,
                 "user_message", userMessage
         );
         return systemTemplate.createMessage(promptVars);
+    }
+
+    /**
+     * 【新增辅助方法】将结构化的偏好设置转换为 AI 能理解的自然语言描述
+     */
+    private String buildPersonalityDescription(NoviPersonaSettings settings) {
+        StringBuilder desc = new StringBuilder();
+
+        // A. 处理核心性格 (Personality Mode)
+        String mode = settings.getPersonalityMode();
+        // 防止 null
+        if (mode == null) mode = "default";
+
+        switch (mode) {
+            case "default" -> desc.append("随性自然，说话直爽，就像认识多年的老朋友，不卑不亢。");
+            case "witty" -> desc.append("风趣幽默，喜欢讲段子，说话好玩，不用太正经，多用反问句活跃气氛。");
+            case "gentle" -> desc.append("温柔知心，充满同理心，语气柔和，像个大姐姐/大哥哥一样治愈，多给予鼓励。");
+            case "professional" -> desc.append("专业严谨，逻辑清晰，客观理性，不确定的事情不乱说，语气稳重可靠。");
+            case "tsundere" -> desc.append("傲娇毒舌，口是心非。明明关心对方却要表现得不耐烦或勉为其难（例如：“哼，真拿你没办法”）。");
+            default -> {
+                // 如果不是预设值，说明是用户自定义的 Prompt，直接使用
+                desc.append(mode);
+            }
+        }
+
+        // B. 处理语气风格 (Tone Style)
+        String tone = settings.getToneStyle();
+        if ("emoji_heavy".equals(tone)) {
+            desc.append(" 另外，请在每句话中大量使用Emoji表情(✨、🎉、😂等)来表达情绪，显得非常活泼。");
+        } else if ("concise".equals(tone)) {
+            desc.append(" 回复必须非常简短，惜字如金，能用两个字说完绝不用三个字。");
+        } else if ("verbose".equals(tone)) {
+            desc.append(" 可以稍微话痨一点，多发散思维，多聊聊细节。");
+        }
+
+        // C. 处理语言限制 (Language)
+        String lang = settings.getLanguage();
+        if ("zh_CN".equals(lang)) {
+            desc.append(" 请全程强制使用中文回复，即使我用英文问你。");
+        } else if ("en_US".equals(lang)) {
+            desc.append("必须全程英文回答！即便我用中文问你，你的回复也必须是英文！严禁出现中文！");
+        }
+
+        return desc.toString();
     }
 }

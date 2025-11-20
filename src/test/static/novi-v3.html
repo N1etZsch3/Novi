@@ -1307,26 +1307,49 @@
         async handleStream(payload) {
             try {
                 const res = await fetch(`${this.config.apiBase}/chat/send/stream`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.state.token}` }, body: JSON.stringify(payload)
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.state.token}`
+                    },
+                    body: JSON.stringify(payload)
                 });
+
                 const reader = res.body.getReader();
                 const decoder = new TextDecoder();
+                let buffer = ''; // 【修复点1】定义缓冲区，用于暂存未完成的行
+
                 while(true) {
                     const {done, value} = await reader.read();
                     if(done) break;
-                    const chunk = decoder.decode(value, {stream:true});
-                    const lines = chunk.split('\n');
+
+                    // 【修复点2】将新收到的 chunk 拼接到 buffer 后，而不是直接处理
+                    buffer += decoder.decode(value, {stream:true});
+
+                    // 【修复点3】按换行符分割
+                    const lines = buffer.split('\n');
+
+                    // 【修复点4】将数组中最后一个元素（可能是截断的半行）弹出来，放回 buffer 等待下一次拼接
+                    buffer = lines.pop();
+
                     for(const line of lines) {
                         if(!line.trim() || !line.startsWith('data:')) continue;
                         try {
                             const evt = JSON.parse(line.slice(5));
                             if(evt.eventType === 'CONTENT') Typewriter.push(evt.content);
                             else if (evt.eventType === 'METADATA') this.updateSessionTitle(evt.sessionId, evt.title);
-                        } catch(e){}
+                        } catch(e){
+                            // 只有真正的格式错误才会被捕获，断包问题已被 buffer 解决
+                            console.warn('JSON解析失败:', e);
+                        }
                     }
                 }
             } finally {
-                setTimeout(() => { Typewriter.stop(); this.state.isTyping = false; this.loadSessions(); }, 300);
+                setTimeout(() => {
+                    Typewriter.stop();
+                    this.state.isTyping = false;
+                    this.loadSessions();
+                }, 300);
             }
         },
 
