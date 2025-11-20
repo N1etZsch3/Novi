@@ -41,6 +41,11 @@ public interface UserAccountMapper {
     void updateUser(UserAccount userAccount);
 
     /**
+     * 通过用户ID查找偏好设置 JSON 字符串
+     */
+    String findPreferencesJsonById(Long userId);
+
+    /**
      * 更新用户偏好设置
      */
     void updatePreferences(@Param("userId") Long userId, @Param("preferences") String preferences);

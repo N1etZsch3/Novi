@@ -9,10 +9,12 @@ import com.n1etzsch3.novi.pojo.entity.UserAccount;
 import com.n1etzsch3.novi.service.UserAccountService;
 import com.n1etzsch3.novi.utils.JwtUtils;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -22,7 +24,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserAccountServiceImpl implements UserAccountService {
 
 
@@ -125,102 +127,114 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     /**
-     * 更新用户资料
-     * @param userId 用户ID
-     * @param updateRequest 更新请求
+     * 动态更新用户资料 (支持部分更新 + 密码修改)
      */
     @Override
-    public void updateUserProfile(Long userId, UserProfileUpdateRequest updateRequest) {
-        // 1. 通过id查找用户
-        UserAccount userAccount = userAccountMapper.findById(userId);
-        if (userAccount == null) {
-            throw new BusinessException("用户不存在");
+    @Transactional
+    public void updateUserProfile(Long userId, UserProfileUpdateRequest req) {
+        UserAccount user = userAccountMapper.findById(userId);
+        if (user == null) throw new BusinessException("用户不存在");
+
+        // 1. 处理邮箱修改
+        if (StringUtils.hasText(req.getEmail()) && !req.getEmail().equals(user.getEmail())) {
+            UserAccount conflict = userAccountMapper.findByEmailAndNotId(req.getEmail(), userId);
+            if (conflict != null) throw new BusinessException("该邮箱已被其他用户注册");
+            user.setEmail(req.getEmail());
         }
 
-        // 2. 检查Email冲突
-        // 只有当Email被修改 且 与原Email不同时，才检查冲突
-        if (StringUtils.hasText(updateRequest.getEmail()) && !updateRequest.getEmail().equals(userAccount.getEmail())) {
-            UserAccount emailConflict = userAccountMapper.findByEmailAndNotId(updateRequest.getEmail(), userId);
-            if (emailConflict != null) {
-                throw new BusinessException("该邮箱已被其他用户注册");
+        // 2. 处理昵称修改
+        if (StringUtils.hasText(req.getNickname())) {
+            user.setNickname(req.getNickname());
+        }
+
+        // 3. 处理密码修改
+        if (StringUtils.hasText(req.getNewPassword())) {
+            // 必须提供旧密码进行验证
+            if (!StringUtils.hasText(req.getCurrentPassword())) {
+                throw new BusinessException("修改密码需要提供当前密码");
             }
-            userAccount.setEmail(updateRequest.getEmail());
+            if (!passwordEncoder.matches(req.getCurrentPassword(), user.getHashedPassword())) {
+                throw new BusinessException("当前密码错误");
+            }
+            // 加密新密码
+            user.setHashedPassword(passwordEncoder.encode(req.getNewPassword()));
+            log.info("用户 {} 修改了密码", userId);
         }
 
-        // 3. 更新昵称
-        userAccount.setNickname(updateRequest.getNickname());
-
-        // 4. 更新时间戳
-        userAccount.setUpdatedAt(LocalDateTime.now());
-
-        // 5. 保存更新
-        userAccountMapper.updateUser(userAccount);
-        log.info("用户资料更新成功: {}", userAccount.getUsername());
+        // 4. 执行更新 (MyBatis 会忽略 entity 中未修改的字段吗？
+        // 不，我们需要依靠 Mapper XML 的 <if> 标签。
+        // 但这里我们是先查出来 user 对象，然后修改了它的属性。
+        // 所以传递给 update 的 user 对象其实包含了所有字段（旧值或新值）。
+        // 这样 XML 中的 <if> 依然有效，因为字段都不是 null。
+        // 这里的逻辑是：我们修改了 user 对象的内存状态，然后全量传给 Mapper。
+        // Mapper 的 <if> 主要是为了防止传入一个只有 id 和 email 的"残缺"对象导致其他字段被置空。
+        // 在这里，user 是完整的，所以不仅安全，而且符合逻辑。
+        userAccountMapper.updateUser(user);
     }
 
-    /**
-     * 获取用户偏好
-     */
-    @Override
-    public Map<String, Object> getUserPreferences(Long userId) {
-        // 1. 使用 findById 获取完整的用户对象
-        UserAccount userAccount = userAccountMapper.findById(userId);
-
-        // 2. 检查用户是否存在
-        if (userAccount == null) {
-            throw new BusinessException("用户不存在");
-        }
-
-        // 3. 从实体中获取 preferences (现在是 JSON 字符串)
-        String preferencesString = userAccount.getPreferences();
-
-        // 4. 如果字符串为空或null，返回空Map
-        if (!StringUtils.hasText(preferencesString)) {
-            log.info("用户 {} 尚无偏好设置，返回空Map", userId);
-            return Collections.emptyMap();
-        }
-
-        // 5. 【新增】手动反序列化 JSON 字符串为 Map
-        try {
-            Map<String, Object> preferencesMap = objectMapper.readValue(
-                    preferencesString,
-                    new TypeReference<Map<String, Object>>() {}
-            );
-
-            log.info("成功获取并反序列化用户 {} 的偏好设置", userId);
-            return preferencesMap;
-
-        } catch (JsonProcessingException e) {
-            log.error("JSON 反序列化用户偏好设置失败: {}", e.getMessage());
-            // 即使反序列化失败，也应返回空Map而不是抛出异常
-            return Collections.emptyMap();
-        }
-    }
-
-    /**
-     * 更新用户偏好
-     */
-    @Override
-    public Map<String, Object> updateUserPreferences(Long userId, Map<String, Object> preferences) {
-        if (preferences == null) {
-            throw new BusinessException("偏好设置不能为空");
-        }
-
-        try {
-            // 4. 在 Service 层手动序列化为 JSON 字符串
-            String preferencesString = objectMapper.writeValueAsString(preferences);
-
-            // 5. 将序列化后的字符串传递给 Mapper (这部分代码无需更改)
-            userAccountMapper.updatePreferences(userId, preferencesString);
-
-            log.info("成功更新用户 {} 的偏好设置", userId);
-            return preferences;
-
-        } catch (JsonProcessingException e) {
-            // 6. 如果序列化失败，抛出业务异常
-            log.error("JSON 序列化偏好设置失败: {}", e.getMessage());
-            throw new BusinessException("偏好设置格式无效");
-        }
-    }
+//    /**
+//     * 获取用户偏好
+//     */
+//    @Override
+//    public Map<String, Object> getUserPreferences(Long userId) {
+//        // 1. 使用 findById 获取完整的用户对象
+//        UserAccount userAccount = userAccountMapper.findById(userId);
+//
+//        // 2. 检查用户是否存在
+//        if (userAccount == null) {
+//            throw new BusinessException("用户不存在");
+//        }
+//
+//        // 3. 从实体中获取 preferences (现在是 JSON 字符串)
+//        String preferencesString = userAccount.getPreferences();
+//
+//        // 4. 如果字符串为空或null，返回空Map
+//        if (!StringUtils.hasText(preferencesString)) {
+//            log.info("用户 {} 尚无偏好设置，返回空Map", userId);
+//            return Collections.emptyMap();
+//        }
+//
+//        // 5. 【新增】手动反序列化 JSON 字符串为 Map
+//        try {
+//            Map<String, Object> preferencesMap = objectMapper.readValue(
+//                    preferencesString,
+//                    new TypeReference<Map<String, Object>>() {}
+//            );
+//
+//            log.info("成功获取并反序列化用户 {} 的偏好设置", userId);
+//            return preferencesMap;
+//
+//        } catch (JsonProcessingException e) {
+//            log.error("JSON 反序列化用户偏好设置失败: {}", e.getMessage());
+//            // 即使反序列化失败，也应返回空Map而不是抛出异常
+//            return Collections.emptyMap();
+//        }
+//    }
+//
+//    /**
+//     * 更新用户偏好
+//     */
+//    @Override
+//    public Map<String, Object> updateUserPreferences(Long userId, Map<String, Object> preferences) {
+//        if (preferences == null) {
+//            throw new BusinessException("偏好设置不能为空");
+//        }
+//
+//        try {
+//            // 4. 在 Service 层手动序列化为 JSON 字符串
+//            String preferencesString = objectMapper.writeValueAsString(preferences);
+//
+//            // 5. 将序列化后的字符串传递给 Mapper (这部分代码无需更改)
+//            userAccountMapper.updatePreferences(userId, preferencesString);
+//
+//            log.info("成功更新用户 {} 的偏好设置", userId);
+//            return preferences;
+//
+//        } catch (JsonProcessingException e) {
+//            // 6. 如果序列化失败，抛出业务异常
+//            log.error("JSON 序列化偏好设置失败: {}", e.getMessage());
+//            throw new BusinessException("偏好设置格式无效");
+//        }
+//    }
 
 }

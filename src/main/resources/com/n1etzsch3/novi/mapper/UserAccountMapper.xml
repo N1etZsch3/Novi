@@ -25,11 +25,27 @@
         select * from user_account where email = #{email} and id != #{id}
     </select>
 
-    <update id="updateUser">
+    <select id="findPreferencesJsonById" resultType="java.lang.String">
+        select preferences from user_account where id = #{userId}
+    </select>
+
+    <update id="updateUser" parameterType="com.n1etzsch3.novi.pojo.entity.UserAccount">
         update user_account
-        set nickname = #{nickname},
-            email = #{email},
-            updated_at = #{updatedAt}
+        <set>
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="hashedPassword != null and hashedPassword != ''">
+                hashed_password = #{hashedPassword},
+            </if>
+            <if test="preferences != null and preferences != ''">
+                preferences = #{preferences},
+            </if>
+            updated_at = NOW()
+        </set>
         where id = #{id}
     </update>
 

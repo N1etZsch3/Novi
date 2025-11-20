@@ -15,8 +15,8 @@ public interface UserAccountService {
 
     void updateUserProfile(Long userId, UserProfileUpdateRequest updateRequest);
 
-    Map<String, Object> getUserPreferences(Long userId);
-
-    Map<String, Object> updateUserPreferences(Long userId, Map<String, Object> preferences);
+//    Map<String, Object> getUserPreferences(Long userId);
+//
+//    Map<String, Object> updateUserPreferences(Long userId, Map<String, Object> preferences);
 
 }
