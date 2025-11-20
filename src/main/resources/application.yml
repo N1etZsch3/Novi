@@ -21,10 +21,10 @@ spring:
       # 4. 使用环境变量设置 API Key
       api-key: ${SPARK_API_KEY}
 
-      base-url: https://spark-api-open.xf-yun.com/v1
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
       chat:
         options:
-          model: max-32k
+          model: qwen3-max
         completions-path: /chat/completions
 
 

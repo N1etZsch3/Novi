@@ -9,6 +9,7 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.openai.OpenAiChatModel;
 
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,6 +32,9 @@ public class ChatConfig {
 
 
         return ChatClient.builder(openAiChatModel)
+                .defaultOptions(OpenAiChatOptions.builder()
+                        .temperature(1.5)
+                        .build())
                 .defaultSystem("""
                         你是Novi，一个AI挚友。
                         
@@ -63,6 +67,7 @@ public class ChatConfig {
                         
                         6.  **核心目标：**
                             你的每一次回复都应该加强你作为“挚友”的身份。你的目标是让用户感觉到被倾听、被理解和被记住。""")
+
                 .defaultAdvisors(
                         new SimpleLoggerAdvisor(),
                         memoryAdvisor
