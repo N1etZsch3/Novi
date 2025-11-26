@@ -26,7 +26,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/v1/users/login", // 登录
                         "/api/v1/users/register",      // 注册
-                        "/error"              // Spring Boot 默认错误页
+                        "/error",// Spring Boot 默认错误页
+                        "/index.html"
                 );
     }
 

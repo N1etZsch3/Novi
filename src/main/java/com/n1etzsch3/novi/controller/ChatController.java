@@ -7,12 +7,10 @@ import com.n1etzsch3.novi.service.ChatService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.util.context.Context;
 
 @RequiredArgsConstructor
 @RestController
@@ -77,4 +75,3 @@ public class ChatController {
     }
 
 }
-

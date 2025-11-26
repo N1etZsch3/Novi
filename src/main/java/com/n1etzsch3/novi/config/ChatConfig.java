@@ -9,7 +9,6 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.openai.OpenAiChatModel;
 
-import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,9 +31,6 @@ public class ChatConfig {
 
 
         return ChatClient.builder(openAiChatModel)
-                .defaultOptions(OpenAiChatOptions.builder()
-                        .temperature(1.5)
-                        .build())
                 .defaultAdvisors(
                         new SimpleLoggerAdvisor(),
                         memoryAdvisor

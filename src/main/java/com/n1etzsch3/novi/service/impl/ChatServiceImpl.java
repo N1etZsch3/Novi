@@ -18,14 +18,15 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,9 +40,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatSessionMapper chatSessionMapper;
     private final UserAccountMapper userAccountMapper;
     private final UserPreferenceService userPreferenceService;
-
-    @Value("classpath:/prompts/chat-system.st")
-    private Resource systemPromptResource;
+    private final com.n1etzsch3.novi.service.AiPromptConfigService aiPromptConfigService;
 
     /**
      * 辅助方法：创建复合键
@@ -50,7 +49,8 @@ public class ChatServiceImpl implements ChatService {
         return userId + ":" + sessionId;
     }
 
-    private record SessionInfo(String sessionId, String title) {}
+    private record SessionInfo(String sessionId, String title) {
+    }
 
     /**
      * 辅助方法：获取或创建会话
@@ -64,8 +64,9 @@ public class ChatServiceImpl implements ChatService {
             ChatSession session = new ChatSession();
             session.setId(finalSessionId);
             session.setUserId(userId);
-            finalTitle = messageContent != null && messageContent.length() > 20 ?
-                    messageContent.substring(0, 20) + "..." : messageContent;
+            finalTitle = messageContent != null && messageContent.length() > 20
+                    ? messageContent.substring(0, 20) + "..."
+                    : messageContent;
             session.setTitle(finalTitle);
             chatSessionMapper.createSession(session);
             log.info("创建新会话 (DB): {}, 标题: {}", finalSessionId, finalTitle);
@@ -176,15 +177,42 @@ public class ChatServiceImpl implements ChatService {
         // 5. 获取记忆 (TODO: 接入向量数据库或检索逻辑)
         String memories = "（暂无特殊记忆，就像平时一样闲聊）";
 
+        // === 修改开始：增强时间感知 ===
+        LocalDateTime now = LocalDateTime.now();
+
+        // 1. 基础时间: 16:30
+        String timeStr = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+
+        // 2. 日期与星期: 2025年11月21日 星期五
+        String dateStr = now.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日"));
+        String weekStr = now.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.CHINA);
+
+        // 3. 简单的季节/体感推断 (根据月份给 AI 一个环境暗示)
+        int month = now.getMonthValue();
+        String seasonHint;
+        if (month >= 3 && month <= 5)
+            seasonHint = "春季，气温回暖";
+        else if (month >= 6 && month <= 8)
+            seasonHint = "夏季，天气炎热";
+        else if (month >= 9 && month <= 11)
+            seasonHint = "秋季，天气转凉";
+        else
+            seasonHint = "冬季，天气寒冷";
+
+        // === 修改结束 ===
+
         // 6. 构建并返回 System Message
-        SystemPromptTemplate systemTemplate = new SystemPromptTemplate(systemPromptResource);
+        String systemPromptTemplateStr = aiPromptConfigService.getSystemPromptTemplate();
+        SystemPromptTemplate systemTemplate = new SystemPromptTemplate(systemPromptTemplateStr);
         Map<String, Object> promptVars = Map.of(
                 "nickname", nickname,
                 "personality", personalityDesc,
                 "current_time", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")),
                 "memories", memories,
-                "user_message", userMessage
-        );
+                "user_message", userMessage,
+                "current_date", dateStr + " " + weekStr,
+                "season_hint", seasonHint);
+
         return systemTemplate.createMessage(promptVars);
     }
 
@@ -197,14 +225,16 @@ public class ChatServiceImpl implements ChatService {
         // A. 处理核心性格 (Personality Mode)
         String mode = settings.getPersonalityMode();
         // 防止 null
-        if (mode == null) mode = "default";
+        if (mode == null)
+            mode = "default";
 
         switch (mode) {
-            case "default" -> desc.append("随性自然，说话直爽，就像认识多年的老朋友，不卑不亢。");
-            case "witty" -> desc.append("风趣幽默，喜欢讲段子，说话好玩，不用太正经，多用反问句活跃气氛。");
-            case "gentle" -> desc.append("温柔知心，充满同理心，语气柔和，像个大姐姐/大哥哥一样治愈，多给予鼓励。");
-            case "professional" -> desc.append("专业严谨，逻辑清晰，客观理性，不确定的事情不乱说，语气稳重可靠。");
-            case "tsundere" -> desc.append("傲娇毒舌，口是心非。明明关心对方却要表现得不耐烦或勉为其难（例如：“哼，真拿你没办法”）。");
+            case "default" -> desc.append(aiPromptConfigService.getPersonalityDescription("personality_default"));
+            case "witty" -> desc.append(aiPromptConfigService.getPersonalityDescription("personality_witty"));
+            case "gentle" -> desc.append(aiPromptConfigService.getPersonalityDescription("personality_gentle"));
+            case "professional" ->
+                desc.append(aiPromptConfigService.getPersonalityDescription("personality_professional"));
+            case "tsundere" -> desc.append(aiPromptConfigService.getPersonalityDescription("personality_tsundere"));
             default -> {
                 // 如果不是预设值，说明是用户自定义的 Prompt，直接使用
                 desc.append(mode);
