@@ -7,6 +7,15 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * 聊天消息实体类
+ * <p>
+ * 代表聊天会话中的单条消息。
+ * </p>
+ *
+ * @author N1etzsch3
+ * @since 2025-11-26
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,16 +31,28 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * 会话 ID。
+     */
     @Column(name = "session_id", nullable = false, length = 100)
     private String sessionId;
 
-    @Enumerated(EnumType.STRING) // 将枚举存储为字符串 ("USER", "ASSISTANT")
+    /**
+     * 消息角色 (USER 或 ASSISTANT)。
+     */
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private MessageRole role;
 
+    /**
+     * 消息内容。
+     */
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    /**
+     * 创建时间戳。
+     */
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime timestamp;
@@ -39,19 +60,18 @@ public class ChatMessage {
     // --- 关系 ---
 
     /**
-     * 多条消息属于一个用户
-     * FetchType.LAZY: 懒加载，只有在访问 user 属性时才去数据库查询
+     * 拥有此消息的用户。
+     * <p>
+     * FetchType.LAZY: 仅在访问时加载。
+     * </p>
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore // 关键：防止和 UserAccount 产生序列化循环
+    @JsonIgnore
     private UserAccount user;
 
     /**
-     * 角色枚举
-     * (可以放在单独的
-     * com.novi.zhiyou.model.enums.MessageRole.java
-     * 文件中)
+     * 消息角色枚举。
      */
     public enum MessageRole {
         USER,

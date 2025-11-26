@@ -4,32 +4,49 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Novi 人设设置 DTO
+ * <p>
+ * 代表用户对 AI 人设的偏好设置。
+ * </p>
+ *
+ * @author N1etzsch3
+ * @since 2025-11-26
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class NoviPersonaSettings {
 
     /**
-     * 核心性格模式
-     * 可选值: "default"(默认), "witty"(风趣), "gentle"(温柔), "tsundere"(傲娇), "professional"(专业)
+     * 核心性格模式。
+     * <p>
+     * 选项: "default", "witty", "gentle", "tsundere", "professional"。
+     * </p>
      */
     private String personalityMode = "default";
 
     /**
-     * Novi 对用户的称呼
-     * 例如: "主人", "亲爱的", "老兄", 或者用户的昵称
+     * Novi 对用户的称呼。
+     * <p>
+     * 例如: "主人", "亲爱的", "兄弟", 或用户的昵称。
+     * </p>
      */
     private String userAddressName;
 
     /**
-     * 语气风格
-     * 可选值: "normal"(正常), "emoji_heavy"(多表情), "concise"(简洁), "verbose"(话痨)
+     * 语气风格。
+     * <p>
+     * 选项: "normal", "emoji_heavy", "concise", "verbose"。
+     * </p>
      */
     private String toneStyle = "normal";
 
     /**
-     * 回复语言限制
-     * 可选值: null (自动), "zh_CN", "en_US"
+     * 语言限制。
+     * <p>
+     * 选项: null (自动), "zh_CN", "en_US"。
+     * </p>
      */
     private String language;
 }

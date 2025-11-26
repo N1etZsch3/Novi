@@ -30,6 +30,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 聊天服务实现类
+ * <p>
+ * 实现核心聊天逻辑，包括会话管理、系统提示词构建、
+ * 以及与 AI 模型的交互（阻塞式和流式）。
+ * </p>
+ *
+ * @author N1etzsch3
+ * @since 2025-11-26
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -43,7 +53,7 @@ public class ChatServiceImpl implements ChatService {
     private final com.n1etzsch3.novi.service.AiPromptConfigService aiPromptConfigService;
 
     /**
-     * 辅助方法：创建复合键
+     * 辅助方法：为聊天记忆创建复合键。
      */
     private String createCompositeKey(Long userId, String sessionId) {
         return userId + ":" + sessionId;
@@ -53,7 +63,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     /**
-     * 辅助方法：获取或创建会话
+     * 辅助方法：获取或创建聊天会话。
      */
     private SessionInfo getOrCreateSession(Long userId, String requestedSessionId, String messageContent) {
         boolean isNewSession = !StringUtils.hasText(requestedSessionId);
@@ -69,12 +79,12 @@ public class ChatServiceImpl implements ChatService {
                     : messageContent;
             session.setTitle(finalTitle);
             chatSessionMapper.createSession(session);
-            log.info("创建新会话 (DB): {}, 标题: {}", finalSessionId, finalTitle);
+            log.info("Created new session (DB): {}, Title: {}", finalSessionId, finalTitle);
         } else {
             int rows = chatSessionMapper.updateLastActiveTime(finalSessionId);
             if (rows == 0) {
-                log.warn("会话 {} 在数据库不存在，重新创建", finalSessionId);
-                finalTitle = "恢复的会话";
+                log.warn("Session {} not found in DB, recreating.", finalSessionId);
+                finalTitle = "Restored Session";
                 ChatSession session = new ChatSession();
                 session.setId(finalSessionId);
                 session.setUserId(userId);
@@ -92,16 +102,16 @@ public class ChatServiceImpl implements ChatService {
     public ChatResponse handleCallMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
 
-        // 1. 准备 System Message
+        // 1. 准备系统消息
         Message systemMessage = buildSystemMessage(userId, userMessage);
 
-        // 2. 获取 Session
+        // 2. 获取会话
         SessionInfo sessionInfo = getOrCreateSession(userId, request.getSessionId(), userMessage);
         String compositeKey = createCompositeKey(userId, sessionInfo.sessionId());
 
         // 3. 调用 AI
         String AIResponse = chatClient.prompt()
-                .messages(systemMessage) // 注入动态 System Prompt
+                .messages(systemMessage) // 注入动态系统提示词
                 .user(userMessage)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, compositeKey))
                 .call()
@@ -115,10 +125,10 @@ public class ChatServiceImpl implements ChatService {
     public Flux<String> handleStreamMessage(Long userId, ChatRequest request) {
         String userMessage = request.getMessage();
 
-        // 1. 【新增】准备 System Message (逻辑与阻塞式一致)
+        // 1. 准备系统消息
         Message systemMessage = buildSystemMessage(userId, userMessage);
 
-        // 2. 获取 Session
+        // 2. 获取会话
         SessionInfo sessionInfo = getOrCreateSession(userId, request.getSessionId(), userMessage);
         String sessionIdToUse = sessionInfo.sessionId();
         String compositeKey = createCompositeKey(userId, sessionIdToUse);
@@ -127,27 +137,27 @@ public class ChatServiceImpl implements ChatService {
         StreamEvent metadataEvent = StreamEvent.metadata(sessionIdToUse, sessionInfo.title());
         Flux<StreamEvent> metadataStream = Flux.just(metadataEvent);
 
-        // 4. 【修改】AI 内容流 - 注入 systemMessage
+        // 4. AI 内容流 - 注入系统消息
         Flux<StreamEvent> contentStream = chatClient.prompt()
-                .messages(systemMessage) // <--- 关键：这里也要注入 System Prompt
+                .messages(systemMessage) // 关键：在此处也注入系统提示词
                 .user(userMessage)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, compositeKey))
                 .stream()
                 .content()
                 .map(StreamEvent::content);
 
-        // 5. 拼接并序列化
+        // 5. 合并并序列化
         return Flux.concat(metadataStream, contentStream)
                 .<String>handle((event, sink) -> {
                     try {
                         sink.next(objectMapper.writeValueAsString(event));
                     } catch (JsonProcessingException e) {
-                        log.error("序列化失败", e);
+                        log.error("Serialization failed", e);
                         sink.error(new RuntimeException("Stream serialization error", e));
                     }
                 })
-                .doOnError(e -> log.error("流式处理错误, 用户: {}", userId, e))
-                .doOnComplete(() -> log.info("流式响应完成, 会话: {}", sessionIdToUse));
+                .doOnError(e -> log.error("Stream processing error, User: {}", userId, e))
+                .doOnComplete(() -> log.info("Stream response completed, Session: {}", sessionIdToUse));
     }
 
     /**
@@ -224,31 +234,33 @@ public class ChatServiceImpl implements ChatService {
 
         // A. 处理核心性格 (Personality Mode)
         String mode = settings.getPersonalityMode();
+        log.info(mode);
         // 防止 null
         if (mode == null)
             mode = "default";
 
-        switch (mode) {
-            case "default" -> desc.append(aiPromptConfigService.getPersonalityDescription("personality_default"));
-            case "witty" -> desc.append(aiPromptConfigService.getPersonalityDescription("personality_witty"));
-            case "gentle" -> desc.append(aiPromptConfigService.getPersonalityDescription("personality_gentle"));
-            case "professional" ->
-                desc.append(aiPromptConfigService.getPersonalityDescription("personality_professional"));
-            case "tsundere" -> desc.append(aiPromptConfigService.getPersonalityDescription("personality_tsundere"));
-            default -> {
-                // 如果不是预设值，说明是用户自定义的 Prompt，直接使用
-                desc.append(mode);
+        // 尝试从数据库获取配置
+        String personalityKey = "personality_" + mode;
+        // 使用 getConfigValue 而不是 getPersonalityDescription，以便区分"未找到"和"默认值"
+        String personalityDesc = aiPromptConfigService.getConfigValue(personalityKey);
+
+        if (personalityDesc == null) {
+            // 如果数据库中没有找到对应的 Key
+            if ("default".equals(mode)) {
+                // 如果是默认模式但没配置，使用硬编码兜底
+                personalityDesc = "随性自然，说话直爽。";
+            } else {
+                // 否则，认为 mode 本身就是用户自定义的 Prompt
+                personalityDesc = mode;
             }
         }
+        desc.append(personalityDesc);
 
         // B. 处理语气风格 (Tone Style)
         String tone = settings.getToneStyle();
-        if ("emoji_heavy".equals(tone)) {
-            desc.append(" 另外，请在每句话中大量使用Emoji表情(✨、🎉、😂等)来表达情绪，显得非常活泼。");
-        } else if ("concise".equals(tone)) {
-            desc.append(" 回复必须非常简短，惜字如金，能用两个字说完绝不用三个字。");
-        } else if ("verbose".equals(tone)) {
-            desc.append(" 可以稍微话痨一点，多发散思维，多聊聊细节。");
+        if (tone != null) {
+            String toneKey = "tone_" + tone;
+            desc.append(" ").append(aiPromptConfigService.getToneStyleDescription(toneKey));
         }
 
         // C. 处理语言限制 (Language)

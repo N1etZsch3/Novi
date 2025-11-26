@@ -5,6 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 聊天响应 DTO
+ * <p>
+ * 代表来自聊天服务的响应。
+ * </p>
+ *
+ * @author N1etzsch3
+ * @since 2025-11-26
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,18 +21,21 @@ import lombok.Setter;
 public class ChatResponse {
 
     /**
-     * Novi (AI) 的回复内容。
+     * 来自 Novi (AI) 的响应内容。
      */
     private String response;
 
     /**
-     * 本次聊天的会话ID。
+     * 聊天会话的 ID。
      */
     private String sessionId;
 
     /**
-     * 会话标题 (用于前端更新侧边栏)
-     * 新会话时返回生成的标题，旧会话时可能为 null 或原标题
+     * 会话标题。
+     * <p>
+     * 用于更新前端侧边栏。
+     * 对于新会话返回生成的标题，对于现有会话返回 null 或原始标题。
+     * </p>
      */
     private String title;
 }

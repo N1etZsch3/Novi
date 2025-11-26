@@ -16,6 +16,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 用户账户实体类
+ * <p>
+ * 代表已注册的用户账户。
+ * </p>
+ *
+ * @author N1etzsch3
+ * @since 2025-11-26
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,43 +38,65 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * 用户名 (唯一)。
+     */
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
+    /**
+     * 哈希密码。
+     * <p>
+     * 仅写访问，防止在 API 响应中暴露。
+     * </p>
+     */
     @Column(name = "hashed_password", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 关键：只写（反序列化），不读（序列化）
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String hashedPassword;
 
+    /**
+     * 用户昵称。
+     */
     @Column(length = 50)
     private String nickname;
 
+    /**
+     * 电子邮件地址 (唯一)。
+     */
     @Column(unique = true, length = 100)
     private String email;
 
+    /**
+     * 用户偏好设置 (JSON)。
+     */
     @Column(columnDefinition = "json")
     private String preferences;
 
+    /**
+     * 创建时间。
+     */
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * 最后更新时间。
+     */
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     // --- 关系 ---
 
     /**
-     * 一个用户可以有多条聊天记录
-     * cascade = CascadeType.ALL: 删除用户时，级联删除所有聊天记录
-     * orphanRemoval = true: 从集合中移除消息时，也从数据库中删除
+     * 与用户关联的聊天消息。
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonIgnore // 关键：防止序列化时无限循环
+    @JsonIgnore
     private Set<ChatMessage> chatMessages = new HashSet<>();
 
     /**
-     * 一个用户可以有多条记忆
+     * 与用户关联的用户记忆。
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonIgnore // 关键：防止序列化时无限循环
+    @JsonIgnore
     private Set<UserMemory> userMemories = new HashSet<>();
 }

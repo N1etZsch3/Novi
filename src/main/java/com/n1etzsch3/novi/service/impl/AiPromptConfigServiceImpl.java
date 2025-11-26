@@ -7,6 +7,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+ * AI 提示词配置服务实现类
+ * <p>
+ * 实现管理和检索 AI 提示词配置的逻辑。
+ * 包含默认性格和语气的回退机制。
+ * </p>
+ *
+ * @author N1etzsch3
+ * @since 2025-11-26
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -20,8 +30,14 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
         if (config != null) {
             return config.getConfigValue();
         }
-        log.warn("未找到系统提示词配置 system_prompt_template，使用默认值");
+        log.warn("System prompt config 'system_prompt_template' not found, using default.");
         return "You are a helpful assistant.";
+    }
+
+    @Override
+    public String getConfigValue(String key) {
+        AiPromptConfig config = aiPromptConfigMapper.findByKey(key);
+        return config != null ? config.getConfigValue() : null;
     }
 
     @Override
@@ -30,7 +46,7 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
         if (config != null) {
             return config.getConfigValue();
         }
-        // 如果找不到特定的，尝试找默认的
+        // 如果未找到特定性格，则回退到默认性格
         if (!"personality_default".equals(personalityKey)) {
             config = aiPromptConfigMapper.findByKey("personality_default");
             if (config != null) {
@@ -38,5 +54,39 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
             }
         }
         return "随性自然，说话直爽。";
+    }
+
+    @Override
+    public String getToneStyleDescription(String toneStyleKey) {
+        AiPromptConfig config = aiPromptConfigMapper.findByKey(toneStyleKey);
+        if (config != null) {
+            return config.getConfigValue();
+        }
+        // 回退到默认语气
+        if (!"tone_default".equals(toneStyleKey)) {
+            config = aiPromptConfigMapper.findByKey("tone_default");
+            if (config != null) {
+                return config.getConfigValue();
+            }
+        }
+        return "正常语气";
+    }
+
+    @Override
+    public void addConfig(AiPromptConfig config) {
+        if (aiPromptConfigMapper.findByKey(config.getConfigKey()) != null) {
+            throw new RuntimeException("Config key already exists: " + config.getConfigKey());
+        }
+        aiPromptConfigMapper.insert(config);
+    }
+
+    @Override
+    public void removeConfig(String configKey) {
+        aiPromptConfigMapper.deleteByKey(configKey);
+    }
+
+    @Override
+    public java.util.List<AiPromptConfig> listConfigsByType(Integer type) {
+        return aiPromptConfigMapper.findByType(type);
     }
 }

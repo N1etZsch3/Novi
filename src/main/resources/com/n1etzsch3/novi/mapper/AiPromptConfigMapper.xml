@@ -12,8 +12,21 @@
 
     <update id="updateValue">
         UPDATE ai_prompt_config
-        SET config_value = #{configValue}
+        SET config_value = #{configValue}, update_time = NOW()
         WHERE config_key = #{configKey}
     </update>
+
+    <insert id="insert" parameterType="com.n1etzsch3.novi.pojo.entity.AiPromptConfig">
+        INSERT INTO ai_prompt_config (config_key, config_value, description, config_type, create_time, update_time)
+        VALUES (#{configKey}, #{configValue}, #{description}, #{configType}, NOW(), NOW())
+    </insert>
+
+    <delete id="deleteByKey">
+        DELETE FROM ai_prompt_config WHERE config_key = #{configKey}
+    </delete>
+
+    <select id="findByType" resultType="com.n1etzsch3.novi.pojo.entity.AiPromptConfig">
+        SELECT * FROM ai_prompt_config WHERE config_type = #{configType}
+    </select>
 
 </mapper>
