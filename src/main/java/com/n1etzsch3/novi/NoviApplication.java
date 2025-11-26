@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@org.mybatis.spring.annotation.MapperScan("com.n1etzsch3.novi.mapper")
 public class NoviApplication {
 
 	public static void main(String[] args) {

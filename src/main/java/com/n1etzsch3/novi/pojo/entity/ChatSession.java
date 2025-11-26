@@ -1,29 +1,28 @@
 package com.n1etzsch3.novi.pojo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 /**
  * 聊天会话实体类
  * <p>
- * 代表包含多条消息的聊天会话。
+ * 对应数据库表 `chat_session`。
  * </p>
  *
  * @author N1etzsch3
  * @since 2025-11-26
  */
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@TableName("chat_session")
 public class ChatSession {
     /**
-     * 会话 ID (UUID)。
+     * 会话 ID (UUID字符串，非自增)
      */
+    @TableId(type = IdType.INPUT)
     private String id;
 
     /**

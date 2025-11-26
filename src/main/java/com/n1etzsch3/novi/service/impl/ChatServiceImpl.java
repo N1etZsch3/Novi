@@ -78,7 +78,9 @@ public class ChatServiceImpl implements ChatService {
                     ? messageContent.substring(0, 20) + "..."
                     : messageContent;
             session.setTitle(finalTitle);
-            chatSessionMapper.createSession(session);
+            session.setCreatedAt(LocalDateTime.now());
+            session.setUpdatedAt(LocalDateTime.now());
+            chatSessionMapper.insert(session);
             log.info("Created new session (DB): {}, Title: {}", finalSessionId, finalTitle);
         } else {
             int rows = chatSessionMapper.updateLastActiveTime(finalSessionId);
@@ -89,7 +91,9 @@ public class ChatServiceImpl implements ChatService {
                 session.setId(finalSessionId);
                 session.setUserId(userId);
                 session.setTitle(finalTitle);
-                chatSessionMapper.createSession(session);
+                session.setCreatedAt(LocalDateTime.now());
+                session.setUpdatedAt(LocalDateTime.now());
+                chatSessionMapper.insert(session);
             } else {
                 finalTitle = null;
             }
@@ -166,7 +170,7 @@ public class ChatServiceImpl implements ChatService {
      */
     private Message buildSystemMessage(Long userId, String userMessage) {
         // 1. 获取用户信息
-        UserAccount user = userAccountMapper.findById(userId);
+        UserAccount user = userAccountMapper.selectById(userId);
 
         // 2. 获取用户偏好
         NoviPersonaSettings settings = userPreferenceService.getPersonaSettings(userId);

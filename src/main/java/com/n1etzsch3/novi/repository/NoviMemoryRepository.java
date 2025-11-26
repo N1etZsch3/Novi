@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
  * 开发测试版 MessageWindowChatMemory 实现
  * 基于 Novi 的数据库和 MyBatis 映射器
  * 用于MessageWindowMemory 持久化聊天记录
+ * 
  * @Note: 此实现与 LoginUserContext 绑定
  */
 public class NoviMemoryRepository implements ChatMemoryRepository {
@@ -86,21 +87,16 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
             return;
         }
 
-        // 创建一个临时的 UserAccount 引用，仅用于设置外键 ID
-        // 这是 MyBatis 插入关联所必需的
-        UserAccount currentUser = new UserAccount();
-        currentUser.setId(userId);
-
         for (Message message : messages) {
             // 我们只持久化 USER 和 ASSISTANT 的消息
             // SYSTEM 消息通常是固定的，不需要存储在会话历史中
             if (message.getMessageType() == MessageType.USER || message.getMessageType() == MessageType.ASSISTANT) {
 
                 // 1. 将 Spring AI 的 Message 转换为 ChatMessage 实体
-                ChatMessage chatMessage = toChatMessageEntity(message, currentUser, conversationId);
+                ChatMessage chatMessage = toChatMessageEntity(message, userId, conversationId);
 
                 // 2. 保存到数据库
-                chatMemoryMapper.saveMessage(chatMessage);
+                chatMemoryMapper.insert(chatMessage);
             }
         }
     }
@@ -141,7 +137,7 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
      * 转换 (Spring AI) Message -> (Novi 实体) ChatMessage
      * (已修正)
      */
-    private ChatMessage toChatMessageEntity(Message message, UserAccount user, String sessionId) {
+    private ChatMessage toChatMessageEntity(Message message, Long userId, String sessionId) {
         ChatMessage.MessageRole role = (message.getMessageType() == MessageType.USER)
                 ? ChatMessage.MessageRole.USER
                 : ChatMessage.MessageRole.ASSISTANT;
@@ -161,7 +157,7 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
         }
 
         return ChatMessage.builder()
-                .user(user)
+                .userId(userId)
                 .sessionId(sessionId)
                 .role(role)
                 .content(textContent)

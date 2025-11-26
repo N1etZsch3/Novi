@@ -1,43 +1,57 @@
 package com.n1etzsch3.novi.service.impl;
 
 import com.n1etzsch3.novi.exception.BusinessException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.n1etzsch3.novi.mapper.ChatSessionMapper;
 import com.n1etzsch3.novi.pojo.entity.ChatSession;
 import com.n1etzsch3.novi.service.ChatSessionService;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+/**
+ * 聊天会话服务实现类
+ *
+ * @author N1etzsch3
+ * @since 2025-11-26
+ */
 @Service
-@Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ChatSessionServiceImpl implements ChatSessionService {
 
     private final ChatSessionMapper chatSessionMapper;
 
-    /**
-     * 根据用户Id获取该用户的所有会话
-     */
     @Override
     public List<ChatSession> getUserSessions(Long userId) {
         return chatSessionMapper.findByUserId(userId);
     }
 
-
     @Override
     public void validateSessionOwner(String sessionId, Long userId) {
-        int count = chatSessionMapper.countByUserIdAndSessionId(userId, sessionId);
+        int count = chatSessionMapper.countByUserIdAndSessionId(sessionId, userId);
         if (count == 0) {
-            // 可能是会话不存在，也可能是属于别人
-            throw new BusinessException("会话不存在或无权访问");
+            throw new BusinessException("Session not found or access denied");
         }
     }
 
     @Override
     public void deleteSession(String sessionId, Long userId) {
+        // 验证所有权
+        validateSessionOwner(sessionId, userId);
         chatSessionMapper.softDeleteSession(sessionId, userId);
+    }
+
+    @Override
+    public ChatSession getSession(Long userId, String sessionId) {
+        // 验证所有权并获取
+        ChatSession session = chatSessionMapper.selectOne(
+                new QueryWrapper<ChatSession>()
+                        .eq("id", sessionId)
+                        .eq("user_id", userId));
+        if (session == null) {
+            throw new RuntimeException("Session not found or access denied");
+        }
+        return session;
     }
 }

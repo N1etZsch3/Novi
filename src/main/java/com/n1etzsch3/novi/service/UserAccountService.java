@@ -12,9 +12,8 @@ public interface UserAccountService {
 
     void updateUserProfile(Long userId, UserProfileUpdateRequest updateRequest);
 
-    // Map<String, Object> getUserPreferences(Long userId);
-    //
-    // Map<String, Object> updateUserPreferences(Long userId, Map<String, Object>
-    // preferences);
+    java.util.Map<String, Object> getUserPreferences(Long userId);
+
+    java.util.Map<String, Object> updateUserPreferences(Long userId, java.util.Map<String, Object> preferences);
 
 }

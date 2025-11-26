@@ -10,4 +10,6 @@ public interface ChatSessionService {
     void validateSessionOwner(String sessionId, Long userId);
 
     void deleteSession(String sessionId, Long userId);
+
+    ChatSession getSession(Long userId, String sessionId);
 }

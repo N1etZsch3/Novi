@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -28,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@ActiveProfiles("test")
+@SuppressWarnings("null")
 @DisplayName("用户账户控制器 (UserAccountController) 测试")
 public class UserAccountControllerTest {
 
@@ -296,7 +299,7 @@ public class UserAccountControllerTest {
 
     // --- 4. 用户偏好测试 ---
     @Nested
-    @DisplayName("4. 用户偏好 (/me/preferences)")
+    @DisplayName("4. 用户偏好 (/preferences)")
     class PreferencesTests {
 
         @Test
@@ -305,7 +308,7 @@ public class UserAccountControllerTest {
             String token = registerAndLogin("pref_user", "PrefPass123!", "pref@example.com", "PrefUser");
 
             // 2. 检查初始偏好 (应为空)
-            mockMvc.perform(get("/api/v1/users/me/preferences")
+            mockMvc.perform(get("/api/v1/users/preferences")
                             .header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
@@ -317,7 +320,7 @@ public class UserAccountControllerTest {
             newPreferences.put("voice", "female_A");
 
             // 4. 发送 PUT 请求更新偏好
-            mockMvc.perform(put("/api/v1/users/me/preferences")
+            mockMvc.perform(put("/api/v1/users/preferences")
                             .header("Authorization", "Bearer " + token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(newPreferences)))
@@ -326,7 +329,7 @@ public class UserAccountControllerTest {
                     .andExpect(jsonPath("$.data.personality").value("witty"));
 
             // 5. 再次 GET 请求，验证数据是否已持久化
-            mockMvc.perform(get("/api/v1/users/me/preferences")
+            mockMvc.perform(get("/api/v1/users/preferences")
                             .header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
@@ -337,11 +340,11 @@ public class UserAccountControllerTest {
         @Test
         @DisplayName("失败：未授权访问偏好接口")
         public void testPreferencesEndpointsFailNoToken() throws Exception {
-            mockMvc.perform(get("/api/v1/users/me/preferences"))
+            mockMvc.perform(get("/api/v1/users/preferences"))
                     .andExpect(status().isUnauthorized());
 
             Map<String, Object> prefs = Map.of("personality", "witty");
-            mockMvc.perform(put("/api/v1/users/me/preferences")
+            mockMvc.perform(put("/api/v1/users/preferences")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(prefs)))
                     .andExpect(status().isUnauthorized());

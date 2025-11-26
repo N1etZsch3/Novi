@@ -26,7 +26,7 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
 
     @Override
     public String getSystemPromptTemplate() {
-        AiPromptConfig config = aiPromptConfigMapper.findByKey("system_prompt_template");
+        AiPromptConfig config = aiPromptConfigMapper.selectById("system_prompt_template");
         if (config != null) {
             return config.getConfigValue();
         }
@@ -36,19 +36,19 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
 
     @Override
     public String getConfigValue(String key) {
-        AiPromptConfig config = aiPromptConfigMapper.findByKey(key);
+        AiPromptConfig config = aiPromptConfigMapper.selectById(key);
         return config != null ? config.getConfigValue() : null;
     }
 
     @Override
     public String getPersonalityDescription(String personalityKey) {
-        AiPromptConfig config = aiPromptConfigMapper.findByKey(personalityKey);
+        AiPromptConfig config = aiPromptConfigMapper.selectById(personalityKey);
         if (config != null) {
             return config.getConfigValue();
         }
         // 如果未找到特定性格，则回退到默认性格
         if (!"personality_default".equals(personalityKey)) {
-            config = aiPromptConfigMapper.findByKey("personality_default");
+            config = aiPromptConfigMapper.selectById("personality_default");
             if (config != null) {
                 return config.getConfigValue();
             }
@@ -58,13 +58,13 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
 
     @Override
     public String getToneStyleDescription(String toneStyleKey) {
-        AiPromptConfig config = aiPromptConfigMapper.findByKey(toneStyleKey);
+        AiPromptConfig config = aiPromptConfigMapper.selectById(toneStyleKey);
         if (config != null) {
             return config.getConfigValue();
         }
         // 回退到默认语气
         if (!"tone_default".equals(toneStyleKey)) {
-            config = aiPromptConfigMapper.findByKey("tone_default");
+            config = aiPromptConfigMapper.selectById("tone_default");
             if (config != null) {
                 return config.getConfigValue();
             }
@@ -74,7 +74,7 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
 
     @Override
     public void addConfig(AiPromptConfig config) {
-        if (aiPromptConfigMapper.findByKey(config.getConfigKey()) != null) {
+        if (aiPromptConfigMapper.selectById(config.getConfigKey()) != null) {
             throw new RuntimeException("Config key already exists: " + config.getConfigKey());
         }
         aiPromptConfigMapper.insert(config);
@@ -82,7 +82,7 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
 
     @Override
     public void removeConfig(String configKey) {
-        aiPromptConfigMapper.deleteByKey(configKey);
+        aiPromptConfigMapper.deleteById(configKey);
     }
 
     @Override

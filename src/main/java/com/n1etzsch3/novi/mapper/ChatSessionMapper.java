@@ -1,7 +1,11 @@
 package com.n1etzsch3.novi.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.n1etzsch3.novi.pojo.entity.ChatSession;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -15,45 +19,42 @@ import java.util.List;
  * @since 2025-11-26
  */
 @Mapper
-public interface ChatSessionMapper {
+public interface ChatSessionMapper extends BaseMapper<ChatSession> {
 
     /**
-     * 查找用户的所有聊天会话。
+     * 查找用户的所有会话（按更新时间倒序）。
      *
      * @param userId 用户 ID。
-     * @return 聊天会话列表。
+     * @return 会话列表。
      */
+    @Select("SELECT * FROM chat_session WHERE user_id = #{userId} AND is_deleted = 0 ORDER BY updated_at DESC")
     List<ChatSession> findByUserId(Long userId);
-
-    /**
-     * 创建新的聊天会话。
-     *
-     * @param session 聊天会话实体。
-     */
-    void createSession(ChatSession session);
 
     /**
      * 更新会话的最后活跃时间。
      *
-     * @param finalSessionId 会话 ID。
-     * @return 受影响的行数。
+     * @param sessionId 会话 ID。
+     * @return 影响的行数。
      */
-    int updateLastActiveTime(String finalSessionId);
+    @Update("UPDATE chat_session SET updated_at = NOW() WHERE id = #{sessionId}")
+    int updateLastActiveTime(String sessionId);
 
     /**
-     * 统计用户 ID 和会话 ID 的会话数量。
+     * 统计指定用户和会话 ID 的数量（用于检查所有权）。
      *
+     * @param sessionId 会话 ID。
      * @param userId    用户 ID。
-     * @param sessionId 会话 ID。
-     * @return 匹配的会话数量。
+     * @return 数量。
      */
-    int countByUserIdAndSessionId(Long userId, String sessionId);
+    @Select("SELECT COUNT(*) FROM chat_session WHERE id = #{sessionId} AND user_id = #{userId}")
+    int countByUserIdAndSessionId(@Param("sessionId") String sessionId, @Param("userId") Long userId);
 
     /**
-     * 软删除会话（标记为已删除）。
+     * 软删除会话。
      *
      * @param sessionId 会话 ID。
-     * @param userId    用户 ID（用于所有权验证）。
+     * @param userId    用户 ID。
      */
-    void softDeleteSession(String sessionId, Long userId);
+    @Update("UPDATE chat_session SET is_deleted = 1 WHERE id = #{sessionId} AND user_id = #{userId}")
+    void softDeleteSession(@Param("sessionId") String sessionId, @Param("userId") Long userId);
 }

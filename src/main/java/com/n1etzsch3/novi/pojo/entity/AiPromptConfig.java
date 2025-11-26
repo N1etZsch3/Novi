@@ -1,6 +1,10 @@
 package com.n1etzsch3.novi.pojo.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
 import java.time.LocalDateTime;
 
 /**
@@ -9,20 +13,21 @@ import java.time.LocalDateTime;
  * 代表 AI 提示词的配置条目，包括系统提示词、
  * 性格和语气风格。
  * </p>
+ * <p>
+ * 对应数据库表 `ai_prompt_config`。
+ * </p>
  *
  * @author N1etzsch3
  * @since 2025-11-26
  */
 @Data
+@TableName("ai_prompt_config")
 public class AiPromptConfig {
-    /**
-     * 主键。
-     */
-    private Long id;
 
     /**
-     * 配置 Key (例如: "personality_default")。
+     * 配置 Key (主键)
      */
+    @TableId(type = IdType.INPUT)
     private String configKey;
 
     /**

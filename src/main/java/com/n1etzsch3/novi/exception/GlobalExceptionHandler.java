@@ -34,6 +34,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public Result handleDuplicateKeyException(DuplicateKeyException e) {
         log.error("数据库键冲突异常: ", e);
+        if (e.getMessage() != null && e.getMessage().contains("EMAIL")) {
+            return Result.error("邮箱已被注册");
+        }
         // 只返回一个通用的、安全的消息
         return Result.error("数据冲突，请检查您的输入");
     }

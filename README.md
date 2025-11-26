@@ -8,7 +8,7 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 
 ## 🛠 技术栈 (Tech Stack)
 
-- **核心框架**: Spring Boot 3.5.7 (Java 25 Preview)
+- **核心框架**: Spring Boot 3.5.7 (Java 21)
 - **AI 接入**: Spring AI (兼容 OpenAI 协议，当前适配讯飞星火/通义千问等)
 - **数据库**: MySQL 8.0
 - **ORM 框架**: MyBatis 3.0.5
@@ -35,6 +35,7 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 - **上下文记忆**：
   - 基于数据库 (`chat_message` 表) 实现的持久化聊天记忆 (`NoviDatabaseChatMemory`)。
   - 支持多轮对话，AI 能记住之前的聊天内容。
+  - *(计划中)* 长期事实记忆提取 (Long-term Memory Extraction)。
 
 ### 3. 📚 会话与历史管理
 - **侧边栏会话列表**：按最后活跃时间排序。
@@ -64,7 +65,7 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 SPRING_DATASOURCE_URL=""
 SPRING_DATASOURCE_USERNAME=""
 SPRING_DATASOURCE_PASSWORD=""
-SPARK_API_KEY=""
+AI_API_KEY=""
 ```
 
 ### 4. 启动项目
@@ -75,9 +76,9 @@ SPARK_API_KEY=""
 
 ```Plaintext
 com.n1etzsch3.novi
-├── config/          # Spring Security, WebMvc, ChatConfig 配置
+├── config/          # Spring Security, WebMvc, AiConfig 配置
 ├── controller/      # REST API 控制器 (User, Chat, Session)
-├── service/         # 业务逻辑层
+├── service/         # 业务逻辑层 (Chat, User, AiPrompt)
 ├── mapper/          # MyBatis 数据访问接口
 ├── repository/      # Spring AI ChatMemory 自定义实现
 ├── pojo/            # 实体类 (Entity) 与 数据传输对象 (DTO)

@@ -83,4 +83,32 @@ public class UserAccountController {
         return Result.success(userAccountService.getUserDetailsById(userId));
     }
 
+    /**
+     * 获取用户偏好
+     *
+     * @return 包含用户偏好 Map 的结果。
+     */
+    @GetMapping("/preferences") // 路径: /api/v1/users/preferences
+    public Result getUserPreferences() {
+        Long userId = LoginUserContext.getUserId();
+        java.util.Map<String, Object> preferences = userAccountService.getUserPreferences(userId);
+        log.info("Retrieved user preferences: {}", userId);
+        return Result.success(preferences);
+    }
+
+    /**
+     * 更新用户偏好
+     *
+     * @param preferences 偏好设置 Map。
+     * @return 包含更新后的偏好设置 Map 的结果。
+     */
+    @PutMapping("/preferences") // 路径: /api/v1/users/preferences
+    public Result updateUserPreferences(@RequestBody java.util.Map<String, Object> preferences) {
+        Long userId = LoginUserContext.getUserId();
+        java.util.Map<String, Object> updatedPreferences = userAccountService.updateUserPreferences(userId,
+                preferences);
+        log.info("Updated user preferences: {}", userId);
+        return Result.success(updatedPreferences);
+    }
+
 }

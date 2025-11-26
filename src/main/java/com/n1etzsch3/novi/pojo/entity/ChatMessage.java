@@ -1,72 +1,73 @@
 package com.n1etzsch3.novi.pojo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 /**
  * 聊天消息实体类
  * <p>
- * 代表聊天会话中的单条消息。
+ * 对应数据库表 `chat_message`。
  * </p>
  *
  * @author N1etzsch3
  * @since 2025-11-26
  */
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Entity
-@Table(name = "chat_message", indexes = {
-        @Index(name = "idx_user_session", columnList = "user_id, session_id, timestamp")
-})
+@TableName("chat_message")
 public class ChatMessage {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    /**
+     * 消息 ID (主键)
+     */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
      * 会话 ID。
      */
-    @Column(name = "session_id", nullable = false, length = 100)
+    /**
+     * 会话 ID。
+     */
     private String sessionId;
 
     /**
      * 消息角色 (USER 或 ASSISTANT)。
      */
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
     private MessageRole role;
 
     /**
      * 消息内容。
      */
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     /**
      * 创建时间戳。
      */
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     private LocalDateTime timestamp;
+
+    /**
+     * 用户 ID
+     */
+    private Long userId;
 
     // --- 关系 ---
 
     /**
      * 拥有此消息的用户。
-     * <p>
-     * FetchType.LAZY: 仅在访问时加载。
-     * </p>
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @TableField(exist = false)
     @JsonIgnore
     private UserAccount user;
 

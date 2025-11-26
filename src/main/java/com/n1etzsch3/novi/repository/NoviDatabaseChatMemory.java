@@ -3,7 +3,6 @@ package com.n1etzsch3.novi.repository;
 import com.n1etzsch3.novi.mapper.ChatMemoryMapper;
 import com.n1etzsch3.novi.pojo.entity.ChatMessage;
 import com.n1etzsch3.novi.pojo.entity.UserAccount;
-// 移除：import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.*;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component // 注册为 Spring Bean
-@Primary   // 优先使用这个 ChatMemory 实现
+@Primary // 优先使用这个 ChatMemory 实现
 public class NoviDatabaseChatMemory implements ChatMemory {
 
     private final ChatMemoryMapper chatMemoryMapper;
@@ -60,7 +59,6 @@ public class NoviDatabaseChatMemory implements ChatMemory {
             return null;
         }
     }
-
 
     @Autowired
     public NoviDatabaseChatMemory(ChatMemoryMapper chatMemoryMapper) {
@@ -100,15 +98,12 @@ public class NoviDatabaseChatMemory implements ChatMemory {
             return;
         }
 
-        UserAccount currentUser = new UserAccount();
-        currentUser.setId(key.userId); // 【关键修改】
-
         for (Message message : messages) {
             // 我们只持久化 USER 和 ASSISTANT 的消息
             if (message.getMessageType() == MessageType.USER || message.getMessageType() == MessageType.ASSISTANT) {
                 // 【关键修改】
-                ChatMessage chatMessage = toChatMessageEntity(message, currentUser, key.sessionId);
-                chatMemoryMapper.saveMessage(chatMessage);
+                ChatMessage chatMessage = toChatMessageEntity(message, key.userId, key.sessionId);
+                chatMemoryMapper.insert(chatMessage);
             }
         }
     }
@@ -148,7 +143,7 @@ public class NoviDatabaseChatMemory implements ChatMemory {
      * 转换 (Spring AI) Message -> (Novi 实体) ChatMessage
      * (已修正)
      */
-    private ChatMessage toChatMessageEntity(Message message, UserAccount user, String sessionId) {
+    private ChatMessage toChatMessageEntity(Message message, Long userId, String sessionId) {
         ChatMessage.MessageRole role = (message.getMessageType() == MessageType.USER)
                 ? ChatMessage.MessageRole.USER
                 : ChatMessage.MessageRole.ASSISTANT;
@@ -168,7 +163,7 @@ public class NoviDatabaseChatMemory implements ChatMemory {
         }
 
         return ChatMessage.builder()
-                .user(user)
+                .userId(userId)
                 .sessionId(sessionId)
                 .role(role)
                 .content(textContent)

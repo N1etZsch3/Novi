@@ -19,7 +19,7 @@ spring:
   ai:
     openai:
       # 4. 使用环境变量设置 API Key
-      api-key: ${SPARK_API_KEY}
+      api-key: ${AI_API_KEY}
 
       base-url: https://ark.cn-beijing.volces.com/api/v3
       chat:
@@ -28,11 +28,13 @@ spring:
         completions-path: /chat/completions
 
 
-mybatis:
+mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     # 开启驼峰命名的开关
     map-underscore-to-camel-case: true
+  type-aliases-package: com.n1etzsch3.novi.pojo.entity
+  mapper-locations: classpath*:mapper/**/*.xml
 
 #配置JWT
 novi:
