@@ -24,12 +24,19 @@ public class ChatSessionServiceImpl implements ChatSessionService {
 
     @Override
     public List<ChatSession> getUserSessions(Long userId) {
-        return chatSessionMapper.findByUserId(userId);
+        return chatSessionMapper.selectList(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatSession>()
+                        .eq(ChatSession::getUserId, userId)
+                        .eq(ChatSession::getIsDeleted, 0)
+                        .orderByDesc(ChatSession::getUpdatedAt));
     }
 
     @Override
     public void validateSessionOwner(String sessionId, Long userId) {
-        int count = chatSessionMapper.countByUserIdAndSessionId(sessionId, userId);
+        Long count = chatSessionMapper.selectCount(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatSession>()
+                        .eq(ChatSession::getId, sessionId)
+                        .eq(ChatSession::getUserId, userId));
         if (count == 0) {
             throw new BusinessException("Session not found or access denied");
         }
@@ -39,7 +46,11 @@ public class ChatSessionServiceImpl implements ChatSessionService {
     public void deleteSession(String sessionId, Long userId) {
         // 验证所有权
         validateSessionOwner(sessionId, userId);
-        chatSessionMapper.softDeleteSession(sessionId, userId);
+        chatSessionMapper.update(null,
+                new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<ChatSession>()
+                        .eq(ChatSession::getId, sessionId)
+                        .eq(ChatSession::getUserId, userId)
+                        .set(ChatSession::getIsDeleted, 1));
     }
 
     @Override

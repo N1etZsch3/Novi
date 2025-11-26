@@ -127,7 +127,10 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         // 1. 处理邮箱修改
         if (StringUtils.hasText(req.getEmail()) && !req.getEmail().equals(user.getEmail())) {
-            UserAccount conflict = userAccountMapper.findByEmailAndNotId(req.getEmail(), userId);
+            UserAccount conflict = userAccountMapper.selectOne(
+                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<UserAccount>()
+                            .eq(UserAccount::getEmail, req.getEmail())
+                            .ne(UserAccount::getId, userId));
             if (conflict != null)
                 throw new BusinessException("该邮箱已被其他用户注册");
             user.setEmail(req.getEmail());
@@ -208,7 +211,11 @@ public class UserAccountServiceImpl implements UserAccountService {
             String preferencesString = objectMapper.writeValueAsString(preferences);
 
             // 5. 将序列化后的字符串传递给 Mapper
-            userAccountMapper.updatePreferences(userId, preferencesString);
+            userAccountMapper.update(null,
+                    new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<UserAccount>()
+                            .eq(UserAccount::getId, userId)
+                            .set(UserAccount::getPreferences, preferencesString)
+                            .set(UserAccount::getUpdatedAt, LocalDateTime.now()));
 
             log.info("成功更新用户 {} 的偏好设置", userId);
             return preferences;

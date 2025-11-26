@@ -18,13 +18,4 @@ import java.util.List;
  */
 @Mapper
 public interface AiPromptConfigMapper extends BaseMapper<AiPromptConfig> {
-
-    /**
-     * 根据类型查找配置。
-     *
-     * @param configType 配置类型 (例如: 0:系统, 1:性格, 2:语气风格)。
-     * @return 匹配的配置列表。
-     */
-    @Select("SELECT * FROM ai_prompt_config WHERE config_type = #{configType}")
-    List<AiPromptConfig> findByType(Integer configType);
 }

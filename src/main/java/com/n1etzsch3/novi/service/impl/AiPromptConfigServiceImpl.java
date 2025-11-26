@@ -87,6 +87,8 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
 
     @Override
     public java.util.List<AiPromptConfig> listConfigsByType(Integer type) {
-        return aiPromptConfigMapper.findByType(type);
+        return aiPromptConfigMapper.selectList(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<AiPromptConfig>()
+                        .eq(AiPromptConfig::getConfigType, type));
     }
 }

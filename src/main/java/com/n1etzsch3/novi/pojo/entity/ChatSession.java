@@ -44,4 +44,9 @@ public class ChatSession {
      * 最后更新时间。
      */
     private LocalDateTime updatedAt;
+
+    /**
+     * 是否删除 (0: 正常, 1: 删除)。
+     */
+    private Integer isDeleted;
 }

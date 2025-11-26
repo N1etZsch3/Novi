@@ -77,7 +77,11 @@ public class NoviDatabaseChatMemory implements ChatMemory {
             return Collections.emptyList();
         }
 
-        List<ChatMessage> chatMessages = chatMemoryMapper.findByUserIdAndSessionId(key.userId, key.sessionId);
+        List<ChatMessage> chatMessages = chatMemoryMapper.selectList(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                        .eq(ChatMessage::getUserId, key.userId)
+                        .eq(ChatMessage::getSessionId, key.sessionId)
+                        .orderByAsc(ChatMessage::getId));
 
         return chatMessages.stream()
                 .map(this::toSpringAiMessage)
@@ -119,7 +123,10 @@ public class NoviDatabaseChatMemory implements ChatMemory {
             log.warn("NoviDatabaseChatMemory.clear: 未找到用户ID，操作中止 (Key: {})", conversationId);
             return;
         }
-        chatMemoryMapper.deleteByUserIdAndSessionId(key.userId, key.sessionId);
+        chatMemoryMapper.delete(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                        .eq(ChatMessage::getUserId, key.userId)
+                        .eq(ChatMessage::getSessionId, key.sessionId));
     }
 
     // --- 辅助转换方法 ---
@@ -149,8 +156,7 @@ public class NoviDatabaseChatMemory implements ChatMemory {
                 : ChatMessage.MessageRole.ASSISTANT;
 
         // --- 修正 ---
-        // 根据教程，UserMessage 和 AssistantMessage 都使用 .getText()
-        // 而不是 .getContent() 来获取纯文本。
+        // 根据文档，UserMessage 和 AssistantMessage 都使用 .getText()来获取纯文本。
         String textContent;
         if (message instanceof UserMessage) {
             textContent = ((UserMessage) message).getText();

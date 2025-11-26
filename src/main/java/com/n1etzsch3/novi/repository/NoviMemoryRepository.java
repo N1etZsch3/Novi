@@ -47,7 +47,12 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
             log.warn("NoviMemoryRepository.findConversationIds: 未找到用户ID，返回空列表");
             return Collections.emptyList();
         }
-        return chatMemoryMapper.findSessionIdsByUserId(userId);
+        List<Object> sessionIds = chatMemoryMapper.selectObjs(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                        .select(ChatMessage::getSessionId)
+                        .eq(ChatMessage::getUserId, userId)
+                        .groupBy(ChatMessage::getSessionId));
+        return sessionIds.stream().map(Object::toString).collect(Collectors.toList());
     }
 
     /**
@@ -64,7 +69,11 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
         }
 
         // 1. 从数据库中获取持久化的 ChatMessage 实体
-        List<ChatMessage> chatMessages = chatMemoryMapper.findByUserIdAndSessionId(userId, conversationId);
+        List<ChatMessage> chatMessages = chatMemoryMapper.selectList(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                        .eq(ChatMessage::getUserId, userId)
+                        .eq(ChatMessage::getSessionId, conversationId)
+                        .orderByAsc(ChatMessage::getId));
 
         // 2. 将 ChatMessage 实体 转换为 Spring AI 的 Message 列表
         return chatMessages.stream()
@@ -113,7 +122,10 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
             log.warn("NoviMemoryRepository.deleteByConversationId: 未找到用户ID，操作中止");
             return;
         }
-        chatMemoryMapper.deleteByUserIdAndSessionId(userId, conversationId);
+        chatMemoryMapper.delete(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                        .eq(ChatMessage::getUserId, userId)
+                        .eq(ChatMessage::getSessionId, conversationId));
     }
 
     // --- 辅助转换方法 ---

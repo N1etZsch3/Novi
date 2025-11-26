@@ -23,8 +23,12 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
     public NoviPersonaSettings getPersonaSettings(Long userId) {
         // 1. 只查询需要的字段 (需要在 Mapper 中添加 findPreferencesJsonById)
         // 如果不想改 Mapper，也可以用 findById 查全量，但性能略低
-        String json = userAccountMapper.findPreferencesJsonById(userId);
-        
+        com.n1etzsch3.novi.pojo.entity.UserAccount userAccount = userAccountMapper.selectOne(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<com.n1etzsch3.novi.pojo.entity.UserAccount>()
+                        .select(com.n1etzsch3.novi.pojo.entity.UserAccount::getPreferences)
+                        .eq(com.n1etzsch3.novi.pojo.entity.UserAccount::getId, userId));
+        String json = userAccount != null ? userAccount.getPreferences() : null;
+
         if (!StringUtils.hasText(json)) {
             return new NoviPersonaSettings(); // 返回默认配置
         }
@@ -51,7 +55,12 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
         // 2. 序列化并保存
         try {
             String json = objectMapper.writeValueAsString(settings);
-            userAccountMapper.updatePreferences(userId, json);
+            userAccountMapper.update(null,
+                    new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<com.n1etzsch3.novi.pojo.entity.UserAccount>()
+                            .eq(com.n1etzsch3.novi.pojo.entity.UserAccount::getId, userId)
+                            .set(com.n1etzsch3.novi.pojo.entity.UserAccount::getPreferences, json)
+                            .set(com.n1etzsch3.novi.pojo.entity.UserAccount::getUpdatedAt,
+                                    java.time.LocalDateTime.now()));
             return settings;
         } catch (JsonProcessingException e) {
             throw new BusinessException("偏好设置格式错误");

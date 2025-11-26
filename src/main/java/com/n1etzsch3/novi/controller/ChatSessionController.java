@@ -54,7 +54,11 @@ public class ChatSessionController {
         chatSessionService.validateSessionOwner(sessionId, userId);
 
         // 复用现有的 ChatMemoryMapper 方法
-        List<ChatMessage> messages = chatMemoryMapper.findByUserIdAndSessionId(userId, sessionId);
+        List<ChatMessage> messages = chatMemoryMapper.selectList(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                        .eq(ChatMessage::getUserId, userId)
+                        .eq(ChatMessage::getSessionId, sessionId)
+                        .orderByAsc(ChatMessage::getId));
         return Result.success(messages);
     }
 

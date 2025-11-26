@@ -20,14 +20,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtAuthInterceptor)
                 // 1. 拦截所有请求
-                .addPathPatterns("/**") 
-                
+                .addPathPatterns("/**")
+
                 // 2. 排除不需要认证的路径
                 .excludePathPatterns(
                         "/api/v1/users/login", // 登录
-                        "/api/v1/users/register",      // 注册
-                        "/error",// Spring Boot 默认错误页
-                        "/index.html"
+                        "/api/v1/users/register", // 注册
+                        "/error", // Spring Boot 默认错误页
+                        "/index.html",
+                        "/api/prompt/config/**" // Exclude prompt config for testing/admin
                 );
     }
 

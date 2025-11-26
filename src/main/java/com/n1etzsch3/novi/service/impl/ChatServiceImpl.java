@@ -83,7 +83,10 @@ public class ChatServiceImpl implements ChatService {
             chatSessionMapper.insert(session);
             log.info("Created new session (DB): {}, Title: {}", finalSessionId, finalTitle);
         } else {
-            int rows = chatSessionMapper.updateLastActiveTime(finalSessionId);
+            int rows = chatSessionMapper.update(null,
+                    new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<ChatSession>()
+                            .eq(ChatSession::getId, finalSessionId)
+                            .set(ChatSession::getUpdatedAt, LocalDateTime.now()));
             if (rows == 0) {
                 log.warn("Session {} not found in DB, recreating.", finalSessionId);
                 finalTitle = "Restored Session";
