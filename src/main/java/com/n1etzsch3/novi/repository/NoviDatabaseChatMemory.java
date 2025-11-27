@@ -1,14 +1,14 @@
 package com.n1etzsch3.novi.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.n1etzsch3.novi.mapper.ChatMemoryMapper;
 import com.n1etzsch3.novi.pojo.entity.ChatMessage;
-import com.n1etzsch3.novi.pojo.entity.UserAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component; // 修改为 @Component
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -78,7 +78,7 @@ public class NoviDatabaseChatMemory implements ChatMemory {
         }
 
         List<ChatMessage> chatMessages = chatMemoryMapper.selectList(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                new LambdaQueryWrapper<ChatMessage>()
                         .eq(ChatMessage::getUserId, key.userId)
                         .eq(ChatMessage::getSessionId, key.sessionId)
                         .orderByAsc(ChatMessage::getId));
@@ -124,7 +124,7 @@ public class NoviDatabaseChatMemory implements ChatMemory {
             return;
         }
         chatMemoryMapper.delete(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                new LambdaQueryWrapper<ChatMessage>()
                         .eq(ChatMessage::getUserId, key.userId)
                         .eq(ChatMessage::getSessionId, key.sessionId));
     }

@@ -4,6 +4,7 @@ import com.n1etzsch3.novi.pojo.dto.Result;
 import com.n1etzsch3.novi.pojo.entity.AiPromptConfig;
 import com.n1etzsch3.novi.service.AiPromptConfigService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/prompt/config")
 @RequiredArgsConstructor
+@Slf4j
 public class AiPromptConfigController {
 
     private final AiPromptConfigService aiPromptConfigService;
@@ -33,6 +35,7 @@ public class AiPromptConfigController {
     @PostMapping
     public Result addConfig(@RequestBody AiPromptConfig config) {
         aiPromptConfigService.addConfig(config);
+        log.info("Added new prompt config: {}", config.getConfigKey());
         return Result.success();
     }
 
@@ -45,6 +48,7 @@ public class AiPromptConfigController {
     @DeleteMapping("/{key}")
     public Result removeConfig(@PathVariable String key) {
         aiPromptConfigService.removeConfig(key);
+        log.info("Removed prompt config: {}", key);
         return Result.success();
     }
 
@@ -57,6 +61,7 @@ public class AiPromptConfigController {
     @GetMapping("/type/{type}")
     public Result listConfigsByType(@PathVariable Integer type) {
         List<AiPromptConfig> list = aiPromptConfigService.listConfigsByType(type);
+        log.info("Listed prompt configs by type: {}", type);
         return Result.success(list);
     }
 }

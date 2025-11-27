@@ -1,5 +1,6 @@
 package com.n1etzsch3.novi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n1etzsch3.novi.mapper.ChatSessionMapper;
@@ -10,6 +11,7 @@ import com.n1etzsch3.novi.pojo.dto.NoviPersonaSettings;
 import com.n1etzsch3.novi.pojo.dto.StreamEvent;
 import com.n1etzsch3.novi.pojo.entity.ChatSession;
 import com.n1etzsch3.novi.pojo.entity.UserAccount;
+import com.n1etzsch3.novi.service.AiPromptConfigService;
 import com.n1etzsch3.novi.service.ChatService;
 import com.n1etzsch3.novi.service.UserPreferenceService;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +52,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatSessionMapper chatSessionMapper;
     private final UserAccountMapper userAccountMapper;
     private final UserPreferenceService userPreferenceService;
-    private final com.n1etzsch3.novi.service.AiPromptConfigService aiPromptConfigService;
+    private final AiPromptConfigService aiPromptConfigService;
 
     /**
      * 辅助方法：为聊天记忆创建复合键。
@@ -84,7 +86,7 @@ public class ChatServiceImpl implements ChatService {
             log.info("Created new session (DB): {}, Title: {}", finalSessionId, finalTitle);
         } else {
             int rows = chatSessionMapper.update(null,
-                    new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<ChatSession>()
+                    new LambdaUpdateWrapper<ChatSession>()
                             .eq(ChatSession::getId, finalSessionId)
                             .set(ChatSession::getUpdatedAt, LocalDateTime.now()));
             if (rows == 0) {
@@ -124,6 +126,7 @@ public class ChatServiceImpl implements ChatService {
                 .call()
                 .content();
 
+        log.info("Blocking call completed for user: {}, session: {}", userId, sessionInfo.sessionId());
         return new ChatResponse(AIResponse, sessionInfo.sessionId(), sessionInfo.title());
     }
 

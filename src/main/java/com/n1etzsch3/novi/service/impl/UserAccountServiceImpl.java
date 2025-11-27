@@ -1,12 +1,16 @@
 package com.n1etzsch3.novi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n1etzsch3.novi.exception.BusinessException;
 import com.n1etzsch3.novi.mapper.UserAccountMapper;
 import com.n1etzsch3.novi.pojo.dto.*;
 import com.n1etzsch3.novi.pojo.entity.UserAccount;
 import com.n1etzsch3.novi.service.UserAccountService;
+import com.n1etzsch3.novi.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * 用户账户服务实现类
@@ -30,7 +35,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountMapper userAccountMapper;
     private final PasswordEncoder passwordEncoder;
-    private final com.n1etzsch3.novi.utils.JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
     @Override
     public void registerUser(RegistrationRequest request) {
@@ -128,7 +133,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         // 1. 处理邮箱修改
         if (StringUtils.hasText(req.getEmail()) && !req.getEmail().equals(user.getEmail())) {
             UserAccount conflict = userAccountMapper.selectOne(
-                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<UserAccount>()
+                    new LambdaQueryWrapper<UserAccount>()
                             .eq(UserAccount::getEmail, req.getEmail())
                             .ne(UserAccount::getId, userId));
             if (conflict != null)
@@ -187,7 +192,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         try {
             return objectMapper.readValue(
                     preferencesString,
-                    new com.fasterxml.jackson.core.type.TypeReference<java.util.Map<String, Object>>() {
+                    new TypeReference<Map<String, Object>>() {
                     });
 
         } catch (JsonProcessingException e) {
@@ -212,7 +217,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
             // 5. 将序列化后的字符串传递给 Mapper
             userAccountMapper.update(null,
-                    new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<UserAccount>()
+                    new LambdaUpdateWrapper<UserAccount>()
                             .eq(UserAccount::getId, userId)
                             .set(UserAccount::getPreferences, preferencesString)
                             .set(UserAccount::getUpdatedAt, LocalDateTime.now()));

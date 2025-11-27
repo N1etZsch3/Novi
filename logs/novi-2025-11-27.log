@@ -1,0 +1,550 @@
+2025-11-27 08:36:05.517 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2025-11-27 08:36:05.530 [main] INFO  c.n.novi.controller.ChatSessionControllerTest - Starting ChatSessionControllerTest using Java 25 with PID 75316 (started by n1etzsch3 in /Users/n1etzsch3/Documents/Novi)
+2025-11-27 08:36:05.531 [main] DEBUG c.n.novi.controller.ChatSessionControllerTest - Running with Spring Boot v3.5.7, Spring v6.2.12
+2025-11-27 08:36:05.531 [main] INFO  c.n.novi.controller.ChatSessionControllerTest - The following 1 profile is active: "test"
+2025-11-27 08:36:06.507 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-27 08:36:06.583 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:novi_test_db user=SA
+2025-11-27 08:36:06.584 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-27 08:36:06.804 [main] DEBUG o.s.a.m.t.a.ToolCallingAutoConfiguration - Cannot load class: org.springframework.security.oauth2.client.ClientAuthorizationException
+2025-11-27 08:36:07.075 [main] INFO  o.s.b.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-11-27 08:36:07.075 [main] INFO  o.s.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+2025-11-27 08:36:07.078 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-11-27 08:36:07.083 [main] INFO  o.s.test.web.servlet.TestDispatcherServlet - Completed initialization in 8 ms
+2025-11-27 08:36:07.125 [main] INFO  c.n.novi.controller.ChatSessionControllerTest - Started ChatSessionControllerTest in 1.762 seconds (process running for 2.169)
+2025-11-27 08:36:07.165 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.ChatSessionControllerTest.testGetSessionMessagesSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:07.166 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@2137077755 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:07.167 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@2137077755 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:07.386 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: msg_user
+2025-11-27 08:36:07.386 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: msg_user
+2025-11-27 08:36:07.480 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: msg_user
+2025-11-27 08:36:07.480 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:07.491 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions/sess_1/messages, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibXNnX3VzZXIiLCJzdWIiOiIxIiwiaWF0IjoxNzY0MjAzNzY3LCJleHAiOjE3NjQyOTAxNjd9.nq1LI6cRYTQ3y9YBzxI3CT2BKxRoFx6oQJvty3b2-xQ
+2025-11-27 08:36:07.499 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 1
+2025-11-27 08:36:07.501 [main] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved messages for session: sess_1
+2025-11-27 08:36:07.505 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:07.518 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:07.519 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@2137077755 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:07.519 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@2137077755 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:07.523 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.ChatSessionControllerTest.testGetSessionListSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:07.523 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1211269437 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:07.523 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1211269437 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:07.586 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: session_user
+2025-11-27 08:36:07.586 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: session_user
+2025-11-27 08:36:07.648 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: session_user
+2025-11-27 08:36:07.648 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:07.649 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoic2Vzc2lvbl91c2VyIiwic3ViIjoiMiIsImlhdCI6MTc2NDIwMzc2NywiZXhwIjoxNzY0MjkwMTY3fQ.eXpBsYB1MsG8B_RGcEUu8OBUnx8vuNOapyh_siRJ0dg
+2025-11-27 08:36:07.650 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 2
+2025-11-27 08:36:07.650 [main] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 2
+2025-11-27 08:36:07.651 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:07.653 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:07.653 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@1211269437 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:07.653 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1211269437 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:07.656 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.ChatSessionControllerTest.testDeleteSessionSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:07.656 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@11230819 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:07.656 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@11230819 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:07.720 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: del_user
+2025-11-27 08:36:07.721 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: del_user
+2025-11-27 08:36:07.783 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: del_user
+2025-11-27 08:36:07.783 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:07.784 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions/sess_del, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjMsInVzZXJuYW1lIjoiZGVsX3VzZXIiLCJzdWIiOiIzIiwiaWF0IjoxNzY0MjAzNzY3LCJleHAiOjE3NjQyOTAxNjd9.C8VDbKo_hhhoORhFIT9w3jDwY_ywPd23l6OD3Wz66K0
+2025-11-27 08:36:07.784 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 3
+2025-11-27 08:36:07.785 [main] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Deleted session: sess_del
+2025-11-27 08:36:07.785 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:07.786 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:07.786 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@11230819 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:07.787 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@11230819 wrapping conn0: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:07.790 [main] INFO  o.s.t.c.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.n1etzsch3.novi.controller.AiPromptConfigControllerTest]: AiPromptConfigControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-27 08:36:07.792 [main] INFO  o.s.b.t.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.n1etzsch3.novi.NoviApplication for test class com.n1etzsch3.novi.controller.AiPromptConfigControllerTest
+2025-11-27 08:36:07.797 [main] INFO  me.paulschwarz.springdotenv.DotenvPropertySource - Initialized Dotenv with DotenvConfig{directory=null, filename=null, ignoreIfMalformed=false, ignoreIfMissing=true, systemProperties=false, prefix=null}
+2025-11-27 08:36:07.808 [main] INFO  c.n.novi.controller.AiPromptConfigControllerTest - Starting AiPromptConfigControllerTest using Java 25 with PID 75316 (started by n1etzsch3 in /Users/n1etzsch3/Documents/Novi)
+2025-11-27 08:36:07.808 [main] DEBUG c.n.novi.controller.AiPromptConfigControllerTest - Running with Spring Boot v3.5.7, Spring v6.2.12
+2025-11-27 08:36:07.808 [main] INFO  c.n.novi.controller.AiPromptConfigControllerTest - The following 1 profile is active: "test"
+2025-11-27 08:36:07.937 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2025-11-27 08:36:07.937 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:novi_test_db user=SA
+2025-11-27 08:36:07.937 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2025-11-27 08:36:08.001 [main] DEBUG o.s.a.m.t.a.ToolCallingAutoConfiguration - Cannot load class: org.springframework.security.oauth2.client.ClientAuthorizationException
+2025-11-27 08:36:08.101 [main] INFO  o.s.b.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-11-27 08:36:08.101 [main] INFO  o.s.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+2025-11-27 08:36:08.102 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-11-27 08:36:08.104 [main] INFO  o.s.test.web.servlet.TestDispatcherServlet - Completed initialization in 3 ms
+2025-11-27 08:36:08.118 [main] INFO  c.n.novi.controller.AiPromptConfigControllerTest - Started AiPromptConfigControllerTest in 0.324 seconds (process running for 3.162)
+2025-11-27 08:36:08.119 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.AiPromptConfigControllerTest.testListConfigsByTypeSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:08.119 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1923082984 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:08.119 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1923082984 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:08.124 [main] INFO  c.n.novi.service.impl.AiPromptConfigServiceImpl - Added new prompt config: type_test_key
+2025-11-27 08:36:08.124 [main] INFO  c.n.novi.controller.AiPromptConfigController - Added new prompt config: type_test_key
+2025-11-27 08:36:08.128 [main] INFO  c.n.novi.controller.AiPromptConfigController - Listed prompt configs by type: 2
+2025-11-27 08:36:08.136 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:08.136 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@1923082984 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:08.136 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1923082984 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:08.137 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.AiPromptConfigControllerTest.testRemoveConfigSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:08.137 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1534809220 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:08.137 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1534809220 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:08.140 [main] INFO  c.n.novi.service.impl.AiPromptConfigServiceImpl - Added new prompt config: delete_key_32cf53a0-b7ec-4258-99bf-6d58f4f63e2b
+2025-11-27 08:36:08.140 [main] INFO  c.n.novi.controller.AiPromptConfigController - Added new prompt config: delete_key_32cf53a0-b7ec-4258-99bf-6d58f4f63e2b
+2025-11-27 08:36:08.142 [main] INFO  c.n.novi.service.impl.AiPromptConfigServiceImpl - Removed prompt config: delete_key_32cf53a0-b7ec-4258-99bf-6d58f4f63e2b
+2025-11-27 08:36:08.143 [main] INFO  c.n.novi.controller.AiPromptConfigController - Removed prompt config: delete_key_32cf53a0-b7ec-4258-99bf-6d58f4f63e2b
+2025-11-27 08:36:08.144 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:08.144 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@1534809220 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:08.145 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1534809220 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:08.146 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.AiPromptConfigControllerTest.testAddConfigSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:08.146 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@112973381 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:08.146 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@112973381 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:08.149 [main] INFO  c.n.novi.service.impl.AiPromptConfigServiceImpl - Added new prompt config: test_key_3cfff528-04b6-44d9-985d-1787d7ffcdd5
+2025-11-27 08:36:08.149 [main] INFO  c.n.novi.controller.AiPromptConfigController - Added new prompt config: test_key_3cfff528-04b6-44d9-985d-1787d7ffcdd5
+2025-11-27 08:36:08.151 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:08.151 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@112973381 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:08.151 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@112973381 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:08.153 [main] INFO  o.s.t.c.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.n1etzsch3.novi.controller.UserPreferenceControllerTest]: UserPreferenceControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-27 08:36:08.155 [main] INFO  o.s.b.t.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.n1etzsch3.novi.NoviApplication for test class com.n1etzsch3.novi.controller.UserPreferenceControllerTest
+2025-11-27 08:36:08.157 [main] INFO  me.paulschwarz.springdotenv.DotenvPropertySource - Initialized Dotenv with DotenvConfig{directory=null, filename=null, ignoreIfMalformed=false, ignoreIfMissing=true, systemProperties=false, prefix=null}
+2025-11-27 08:36:08.165 [main] INFO  c.n.novi.controller.UserPreferenceControllerTest - Starting UserPreferenceControllerTest using Java 25 with PID 75316 (started by n1etzsch3 in /Users/n1etzsch3/Documents/Novi)
+2025-11-27 08:36:08.166 [main] DEBUG c.n.novi.controller.UserPreferenceControllerTest - Running with Spring Boot v3.5.7, Spring v6.2.12
+2025-11-27 08:36:08.166 [main] INFO  c.n.novi.controller.UserPreferenceControllerTest - The following 1 profile is active: "test"
+2025-11-27 08:36:08.353 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2025-11-27 08:36:08.354 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection conn20: url=jdbc:h2:mem:novi_test_db user=SA
+2025-11-27 08:36:08.354 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2025-11-27 08:36:08.435 [main] DEBUG o.s.a.m.t.a.ToolCallingAutoConfiguration - Cannot load class: org.springframework.security.oauth2.client.ClientAuthorizationException
+2025-11-27 08:36:08.571 [main] INFO  o.s.b.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-11-27 08:36:08.571 [main] INFO  o.s.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+2025-11-27 08:36:08.572 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-11-27 08:36:08.576 [main] INFO  o.s.test.web.servlet.TestDispatcherServlet - Completed initialization in 5 ms
+2025-11-27 08:36:08.597 [main] INFO  c.n.novi.controller.UserPreferenceControllerTest - Started UserPreferenceControllerTest in 0.441 seconds (process running for 3.641)
+2025-11-27 08:36:08.599 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserPreferenceControllerTest.testUpdateSettingsSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:08.599 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@369903540 wrapping conn20: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:08.599 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@369903540 wrapping conn20: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:08.677 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: pref_user_3
+2025-11-27 08:36:08.677 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: pref_user_3
+2025-11-27 08:36:08.744 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: pref_user_3
+2025-11-27 08:36:08.744 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:08.749 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/preferences, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjQsInVzZXJuYW1lIjoicHJlZl91c2VyXzMiLCJzdWIiOiI0IiwiaWF0IjoxNzY0MjAzNzY4LCJleHAiOjE3NjQyOTAxNjh9.sqa79eoJSg1vstOVglkHtGuydjh3q_vMiMXwbkit4wI
+2025-11-27 08:36:08.750 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 4
+2025-11-27 08:36:08.752 [main] INFO  c.n.novi.controller.UserPreferenceController - Updated persona settings for user: 4
+2025-11-27 08:36:08.753 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:08.756 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:08.756 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@369903540 wrapping conn20: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:08.756 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@369903540 wrapping conn20: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:08.758 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserPreferenceControllerTest.testGetSettingsSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:08.759 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@293319588 wrapping conn20: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:08.759 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@293319588 wrapping conn20: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:08.827 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: pref_user_2
+2025-11-27 08:36:08.827 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: pref_user_2
+2025-11-27 08:36:08.897 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: pref_user_2
+2025-11-27 08:36:08.897 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:08.899 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/preferences, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjUsInVzZXJuYW1lIjoicHJlZl91c2VyXzIiLCJzdWIiOiI1IiwiaWF0IjoxNzY0MjAzNzY4LCJleHAiOjE3NjQyOTAxNjh9.6faOWrEC3T2LysCMNJw6L-2gUV8RzLvDdue94LUsqCY
+2025-11-27 08:36:08.899 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 5
+2025-11-27 08:36:08.899 [main] INFO  c.n.novi.controller.UserPreferenceController - Retrieved persona settings for user: 5
+2025-11-27 08:36:08.900 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:08.901 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:08.901 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@293319588 wrapping conn20: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:08.901 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@293319588 wrapping conn20: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:08.904 [main] INFO  o.s.t.c.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.n1etzsch3.novi.controller.ChatControllerTest]: ChatControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-27 08:36:08.905 [main] INFO  o.s.b.t.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.n1etzsch3.novi.NoviApplication for test class com.n1etzsch3.novi.controller.ChatControllerTest
+2025-11-27 08:36:08.907 [main] INFO  me.paulschwarz.springdotenv.DotenvPropertySource - Initialized Dotenv with DotenvConfig{directory=null, filename=null, ignoreIfMalformed=false, ignoreIfMissing=true, systemProperties=false, prefix=null}
+2025-11-27 08:36:08.919 [main] INFO  com.n1etzsch3.novi.controller.ChatControllerTest - Starting ChatControllerTest using Java 25 with PID 75316 (started by n1etzsch3 in /Users/n1etzsch3/Documents/Novi)
+2025-11-27 08:36:08.919 [main] DEBUG com.n1etzsch3.novi.controller.ChatControllerTest - Running with Spring Boot v3.5.7, Spring v6.2.12
+2025-11-27 08:36:08.919 [main] INFO  com.n1etzsch3.novi.controller.ChatControllerTest - The following 1 profile is active: "test"
+2025-11-27 08:36:09.124 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2025-11-27 08:36:09.124 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection conn30: url=jdbc:h2:mem:novi_test_db user=SA
+2025-11-27 08:36:09.125 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2025-11-27 08:36:09.202 [main] DEBUG o.s.a.m.t.a.ToolCallingAutoConfiguration - Cannot load class: org.springframework.security.oauth2.client.ClientAuthorizationException
+2025-11-27 08:36:09.311 [main] INFO  o.s.b.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-11-27 08:36:09.311 [main] INFO  o.s.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+2025-11-27 08:36:09.312 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-11-27 08:36:09.315 [main] INFO  o.s.test.web.servlet.TestDispatcherServlet - Completed initialization in 4 ms
+2025-11-27 08:36:09.328 [main] INFO  com.n1etzsch3.novi.controller.ChatControllerTest - Started ChatControllerTest in 0.422 seconds (process running for 4.372)
+2025-11-27 08:36:09.330 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.ChatControllerTest.testSendMessageStreamSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:09.330 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1873232309 wrapping conn30: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:09.330 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1873232309 wrapping conn30: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:09.396 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: stream_user
+2025-11-27 08:36:09.396 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: stream_user
+2025-11-27 08:36:09.460 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: stream_user
+2025-11-27 08:36:09.461 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:09.466 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/chat/send/stream, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoic3RyZWFtX3VzZXIiLCJzdWIiOiI2IiwiaWF0IjoxNzY0MjAzNzY5LCJleHAiOjE3NjQyOTAxNjl9.H8YBxRyelL5XoCi9_fMNpCGOM79Hw4JldL3uduBxhOE
+2025-11-27 08:36:09.468 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 6
+2025-11-27 08:36:09.483 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:09.483 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@1873232309 wrapping conn30: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:09.483 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1873232309 wrapping conn30: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:09.485 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.ChatControllerTest.testSendMessageBlockingSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:09.485 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@864667293 wrapping conn30: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:09.485 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@864667293 wrapping conn30: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:09.550 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: chat_user
+2025-11-27 08:36:09.551 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: chat_user
+2025-11-27 08:36:09.613 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: chat_user
+2025-11-27 08:36:09.613 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:09.614 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/chat/send/call, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjcsInVzZXJuYW1lIjoiY2hhdF91c2VyIiwic3ViIjoiNyIsImlhdCI6MTc2NDIwMzc2OSwiZXhwIjoxNzY0MjkwMTY5fQ.JdNEQBHFqoofAj0jOjnia1Gv6FGKje9tUMiAYVNzzCU
+2025-11-27 08:36:09.615 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 7
+2025-11-27 08:36:09.615 [main] INFO  com.n1etzsch3.novi.controller.ChatController - Received blocking message from user 7 in session session_1: Hello
+2025-11-27 08:36:09.615 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:09.617 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:09.617 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@864667293 wrapping conn30: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:09.617 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@864667293 wrapping conn30: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:09.619 [main] INFO  o.s.t.c.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.n1etzsch3.novi.controller.UserAccountControllerTest]: UserAccountControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-27 08:36:09.619 [main] INFO  o.s.b.t.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.n1etzsch3.novi.NoviApplication for test class com.n1etzsch3.novi.controller.UserAccountControllerTest
+2025-11-27 08:36:09.621 [main] INFO  o.s.t.c.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.n1etzsch3.novi.controller.UserAccountControllerTest$PreferencesTests]: PreferencesTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-27 08:36:09.622 [main] INFO  o.s.b.t.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.n1etzsch3.novi.NoviApplication for test class com.n1etzsch3.novi.controller.UserAccountControllerTest$PreferencesTests
+2025-11-27 08:36:09.624 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$PreferencesTests.testUpdateAndGetPreferencesSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:09.624 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@94482949 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:09.624 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@94482949 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:09.689 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: pref_user
+2025-11-27 08:36:09.689 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: pref_user
+2025-11-27 08:36:09.752 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: pref_user
+2025-11-27 08:36:09.752 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:09.754 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/preferences, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoicHJlZl91c2VyIiwic3ViIjoiOCIsImlhdCI6MTc2NDIwMzc2OSwiZXhwIjoxNzY0MjkwMTY5fQ.BChu5CCpDWlUQIs96T7_BveZ8oqnL5sb2OTbLxl4zgA
+2025-11-27 08:36:09.754 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 8
+2025-11-27 08:36:09.756 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户 8 尚无偏好设置，返回空Map
+2025-11-27 08:36:09.756 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - Retrieved user preferences: 8
+2025-11-27 08:36:09.757 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:09.758 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/preferences, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoicHJlZl91c2VyIiwic3ViIjoiOCIsImlhdCI6MTc2NDIwMzc2OSwiZXhwIjoxNzY0MjkwMTY5fQ.BChu5CCpDWlUQIs96T7_BveZ8oqnL5sb2OTbLxl4zgA
+2025-11-27 08:36:09.759 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 8
+2025-11-27 08:36:09.764 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 成功更新用户 8 的偏好设置
+2025-11-27 08:36:09.764 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - Updated user preferences: 8
+2025-11-27 08:36:09.765 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:09.766 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/preferences, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoicHJlZl91c2VyIiwic3ViIjoiOCIsImlhdCI6MTc2NDIwMzc2OSwiZXhwIjoxNzY0MjkwMTY5fQ.BChu5CCpDWlUQIs96T7_BveZ8oqnL5sb2OTbLxl4zgA
+2025-11-27 08:36:09.766 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 8
+2025-11-27 08:36:09.766 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - Retrieved user preferences: 8
+2025-11-27 08:36:09.767 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:09.768 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:09.768 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@94482949 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:09.768 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@94482949 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:09.770 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$PreferencesTests.testPreferencesEndpointsFailNoToken]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:09.770 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1518883091 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:09.770 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1518883091 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:09.771 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/preferences, Token: null
+2025-11-27 08:36:09.771 [main] WARN  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token is missing or has invalid format.
+2025-11-27 08:36:09.772 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/preferences, Token: null
+2025-11-27 08:36:09.772 [main] WARN  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token is missing or has invalid format.
+2025-11-27 08:36:09.773 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:09.773 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@1518883091 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:09.773 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1518883091 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:09.775 [main] INFO  o.s.t.c.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.n1etzsch3.novi.controller.UserAccountControllerTest$ProfileTests]: ProfileTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-27 08:36:09.776 [main] INFO  o.s.b.t.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.n1etzsch3.novi.NoviApplication for test class com.n1etzsch3.novi.controller.UserAccountControllerTest$ProfileTests
+2025-11-27 08:36:09.777 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$ProfileTests.testUpdateUserProfileSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:09.777 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@603111387 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:09.777 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@603111387 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:09.840 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: update_user
+2025-11-27 08:36:09.840 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: update_user
+2025-11-27 08:36:09.900 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: update_user
+2025-11-27 08:36:09.900 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:09.902 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjksInVzZXJuYW1lIjoidXBkYXRlX3VzZXIiLCJzdWIiOiI5IiwiaWF0IjoxNzY0MjAzNzY5LCJleHAiOjE3NjQyOTAxNjl9.-mRW_89boWneV6-Xplz-ZV29r_aDKGkhW24ofxQijsk
+2025-11-27 08:36:09.902 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 9
+2025-11-27 08:36:09.907 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Participating in existing transaction
+2025-11-27 08:36:09.909 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - Updated current user profile: 9
+2025-11-27 08:36:09.910 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 获取用户详情: update_user
+2025-11-27 08:36:09.910 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:09.911 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:09.911 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@603111387 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:09.912 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@603111387 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:09.912 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$ProfileTests.testUpdateUserProfileFailsEmailConflict]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:09.913 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@152728727 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:09.913 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@152728727 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:09.975 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: user_A
+2025-11-27 08:36:09.976 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: user_A
+2025-11-27 08:36:10.036 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: user_A
+2025-11-27 08:36:10.036 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:10.101 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: user_B
+2025-11-27 08:36:10.101 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: user_B
+2025-11-27 08:36:10.162 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: user_B
+2025-11-27 08:36:10.162 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:10.163 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJ1c2VybmFtZSI6InVzZXJfQiIsInN1YiI6IjExIiwiaWF0IjoxNzY0MjAzNzcwLCJleHAiOjE3NjQyOTAxNzB9.-ew4TtUDIWWEvlK4ypzyv2NLmNB6URbED33PyQsSkgQ
+2025-11-27 08:36:10.164 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 11
+2025-11-27 08:36:10.164 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Participating in existing transaction
+2025-11-27 08:36:10.165 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Participating transaction failed - marking existing transaction as rollback-only
+2025-11-27 08:36:10.165 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Setting JDBC transaction [HikariProxyConnection@152728727 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] rollback-only
+2025-11-27 08:36:10.166 [main] WARN  c.n1etzsch3.novi.exception.GlobalExceptionHandler - 业务异常: 该邮箱已被其他用户注册
+2025-11-27 08:36:10.167 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:10.168 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:10.168 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@152728727 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:10.169 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@152728727 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:10.170 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$ProfileTests.testGetCurrentUserProfileFailsNoToken]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:10.170 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@688378856 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:10.170 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@688378856 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:10.172 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: null
+2025-11-27 08:36:10.172 [main] WARN  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token is missing or has invalid format.
+2025-11-27 08:36:10.174 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:10.174 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@688378856 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:10.174 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@688378856 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:10.178 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$ProfileTests.testGetCurrentUserProfileSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:10.179 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1273627412 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:10.179 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1273627412 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:10.246 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: profile_user
+2025-11-27 08:36:10.246 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: profile_user
+2025-11-27 08:36:10.308 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: profile_user
+2025-11-27 08:36:10.308 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:10.309 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEyLCJ1c2VybmFtZSI6InByb2ZpbGVfdXNlciIsInN1YiI6IjEyIiwiaWF0IjoxNzY0MjAzNzcwLCJleHAiOjE3NjQyOTAxNzB9.okCCUK-Nr8_oVR0hunK9_d_Sojxf5KiA-rPRT6Ef7ek
+2025-11-27 08:36:10.309 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 12
+2025-11-27 08:36:10.310 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 获取用户详情: profile_user
+2025-11-27 08:36:10.310 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - Retrieved current user profile: profile_user
+2025-11-27 08:36:10.310 [main] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-27 08:36:10.311 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:10.311 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@1273627412 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:10.311 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1273627412 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:10.313 [main] INFO  o.s.t.c.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.n1etzsch3.novi.controller.UserAccountControllerTest$LoginTests]: LoginTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-27 08:36:10.315 [main] INFO  o.s.b.t.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.n1etzsch3.novi.NoviApplication for test class com.n1etzsch3.novi.controller.UserAccountControllerTest$LoginTests
+2025-11-27 08:36:10.316 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$LoginTests.testLoginSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:10.316 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@682101936 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:10.316 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@682101936 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:10.382 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: login_user
+2025-11-27 08:36:10.382 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: login_user
+2025-11-27 08:36:10.447 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: login_user
+2025-11-27 08:36:10.447 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:10.511 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: login_user
+2025-11-27 08:36:10.511 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:10.513 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:10.513 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@682101936 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:10.513 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@682101936 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:10.516 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$LoginTests.testLoginFailsWrongPassword]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:10.516 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@335370922 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:10.516 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@335370922 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:10.579 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: login_user_pass
+2025-11-27 08:36:10.579 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: login_user_pass
+2025-11-27 08:36:10.642 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: login_user_pass
+2025-11-27 08:36:10.642 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:10.736 [main] WARN  c.n1etzsch3.novi.exception.GlobalExceptionHandler - 业务异常: 用户名或密码错误
+2025-11-27 08:36:10.737 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:10.737 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@335370922 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:10.737 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@335370922 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:10.738 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$LoginTests.testLoginFailsUserNotFound]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:10.738 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@507610240 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:10.738 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@507610240 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:10.740 [main] WARN  c.n1etzsch3.novi.exception.GlobalExceptionHandler - 业务异常: 用户名或密码错误
+2025-11-27 08:36:10.741 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:10.741 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@507610240 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:10.741 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@507610240 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:10.742 [main] INFO  o.s.t.c.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.n1etzsch3.novi.controller.UserAccountControllerTest$RegistrationTests]: RegistrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-27 08:36:10.743 [main] INFO  o.s.b.t.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.n1etzsch3.novi.NoviApplication for test class com.n1etzsch3.novi.controller.UserAccountControllerTest$RegistrationTests
+2025-11-27 08:36:10.744 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$RegistrationTests.testRegisterFailsOnDuplicateUsername]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:10.744 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1633141359 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:10.744 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1633141359 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:10.805 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: duplicate_user
+2025-11-27 08:36:10.805 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: duplicate_user
+2025-11-27 08:36:10.868 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: duplicate_user
+2025-11-27 08:36:10.868 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:10.869 [main] WARN  c.n1etzsch3.novi.exception.GlobalExceptionHandler - 业务异常: 用户名已存在
+2025-11-27 08:36:10.870 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:10.870 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@1633141359 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:10.870 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1633141359 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:10.871 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$RegistrationTests.testRegisterFailsOnDuplicateEmail]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:10.871 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@726031898 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:10.871 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@726031898 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:10.931 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: user1
+2025-11-27 08:36:10.931 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: user1
+2025-11-27 08:36:10.992 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: user1
+2025-11-27 08:36:10.992 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-27 08:36:11.094 [main] ERROR c.n1etzsch3.novi.exception.GlobalExceptionHandler - 数据库键冲突异常: 
+org.springframework.dao.DuplicateKeyException: 
+### Error updating database.  Cause: org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_9B ON PUBLIC.USER_ACCOUNT(EMAIL NULLS FIRST) VALUES ( /* 16 */ 'email_conflict@example.com' )"; SQL statement:
+INSERT INTO user_account  ( username, hashed_password,  email,  created_at, updated_at )  VALUES (  ?, ?,  ?,  ?, ?  ) [23505-232]
+### The error may exist in com/n1etzsch3/novi/mapper/UserAccountMapper.java (best guess)
+### The error may involve com.n1etzsch3.novi.mapper.UserAccountMapper.insert-Inline
+### The error occurred while setting parameters
+### SQL: INSERT INTO user_account  ( username, hashed_password,  email,  created_at, updated_at )  VALUES (  ?, ?,  ?,  ?, ?  )
+### Cause: org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_9B ON PUBLIC.USER_ACCOUNT(EMAIL NULLS FIRST) VALUES ( /* 16 */ 'email_conflict@example.com' )"; SQL statement:
+INSERT INTO user_account  ( username, hashed_password,  email,  created_at, updated_at )  VALUES (  ?, ?,  ?,  ?, ?  ) [23505-232]
+; Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_9B ON PUBLIC.USER_ACCOUNT(EMAIL NULLS FIRST) VALUES ( /* 16 */ 'email_conflict@example.com' )"; SQL statement:
+INSERT INTO user_account  ( username, hashed_password,  email,  created_at, updated_at )  VALUES (  ?, ?,  ?,  ?, ?  ) [23505-232]
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:254)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:107)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:93)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy161.insert(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:224)
+	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.execute(MybatisMapperMethod.java:59)
+	at com.baomidou.mybatisplus.core.override.MybatisMapperProxy$PlainMethodInvoker.invoke(MybatisMapperProxy.java:152)
+	at com.baomidou.mybatisplus.core.override.MybatisMapperProxy.invoke(MybatisMapperProxy.java:89)
+	at jdk.proxy2/jdk.proxy2.$Proxy170.insert(Unknown Source)
+	at com.n1etzsch3.novi.service.impl.UserAccountServiceImpl.registerUser(UserAccountServiceImpl.java:55)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:360)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:724)
+	at com.n1etzsch3.novi.service.impl.UserAccountServiceImpl$$SpringCGLIB$$0.registerUser(<generated>)
+	at com.n1etzsch3.novi.controller.UserAccountController.register(UserAccountController.java:40)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:165)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:162)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:162)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:162)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:162)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:201)
+	at com.n1etzsch3.novi.controller.UserAccountControllerTest$RegistrationTests.testRegisterFailsOnDuplicateEmail(UserAccountControllerTest.java:130)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:775)
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:216)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:212)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:137)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:201)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:170)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:94)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:59)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:142)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39)
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.executeWithoutCancellationToken(LauncherAdapter.java:60)
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.execute(LauncherAdapter.java:52)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:203)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:168)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:136)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+Caused by: org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_9B ON PUBLIC.USER_ACCOUNT(EMAIL NULLS FIRST) VALUES ( /* 16 */ 'email_conflict@example.com' )"; SQL statement:
+INSERT INTO user_account  ( username, hashed_password,  email,  created_at, updated_at )  VALUES (  ?, ?,  ?,  ?, ?  ) [23505-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:520)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.index.Index.getDuplicateKeyException(Index.java:523)
+	at org.h2.mvstore.db.MVSecondaryIndex.checkUnique(MVSecondaryIndex.java:223)
+	at org.h2.mvstore.db.MVSecondaryIndex.add(MVSecondaryIndex.java:184)
+	at org.h2.mvstore.db.MVTable.addRow(MVTable.java:517)
+	at org.h2.command.dml.Insert.insertRows(Insert.java:174)
+	at org.h2.command.dml.Insert.update(Insert.java:135)
+	at org.h2.command.CommandContainer.executeUpdateWithGeneratedKeys(CommandContainer.java:212)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:133)
+	at org.h2.command.Command.executeUpdate(Command.java:304)
+	at org.h2.command.Command.executeUpdate(Command.java:248)
+	at org.h2.jdbc.JdbcPreparedStatement.execute(JdbcPreparedStatement.java:262)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:58)
+	at jdk.proxy3/jdk.proxy3.$Proxy187.execute(Unknown Source)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:48)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.update(RoutingStatementHandler.java:75)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:50)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:184)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 134 common frames omitted
+2025-11-27 08:36:11.098 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:11.098 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@726031898 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:11.098 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@726031898 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:11.099 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$RegistrationTests.testRegisterFailsInvalidEmail]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:11.099 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@327929859 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:11.099 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@327929859 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:11.102 [main] WARN  c.n1etzsch3.novi.exception.GlobalExceptionHandler - 参数校验失败: 邮箱格式不正确
+2025-11-27 08:36:11.103 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:11.103 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@327929859 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:11.103 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@327929859 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:11.104 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$RegistrationTests.testRegisterFailsWeakPassword]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:11.104 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@112454487 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:11.104 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@112454487 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:11.106 [main] WARN  c.n1etzsch3.novi.exception.GlobalExceptionHandler - 参数校验失败: 密码必须至少包含一个大写字母、一个小写字母、一个数字和一个特殊字符
+2025-11-27 08:36:11.107 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:11.107 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@112454487 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:11.107 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@112454487 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:11.108 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.controller.UserAccountControllerTest$RegistrationTests.testRegisterSuccess]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-11-27 08:36:11.108 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@434993054 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] for JDBC transaction
+2025-11-27 08:36:11.108 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@434993054 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] to manual commit
+2025-11-27 08:36:11.171 [main] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户注册成功: test_user_01
+2025-11-27 08:36:11.171 [main] INFO  c.n1etzsch3.novi.controller.UserAccountController - User registered successfully: test_user_01
+2025-11-27 08:36:11.172 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction rollback
+2025-11-27 08:36:11.172 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Rolling back JDBC transaction on Connection [HikariProxyConnection@434993054 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA]
+2025-11-27 08:36:11.172 [main] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@434993054 wrapping conn10: url=jdbc:h2:mem:novi_test_db user=SA] after transaction
+2025-11-27 08:36:11.184 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-11-27 08:36:11.184 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-11-27 08:36:11.186 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2025-11-27 08:36:11.186 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2025-11-27 08:36:11.187 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2025-11-27 08:36:11.187 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2025-11-27 08:36:11.188 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown initiated...
+2025-11-27 08:36:11.188 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown completed.

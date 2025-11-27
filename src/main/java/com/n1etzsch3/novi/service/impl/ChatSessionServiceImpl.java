@@ -1,11 +1,14 @@
 package com.n1etzsch3.novi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.n1etzsch3.novi.exception.BusinessException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.n1etzsch3.novi.mapper.ChatSessionMapper;
 import com.n1etzsch3.novi.pojo.entity.ChatSession;
 import com.n1etzsch3.novi.service.ChatSessionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ChatSessionServiceImpl implements ChatSessionService {
 
     private final ChatSessionMapper chatSessionMapper;
@@ -25,7 +29,7 @@ public class ChatSessionServiceImpl implements ChatSessionService {
     @Override
     public List<ChatSession> getUserSessions(Long userId) {
         return chatSessionMapper.selectList(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatSession>()
+                new LambdaQueryWrapper<ChatSession>()
                         .eq(ChatSession::getUserId, userId)
                         .eq(ChatSession::getIsDeleted, 0)
                         .orderByDesc(ChatSession::getUpdatedAt));
@@ -34,10 +38,11 @@ public class ChatSessionServiceImpl implements ChatSessionService {
     @Override
     public void validateSessionOwner(String sessionId, Long userId) {
         Long count = chatSessionMapper.selectCount(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatSession>()
+                new LambdaQueryWrapper<ChatSession>()
                         .eq(ChatSession::getId, sessionId)
                         .eq(ChatSession::getUserId, userId));
         if (count == 0) {
+            log.warn("Session access denied or not found. SessionId: {}, UserId: {}", sessionId, userId);
             throw new BusinessException("Session not found or access denied");
         }
     }
@@ -47,7 +52,7 @@ public class ChatSessionServiceImpl implements ChatSessionService {
         // 验证所有权
         validateSessionOwner(sessionId, userId);
         chatSessionMapper.update(null,
-                new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<ChatSession>()
+                new LambdaUpdateWrapper<ChatSession>()
                         .eq(ChatSession::getId, sessionId)
                         .eq(ChatSession::getUserId, userId)
                         .set(ChatSession::getIsDeleted, 1));

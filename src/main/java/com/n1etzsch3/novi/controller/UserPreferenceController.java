@@ -5,6 +5,7 @@ import com.n1etzsch3.novi.pojo.dto.Result;
 import com.n1etzsch3.novi.service.UserPreferenceService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/preferences")
 @RequiredArgsConstructor
+@Slf4j
 public class UserPreferenceController {
 
     private final UserPreferenceService userPreferenceService;
@@ -31,6 +33,7 @@ public class UserPreferenceController {
     @GetMapping
     public Result getSettings() {
         Long userId = LoginUserContext.getUserId();
+        log.info("Retrieved persona settings for user: {}", userId);
         return Result.success(userPreferenceService.getPersonaSettings(userId));
     }
 
@@ -43,6 +46,7 @@ public class UserPreferenceController {
     @PutMapping
     public Result updateSettings(@RequestBody NoviPersonaSettings settings) {
         Long userId = LoginUserContext.getUserId();
+        log.info("Updated persona settings for user: {}", userId);
         return Result.success(userPreferenceService.updatePersonaSettings(userId, settings));
     }
 }

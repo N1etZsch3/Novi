@@ -1,8 +1,8 @@
 package com.n1etzsch3.novi.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.n1etzsch3.novi.mapper.ChatMemoryMapper;
 import com.n1etzsch3.novi.pojo.entity.ChatMessage;
-import com.n1etzsch3.novi.pojo.entity.UserAccount;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,7 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
             return Collections.emptyList();
         }
         List<Object> sessionIds = chatMemoryMapper.selectObjs(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                new LambdaQueryWrapper<ChatMessage>()
                         .select(ChatMessage::getSessionId)
                         .eq(ChatMessage::getUserId, userId)
                         .groupBy(ChatMessage::getSessionId));
@@ -70,7 +70,7 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
 
         // 1. 从数据库中获取持久化的 ChatMessage 实体
         List<ChatMessage> chatMessages = chatMemoryMapper.selectList(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                new LambdaQueryWrapper<ChatMessage>()
                         .eq(ChatMessage::getUserId, userId)
                         .eq(ChatMessage::getSessionId, conversationId)
                         .orderByAsc(ChatMessage::getId));
@@ -123,7 +123,7 @@ public class NoviMemoryRepository implements ChatMemoryRepository {
             return;
         }
         chatMemoryMapper.delete(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                new LambdaQueryWrapper<ChatMessage>()
                         .eq(ChatMessage::getUserId, userId)
                         .eq(ChatMessage::getSessionId, conversationId));
     }

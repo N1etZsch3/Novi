@@ -1,5 +1,6 @@
 package com.n1etzsch3.novi.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.n1etzsch3.novi.mapper.ChatMemoryMapper;
 import com.n1etzsch3.novi.pojo.dto.Result;
 import com.n1etzsch3.novi.pojo.entity.ChatMessage;
@@ -7,6 +8,7 @@ import com.n1etzsch3.novi.pojo.entity.ChatSession;
 import com.n1etzsch3.novi.service.ChatSessionService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/sessions")
 @AllArgsConstructor
+@Slf4j
 public class ChatSessionController {
 
     private final ChatSessionService chatSessionService;
@@ -37,6 +40,7 @@ public class ChatSessionController {
     public Result getSessionList() {
         Long userId = LoginUserContext.getUserId();
         List<ChatSession> sessions = chatSessionService.getUserSessions(userId);
+        log.info("Retrieved session list for user: {}", userId);
         return Result.success(sessions);
     }
 
@@ -55,10 +59,11 @@ public class ChatSessionController {
 
         // 复用现有的 ChatMemoryMapper 方法
         List<ChatMessage> messages = chatMemoryMapper.selectList(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ChatMessage>()
+                new LambdaQueryWrapper<ChatMessage>()
                         .eq(ChatMessage::getUserId, userId)
                         .eq(ChatMessage::getSessionId, sessionId)
                         .orderByAsc(ChatMessage::getId));
+        log.info("Retrieved messages for session: {}", sessionId);
         return Result.success(messages);
     }
 
@@ -72,6 +77,7 @@ public class ChatSessionController {
     public Result deleteSession(@PathVariable String sessionId) {
         Long userId = LoginUserContext.getUserId();
         chatSessionService.deleteSession(sessionId, userId);
+        log.info("Deleted session: {}", sessionId);
         return Result.success();
     }
 

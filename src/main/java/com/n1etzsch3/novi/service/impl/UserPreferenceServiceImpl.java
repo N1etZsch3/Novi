@@ -1,10 +1,13 @@
 package com.n1etzsch3.novi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n1etzsch3.novi.exception.BusinessException;
 import com.n1etzsch3.novi.mapper.UserAccountMapper;
 import com.n1etzsch3.novi.pojo.dto.NoviPersonaSettings;
+import com.n1etzsch3.novi.pojo.entity.UserAccount;
 import com.n1etzsch3.novi.service.UserPreferenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +26,10 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
     public NoviPersonaSettings getPersonaSettings(Long userId) {
         // 1. 只查询需要的字段 (需要在 Mapper 中添加 findPreferencesJsonById)
         // 如果不想改 Mapper，也可以用 findById 查全量，但性能略低
-        com.n1etzsch3.novi.pojo.entity.UserAccount userAccount = userAccountMapper.selectOne(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<com.n1etzsch3.novi.pojo.entity.UserAccount>()
-                        .select(com.n1etzsch3.novi.pojo.entity.UserAccount::getPreferences)
-                        .eq(com.n1etzsch3.novi.pojo.entity.UserAccount::getId, userId));
+        UserAccount userAccount = userAccountMapper.selectOne(
+                new LambdaQueryWrapper<UserAccount>()
+                        .select(UserAccount::getPreferences)
+                        .eq(UserAccount::getId, userId));
         String json = userAccount != null ? userAccount.getPreferences() : null;
 
         if (!StringUtils.hasText(json)) {
@@ -48,6 +51,7 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
         if ("tsundere".equals(settings.getPersonalityMode())) {
             // 比如：傲娇模式下，语气不能是“professional”
             if ("professional".equals(settings.getToneStyle())) {
+                log.warn("User {} attempted invalid combination: tsundere + professional", userId);
                 throw new BusinessException("傲娇性格不能搭配专业语气！");
             }
         }
@@ -56,13 +60,15 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
         try {
             String json = objectMapper.writeValueAsString(settings);
             userAccountMapper.update(null,
-                    new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<com.n1etzsch3.novi.pojo.entity.UserAccount>()
-                            .eq(com.n1etzsch3.novi.pojo.entity.UserAccount::getId, userId)
-                            .set(com.n1etzsch3.novi.pojo.entity.UserAccount::getPreferences, json)
-                            .set(com.n1etzsch3.novi.pojo.entity.UserAccount::getUpdatedAt,
+                    new LambdaUpdateWrapper<UserAccount>()
+                            .eq(UserAccount::getId, userId)
+                            .set(UserAccount::getPreferences, json)
+                            .set(UserAccount::getUpdatedAt,
                                     java.time.LocalDateTime.now()));
+            log.info("Updated persona settings for user: {}", userId);
             return settings;
         } catch (JsonProcessingException e) {
+            log.error("Failed to serialize user preferences for user: {}", userId, e);
             throw new BusinessException("偏好设置格式错误");
         }
     }

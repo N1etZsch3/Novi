@@ -1,5 +1,6 @@
 package com.n1etzsch3.novi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.n1etzsch3.novi.mapper.AiPromptConfigMapper;
 import com.n1etzsch3.novi.pojo.entity.AiPromptConfig;
 import com.n1etzsch3.novi.service.AiPromptConfigService;
@@ -75,20 +76,23 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
     @Override
     public void addConfig(AiPromptConfig config) {
         if (aiPromptConfigMapper.selectById(config.getConfigKey()) != null) {
+            log.warn("Attempted to add existing config key: {}", config.getConfigKey());
             throw new RuntimeException("Config key already exists: " + config.getConfigKey());
         }
         aiPromptConfigMapper.insert(config);
+        log.info("Added new prompt config: {}", config.getConfigKey());
     }
 
     @Override
     public void removeConfig(String configKey) {
         aiPromptConfigMapper.deleteById(configKey);
+        log.info("Removed prompt config: {}", configKey);
     }
 
     @Override
     public java.util.List<AiPromptConfig> listConfigsByType(Integer type) {
         return aiPromptConfigMapper.selectList(
-                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<AiPromptConfig>()
+                new LambdaQueryWrapper<AiPromptConfig>()
                         .eq(AiPromptConfig::getConfigType, type));
     }
 }
