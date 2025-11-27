@@ -48,7 +48,7 @@ public interface AiPromptConfigService {
      *
      * @param config 要添加的配置对象。
      */
-    void addConfig(com.n1etzsch3.novi.pojo.entity.AiPromptConfig config);
+    void addConfig(com.n1etzsch3.novi.domain.po.AiPromptConfig config);
 
     /**
      * 根据 Key 删除配置。
@@ -63,5 +63,5 @@ public interface AiPromptConfigService {
      * @param type 配置类型 (0:系统, 1:性格, 2:语气风格)。
      * @return 匹配类型的配置列表。
      */
-    java.util.List<com.n1etzsch3.novi.pojo.entity.AiPromptConfig> listConfigsByType(Integer type);
+    java.util.List<com.n1etzsch3.novi.domain.po.AiPromptConfig> listConfigsByType(Integer type);
 }

@@ -1,6 +1,6 @@
 package com.n1etzsch3.novi.service;
 
-import com.n1etzsch3.novi.pojo.dto.*;
+import com.n1etzsch3.novi.domain.dto.*;
 
 public interface UserAccountService {
 

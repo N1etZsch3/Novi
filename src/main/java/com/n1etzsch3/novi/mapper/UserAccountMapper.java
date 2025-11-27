@@ -1,7 +1,7 @@
 package com.n1etzsch3.novi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.n1etzsch3.novi.pojo.entity.UserAccount;
+import com.n1etzsch3.novi.domain.po.UserAccount;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

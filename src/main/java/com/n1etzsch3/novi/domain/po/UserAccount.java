@@ -1,4 +1,4 @@
-package com.n1etzsch3.novi.pojo.entity;
+package com.n1etzsch3.novi.domain.po;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

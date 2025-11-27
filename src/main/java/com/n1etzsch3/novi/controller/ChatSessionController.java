@@ -2,9 +2,9 @@ package com.n1etzsch3.novi.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.n1etzsch3.novi.mapper.ChatMemoryMapper;
-import com.n1etzsch3.novi.pojo.dto.Result;
-import com.n1etzsch3.novi.pojo.entity.ChatMessage;
-import com.n1etzsch3.novi.pojo.entity.ChatSession;
+import com.n1etzsch3.novi.domain.dto.Result;
+import com.n1etzsch3.novi.domain.po.ChatMessage;
+import com.n1etzsch3.novi.domain.po.ChatSession;
 import com.n1etzsch3.novi.service.ChatSessionService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.AllArgsConstructor;

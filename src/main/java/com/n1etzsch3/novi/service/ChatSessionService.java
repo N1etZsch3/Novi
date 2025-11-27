@@ -1,6 +1,6 @@
 package com.n1etzsch3.novi.service;
 
-import com.n1etzsch3.novi.pojo.entity.ChatSession;
+import com.n1etzsch3.novi.domain.po.ChatSession;
 
 import java.util.List;
 

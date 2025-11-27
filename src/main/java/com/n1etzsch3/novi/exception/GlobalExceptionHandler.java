@@ -1,6 +1,6 @@
 package com.n1etzsch3.novi.exception;
 
-import com.n1etzsch3.novi.pojo.dto.Result;
+import com.n1etzsch3.novi.domain.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DuplicateKeyException;

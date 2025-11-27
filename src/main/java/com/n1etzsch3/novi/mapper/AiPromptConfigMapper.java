@@ -1,6 +1,6 @@
 package com.n1etzsch3.novi.mapper;
 
-import com.n1etzsch3.novi.pojo.entity.AiPromptConfig;
+import com.n1etzsch3.novi.domain.po.AiPromptConfig;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

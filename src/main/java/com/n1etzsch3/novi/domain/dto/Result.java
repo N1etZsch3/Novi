@@ -1,4 +1,4 @@
-package com.n1etzsch3.novi.pojo.dto;
+package com.n1etzsch3.novi.domain.dto;
 
 import lombok.*;
 

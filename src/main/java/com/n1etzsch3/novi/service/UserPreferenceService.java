@@ -1,6 +1,6 @@
 package com.n1etzsch3.novi.service;
 
-import com.n1etzsch3.novi.pojo.dto.NoviPersonaSettings;
+import com.n1etzsch3.novi.domain.dto.NoviPersonaSettings;
 
 public interface UserPreferenceService {
 

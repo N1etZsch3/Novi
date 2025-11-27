@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.n1etzsch3.novi.exception.BusinessException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.n1etzsch3.novi.mapper.ChatSessionMapper;
-import com.n1etzsch3.novi.pojo.entity.ChatSession;
+import com.n1etzsch3.novi.domain.po.ChatSession;
 import com.n1etzsch3.novi.service.ChatSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

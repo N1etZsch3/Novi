@@ -1,8 +1,8 @@
 package com.n1etzsch3.novi.controller;
 
-import com.n1etzsch3.novi.pojo.dto.ChatRequest;
-import com.n1etzsch3.novi.pojo.dto.ChatResponse;
-import com.n1etzsch3.novi.pojo.dto.Result;
+import com.n1etzsch3.novi.domain.dto.ChatRequest;
+import com.n1etzsch3.novi.domain.dto.ChatResponse;
+import com.n1etzsch3.novi.domain.dto.Result;
 import com.n1etzsch3.novi.service.ChatService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.n1etzsch3.novi.controller;
 
-import com.n1etzsch3.novi.pojo.dto.*;
+import com.n1etzsch3.novi.domain.dto.*;
 import com.n1etzsch3.novi.service.UserAccountService;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.RequiredArgsConstructor;

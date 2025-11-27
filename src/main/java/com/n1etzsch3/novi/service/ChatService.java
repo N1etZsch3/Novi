@@ -1,7 +1,7 @@
 package com.n1etzsch3.novi.service;
 
-import com.n1etzsch3.novi.pojo.dto.ChatRequest;
-import com.n1etzsch3.novi.pojo.dto.ChatResponse;
+import com.n1etzsch3.novi.domain.dto.ChatRequest;
+import com.n1etzsch3.novi.domain.dto.ChatResponse;
 import reactor.core.publisher.Flux;
 
 /**

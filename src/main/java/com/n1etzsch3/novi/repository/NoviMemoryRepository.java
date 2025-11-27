@@ -2,7 +2,7 @@ package com.n1etzsch3.novi.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.n1etzsch3.novi.mapper.ChatMemoryMapper;
-import com.n1etzsch3.novi.pojo.entity.ChatMessage;
+import com.n1etzsch3.novi.domain.po.ChatMessage;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -2,7 +2,7 @@ package com.n1etzsch3.novi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.n1etzsch3.novi.mapper.AiPromptConfigMapper;
-import com.n1etzsch3.novi.pojo.entity.AiPromptConfig;
+import com.n1etzsch3.novi.domain.po.AiPromptConfig;
 import com.n1etzsch3.novi.service.AiPromptConfigService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

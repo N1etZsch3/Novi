@@ -1,7 +1,7 @@
 package com.n1etzsch3.novi.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.n1etzsch3.novi.pojo.dto.Result;
+import com.n1etzsch3.novi.domain.dto.Result;
 import com.n1etzsch3.novi.utils.JwtUtils;
 import com.n1etzsch3.novi.utils.LoginUserContext;
 import io.jsonwebtoken.Claims;
