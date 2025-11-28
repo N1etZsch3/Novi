@@ -3,9 +3,6 @@ package com.n1etzsch3.novi.mapper;
 import com.n1etzsch3.novi.domain.po.AiPromptConfig;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
 
 /**
  * AI 提示词配置 Mapper

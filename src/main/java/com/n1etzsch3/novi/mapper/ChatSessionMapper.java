@@ -3,11 +3,6 @@ package com.n1etzsch3.novi.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.n1etzsch3.novi.domain.po.ChatSession;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-
-import java.util.List;
 
 /**
  * 聊天会话 Mapper

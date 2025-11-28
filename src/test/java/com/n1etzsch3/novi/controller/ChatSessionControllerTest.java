@@ -3,11 +3,11 @@ package com.n1etzsch3.novi.controller;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n1etzsch3.novi.mapper.ChatMemoryMapper;
-import com.n1etzsch3.novi.pojo.dto.LoginRequest;
-import com.n1etzsch3.novi.pojo.dto.RegistrationRequest;
-import com.n1etzsch3.novi.pojo.dto.Result;
-import com.n1etzsch3.novi.pojo.entity.ChatMessage;
-import com.n1etzsch3.novi.pojo.entity.ChatSession;
+import com.n1etzsch3.novi.domain.dto.LoginRequest;
+import com.n1etzsch3.novi.domain.dto.RegistrationRequest;
+import com.n1etzsch3.novi.domain.dto.Result;
+import com.n1etzsch3.novi.domain.po.ChatMessage;
+import com.n1etzsch3.novi.domain.po.ChatSession;
 import com.n1etzsch3.novi.service.ChatSessionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +23,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;

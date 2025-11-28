@@ -1,7 +1,7 @@
 package com.n1etzsch3.novi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.n1etzsch3.novi.pojo.entity.AiPromptConfig;
+import com.n1etzsch3.novi.domain.po.AiPromptConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

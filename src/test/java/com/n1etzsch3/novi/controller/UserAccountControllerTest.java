@@ -1,10 +1,10 @@
 package com.n1etzsch3.novi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.n1etzsch3.novi.pojo.dto.LoginRequest;
-import com.n1etzsch3.novi.pojo.dto.Result;
-import com.n1etzsch3.novi.pojo.dto.UserProfileUpdateRequest;
-import com.n1etzsch3.novi.pojo.dto.RegistrationRequest;
+import com.n1etzsch3.novi.domain.dto.LoginRequest;
+import com.n1etzsch3.novi.domain.dto.Result;
+import com.n1etzsch3.novi.domain.dto.UserProfileUpdateRequest;
+import com.n1etzsch3.novi.domain.dto.RegistrationRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,8 +50,8 @@ public class UserAccountControllerTest {
         regRequest.setNickname(nickname);
 
         mockMvc.perform(post("/api/v1/users/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(regRequest)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(regRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1));
 
@@ -61,8 +61,8 @@ public class UserAccountControllerTest {
         loginRequest.setPassword(pass);
 
         MvcResult loginResult = mockMvc.perform(post("/api/v1/users/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginRequest)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1))
                 .andReturn();
@@ -88,8 +88,8 @@ public class UserAccountControllerTest {
             request.setNickname("Tester");
 
             mockMvc.perform(post("/api/v1/users/register")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
                     .andExpect(jsonPath("$.msg").value("success"));
@@ -108,8 +108,8 @@ public class UserAccountControllerTest {
             request2.setEmail("another@example.com");
 
             mockMvc.perform(post("/api/v1/users/register")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request2)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request2)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.msg").value("用户名已存在"));
@@ -128,8 +128,8 @@ public class UserAccountControllerTest {
             request2.setEmail("email_conflict@example.com"); // 相同的邮箱
 
             mockMvc.perform(post("/api/v1/users/register")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request2)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request2)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.msg").value("邮箱已被注册"));
@@ -144,8 +144,8 @@ public class UserAccountControllerTest {
             request.setEmail("weak@example.com");
 
             mockMvc.perform(post("/api/v1/users/register")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.msg").value("密码必须至少包含一个大写字母、一个小写字母、一个数字和一个特殊字符"));
@@ -160,8 +160,8 @@ public class UserAccountControllerTest {
             request.setEmail("not-an-email"); // 格式错误
 
             mockMvc.perform(post("/api/v1/users/register")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.msg").value("邮箱格式不正确"));
@@ -186,8 +186,8 @@ public class UserAccountControllerTest {
 
             // 3. 模拟登录
             mockMvc.perform(post("/api/v1/users/login")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(loginRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
                     .andExpect(jsonPath("$.data.userId").exists())
@@ -204,8 +204,8 @@ public class UserAccountControllerTest {
             loginRequest.setPassword("WrongPassword!"); // 错误的密码
 
             mockMvc.perform(post("/api/v1/users/login")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(loginRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.msg").value("用户名或密码错误"));
@@ -219,8 +219,8 @@ public class UserAccountControllerTest {
             loginRequest.setPassword("AnyPassword");
 
             mockMvc.perform(post("/api/v1/users/login")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(loginRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.msg").value("用户名或密码错误"));
@@ -238,7 +238,7 @@ public class UserAccountControllerTest {
             String token = registerAndLogin("profile_user", "ProfilePass123!", "profile@example.com", "ProfileTester");
 
             mockMvc.perform(get("/api/v1/users/me")
-                            .header("Authorization", "Bearer " + token))
+                    .header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
                     .andExpect(jsonPath("$.data.username").value("profile_user"))
@@ -266,9 +266,9 @@ public class UserAccountControllerTest {
             updateRequest.setEmail("new_email@example.com");
 
             mockMvc.perform(put("/api/v1/users/me")
-                            .header("Authorization", "Bearer " + token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(updateRequest)))
+                    .header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updateRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
                     .andExpect(jsonPath("$.data.nickname").value("UpdatedNickname"))
@@ -288,9 +288,9 @@ public class UserAccountControllerTest {
             updateRequest.setEmail("user_A@example.com"); // 冲突的Email
 
             mockMvc.perform(put("/api/v1/users/me")
-                            .header("Authorization", "Bearer " + tokenB)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(updateRequest)))
+                    .header("Authorization", "Bearer " + tokenB)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updateRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.msg").value("该邮箱已被其他用户注册"));
@@ -309,7 +309,7 @@ public class UserAccountControllerTest {
 
             // 2. 检查初始偏好 (应为空)
             mockMvc.perform(get("/api/v1/users/preferences")
-                            .header("Authorization", "Bearer " + token))
+                    .header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
                     .andExpect(jsonPath("$.data").isEmpty()); // 期望是一个空Map {}
@@ -321,16 +321,16 @@ public class UserAccountControllerTest {
 
             // 4. 发送 PUT 请求更新偏好
             mockMvc.perform(put("/api/v1/users/preferences")
-                            .header("Authorization", "Bearer " + token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(newPreferences)))
+                    .header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(newPreferences)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
                     .andExpect(jsonPath("$.data.personality").value("witty"));
 
             // 5. 再次 GET 请求，验证数据是否已持久化
             mockMvc.perform(get("/api/v1/users/preferences")
-                            .header("Authorization", "Bearer " + token))
+                    .header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1))
                     .andExpect(jsonPath("$.data.personality").value("witty"))
@@ -345,8 +345,8 @@ public class UserAccountControllerTest {
 
             Map<String, Object> prefs = Map.of("personality", "witty");
             mockMvc.perform(put("/api/v1/users/preferences")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(prefs)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(prefs)))
                     .andExpect(status().isUnauthorized());
         }
     }

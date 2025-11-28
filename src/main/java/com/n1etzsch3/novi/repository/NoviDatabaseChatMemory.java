@@ -6,7 +6,6 @@ import com.n1etzsch3.novi.domain.po.ChatMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -60,7 +59,6 @@ public class NoviDatabaseChatMemory implements ChatMemory {
         }
     }
 
-    @Autowired
     public NoviDatabaseChatMemory(ChatMemoryMapper chatMemoryMapper) {
         this.chatMemoryMapper = chatMemoryMapper;
     }
