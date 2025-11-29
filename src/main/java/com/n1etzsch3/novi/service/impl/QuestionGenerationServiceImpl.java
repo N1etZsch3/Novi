@@ -205,6 +205,23 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         return new QuestionGenerationResponse(record.getId(), record.getGeneratedQuestions());
     }
 
+    @Override
+    public void deleteGenerationRecord(Long recordId, Long userId) {
+        // 1. Check if the record exists and belongs to the user
+        QuestionGenerationRecord record = questionGenerationRecordMapper.selectOne(
+                new LambdaQueryWrapper<QuestionGenerationRecord>()
+                        .eq(QuestionGenerationRecord::getId, recordId)
+                        .eq(QuestionGenerationRecord::getUserId, userId));
+
+        if (record == null) {
+            throw new IllegalArgumentException("Record not found or access denied");
+        }
+
+        // 2. Delete the record
+        questionGenerationRecordMapper.deleteById(recordId);
+        log.info("Deleted question generation record with ID: {}", recordId);
+    }
+
     /**
      * 清理AI返回的内容，提取有效的JSON部分
      */

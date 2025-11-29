@@ -47,6 +47,10 @@ public class AiModelConfigServiceImpl implements AiModelConfigService {
     @Override
     @Transactional
     public boolean switchModelByName(String modelName) {
+        // 0. 获取当前激活的模型（用于日志）
+        AiModelConfig currentActiveModel = getActiveModel();
+        String oldModelName = (currentActiveModel != null) ? currentActiveModel.getModelName() : "None";
+
         // 1. 根据模型名称查找模型
         AiModelConfig targetModel = aiModelConfigMapper.selectOne(
                 new LambdaQueryWrapper<AiModelConfig>()
@@ -68,7 +72,8 @@ public class AiModelConfigServiceImpl implements AiModelConfigService {
                         .eq(AiModelConfig::getId, targetModel.getId())
                         .set(AiModelConfig::getIsActive, true));
 
-        log.info("Successfully switched to model: {} (ID: {})", targetModel.getModelName(), targetModel.getId());
+        log.info("Successfully switched model from [{}] to [{}] (ID: {})", oldModelName, targetModel.getModelName(),
+                targetModel.getId());
         return true;
     }
 

@@ -67,4 +67,17 @@ public class QuestionGenerationController {
         Long userId = LoginUserContext.getUserId();
         return Result.success(questionGenerationService.getRecordDetail(recordId, userId));
     }
+
+    /**
+     * 删除出题记录
+     *
+     * @param recordId 记录ID
+     * @return 成功提示
+     */
+    @DeleteMapping("/history/{recordId}")
+    public Result<Void> deleteRecord(@PathVariable Long recordId) {
+        Long userId = LoginUserContext.getUserId();
+        questionGenerationService.deleteGenerationRecord(recordId, userId);
+        return Result.success(null);
+    }
 }

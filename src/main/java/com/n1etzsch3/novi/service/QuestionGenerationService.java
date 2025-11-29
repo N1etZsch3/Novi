@@ -47,4 +47,12 @@ public interface QuestionGenerationService {
      * @return 出题响应，包含完整题目
      */
     QuestionGenerationResponse getRecordDetail(Long recordId, Long userId);
+
+    /**
+     * 删除出题记录
+     *
+     * @param recordId 记录ID
+     * @param userId   用户ID
+     */
+    void deleteGenerationRecord(Long recordId, Long userId);
 }

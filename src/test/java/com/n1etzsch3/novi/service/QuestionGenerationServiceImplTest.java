@@ -153,4 +153,33 @@ class QuestionGenerationServiceImplTest {
         assertEquals(1L, history.get(0).getId());
         assertEquals("Test Subject", history.get(0).getSubject());
     }
+
+    @Test
+    void deleteGenerationRecord_Success() {
+        // Mock DB
+        QuestionGenerationRecord record = new QuestionGenerationRecord();
+        record.setId(1L);
+        record.setUserId(1L);
+
+        when(questionGenerationRecordMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(record);
+
+        // Execute
+        questionGenerationService.deleteGenerationRecord(1L, 1L);
+
+        // Verify
+        verify(questionGenerationRecordMapper).deleteById(1L);
+    }
+
+    @Test
+    void deleteGenerationRecord_NotFound() {
+        // Mock DB return null
+        when(questionGenerationRecordMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(null);
+
+        // Execute & Verify
+        assertThrows(IllegalArgumentException.class, () -> {
+            questionGenerationService.deleteGenerationRecord(1L, 1L);
+        });
+
+        verify(questionGenerationRecordMapper, never()).deleteById(anyLong());
+    }
 }

@@ -1,0 +1,74 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< com.N1etZsch3:Novi >-------------------------
+[INFO] Building Novi 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ Novi ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 10 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ Novi ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ Novi ---
+[INFO] Copying 2 resources from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ Novi ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ Novi ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.n1etzsch3.novi.service.AiModelConfigServiceImplTest
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.870 s <<< FAILURE! -- in com.n1etzsch3.novi.service.AiModelConfigServiceImplTest
+[ERROR] com.n1etzsch3.novi.service.AiModelConfigServiceImplTest.switchModelByName_Success -- Time elapsed: 0.850 s <<< ERROR!
+com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: can not find lambda cache for this entity [com.n1etzsch3.novi.domain.po.AiModelConfig]
+	at com.baomidou.mybatisplus.core.toolkit.ExceptionUtils.mpe(ExceptionUtils.java:49)
+	at com.baomidou.mybatisplus.core.toolkit.Assert.isTrue(Assert.java:38)
+	at com.baomidou.mybatisplus.core.toolkit.Assert.notNull(Assert.java:72)
+	at com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper.tryInitCache(AbstractLambdaWrapper.java:142)
+	at com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper.getColumnCache(AbstractLambdaWrapper.java:131)
+	at com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper.columnToString(AbstractLambdaWrapper.java:66)
+	at com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper.columnToString(AbstractLambdaWrapper.java:62)
+	at com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper.lambda$set$0(LambdaUpdateWrapper.java:82)
+	at com.baomidou.mybatisplus.core.conditions.AbstractWrapper.maybeDo(AbstractWrapper.java:546)
+	at com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper.set(LambdaUpdateWrapper.java:80)
+	at com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper.set(LambdaUpdateWrapper.java:38)
+	at com.baomidou.mybatisplus.core.conditions.update.Update.set(Update.java:46)
+	at com.baomidou.mybatisplus.core.conditions.update.Update.set(Update.java:34)
+	at com.n1etzsch3.novi.service.impl.AiModelConfigServiceImpl.switchModelByName(AiModelConfigServiceImpl.java:67)
+	at com.n1etzsch3.novi.service.AiModelConfigServiceImplTest.switchModelByName_Success(AiModelConfigServiceImplTest.java:49)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   AiModelConfigServiceImplTest.switchModelByName_Success:49 ? MybatisPlus can not find lambda cache for this entity [com.n1etzsch3.novi.domain.po.AiModelConfig]
+[INFO] 
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.160 s
+[INFO] Finished at: 2025-11-29T21:32:43+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.4:test (default-test) on project Novi: 
+[ERROR] 
+[ERROR] See C:\Study\Novi\target\surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

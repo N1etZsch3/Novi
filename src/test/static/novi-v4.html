@@ -362,8 +362,8 @@
             </div>
             <div class="d-flex align-items-center gap-3">
                 <div class="form-check form-switch mb-0" title="深色模式">
-                    <input class="form-check-input" type="checkbox" id="themeSwitch">
-                    <label class="form-check-label" for="themeSwitch"><i class="bi bi-moon-stars" style="color: var(--text-main);"></i></label>
+                    <input class="form-check-input theme-switcher" type="checkbox" id="themeSwitchChat" onchange="ui.toggleTheme(this)">
+                    <label class="form-check-label" for="themeSwitchChat"><i class="bi bi-moon-stars" style="color: var(--text-main);"></i></label>
                 </div>
                 <div class="btn-group btn-group-sm">
                     <input type="radio" class="btn-check" name="apiMode" id="modeStream" value="stream" checked>
@@ -403,9 +403,16 @@
                 <button class="btn btn-link p-0 me-3 d-md-none" style="color: var(--text-main);" onclick="ui.toggleSidebar(event)"><i class="bi bi-list fs-4"></i></button>
                 <h6 class="mb-0 fw-bold" style="color: var(--text-main);">AI 智能出题助手</h6>
             </div>
-            <button class="btn btn-outline-primary btn-sm rounded-pill px-3" onclick="exam.reset()">
-                <i class="bi bi-arrow-clockwise me-1"></i> 重置
-            </button>
+            <div class="d-flex align-items-center gap-3">
+                <!-- 新增：出题页面的深色模式开关 -->
+                <div class="form-check form-switch mb-0" title="深色模式">
+                    <input class="form-check-input theme-switcher" type="checkbox" id="themeSwitchExam" onchange="ui.toggleTheme(this)">
+                    <label class="form-check-label" for="themeSwitchExam"><i class="bi bi-moon-stars" style="color: var(--text-main);"></i></label>
+                </div>
+                <button class="btn btn-outline-primary btn-sm rounded-pill px-3" onclick="exam.reset()">
+                    <i class="bi bi-arrow-clockwise me-1"></i> 重置
+                </button>
+            </div>
         </header>
 
         <div class="exam-container">
@@ -413,6 +420,15 @@
             <div class="exam-config-panel">
                 <h5 class="fw-bold mb-4">出题配置</h5>
                 <form id="examForm" onsubmit="exam.generate(event)">
+                    <!-- 新增：模型选择 -->
+                    <div class="form-floating mb-3">
+                        <select class="form-select rounded-3" id="examModel" aria-label="选择模型">
+                            <option value="doubao-seed-1-6-flash-250828" selected>豆包 (Doubao)</option>
+                            <option value="deepseek-r1-0528">DeepSeek-R1</option>
+                        </select>
+                        <label for="examModel">AI 模型</label>
+                    </div>
+
                     <div class="form-floating mb-3">
                         <select class="form-select rounded-3" id="examSubject" aria-label="选择科目">
                             <option value="湖北专升本英语" selected>湖北专升本英语</option>
@@ -711,7 +727,10 @@
             // 切换侧边栏列表内容
             const showId = `sidebar-${mode}-elements`;
             document.querySelectorAll(`[id^="sidebar-"][id$="-elements"]`).forEach(el => el.classList.add('d-none'));
-            document.querySelectorAll(`#${showId}`).forEach(el => el.classList.remove('d-none').add('d-flex'));
+            document.querySelectorAll(`#${showId}`).forEach(el => {
+                el.classList.remove('d-none');
+                el.classList.add('d-flex');
+            });
         },
 
         togglePassword(inputId, btn) {
@@ -774,6 +793,13 @@
             document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected')); document.getElementById(`card-${id}`).classList.add('selected');
             const customInput = document.getElementById('customPersonaInputDiv');
             if (id === 'custom') { customInput.classList.remove('d-none'); app.currentPreferences.personalityMode = document.getElementById('psCustomPersona').value || 'custom'; } else { customInput.classList.add('d-none'); app.currentPreferences.personalityMode = id; }
+        },
+        toggleTheme(el) {
+            const theme = el.checked ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('novi_theme', theme);
+            // 同步所有开关状态
+            document.querySelectorAll('.theme-switcher').forEach(chk => chk.checked = el.checked);
         }
     };
 
@@ -806,6 +832,7 @@
             const theme = document.getElementById('examTopic').value;
             const difficulty = document.querySelector('input[name="examDifficulty"]:checked').value;
             const quantity = document.getElementById('examQuantity').value;
+            const model = document.getElementById('examModel').value; // 新增：获取模型
 
             document.getElementById('paperLoading').classList.remove('d-none');
             document.getElementById('paperEmpty').classList.add('d-none');
@@ -813,7 +840,7 @@
 
             try {
                 const res = await axios.post('/questions/generate', {
-                    subject, questionType, theme, difficulty, quantity: parseInt(quantity)
+                    subject, questionType, theme, difficulty, quantity: parseInt(quantity), model
                 });
 
                 if (res.data.code === 200 || res.data.code === 1) {
@@ -1018,38 +1045,66 @@
                              `;
                         });
                     } else if (typeof q.answer === 'string') {
-                        // 假如答案也是一个字符串 "1. A; 2. B" 这种
-                        // 尝试解析答案字符串
+                        // 【优化】针对长字符串类型的答案和解析进行智能拆分
                         const ansMap = {};
-                        const ansParts = q.answer.split(/;|；|\n/);
-                        ansParts.forEach(p => {
-                            const m = p.match(/(\d+)[\.、\s]+(.*)/);
-                            if(m) ansMap[m[1]] = m[2].trim();
-                        });
+                        const anaMap = {};
 
-                        // 尝试解析解析字符串
-                        let analysisMap = {};
+                        // 1. 解析答案字符串：匹配 "1. answer;" 或 "1、 answer" 等格式
+                        const ansRegex = /(\d+)[\.、]\s*([^;；\n]+)(?:[;；\n]|$)/g;
+                        let ansMatch;
+                        while ((ansMatch = ansRegex.exec(q.answer)) !== null) {
+                            if(ansMatch[1]) ansMap[ansMatch[1]] = ansMatch[2].trim();
+                        }
+
+                        // Fallback: 如果正则没匹配到，尝试简单分割
+                        if(Object.keys(ansMap).length === 0) {
+                            q.answer.split(/[;；\n]/).forEach((p, i) => {
+                                const m = p.trim().match(/^(\d+)[\.、]\s*(.*)/);
+                                if(m) ansMap[m[1]] = m[2].trim();
+                                else if(p.trim()) ansMap[i+1] = p.trim(); // 假设顺序
+                            });
+                        }
+
+                        // 2. 解析解析字符串：匹配 "1. 解析内容..." 格式
+                        // 使用 lookahead 确保匹配到下一个数字序号之前
                         if (typeof q.analysis === 'string') {
-                            const parts = q.analysis.split(/(?:\n|^)(\d+)\.\s*/);
-                            for (let k = 1; k < parts.length; k += 2) {
-                                analysisMap[parts[k]] = parts[k+1].trim();
+                            const anaRegex = /(\d+)[\.、]\s*(.*?)(?=\s*\d+[\.、]|$)/g;
+                            let anaMatch;
+                            // 防止死循环，确保 input 有效
+                            while ((anaMatch = anaRegex.exec(q.analysis)) !== null) {
+                                if(anaMatch[1]) anaMap[anaMatch[1]] = anaMatch[2].trim();
+                            }
+
+                            // Fallback: 按行分割
+                            if(Object.keys(anaMap).length === 0) {
+                                q.analysis.split('\n').forEach(line => {
+                                    const m = line.trim().match(/^(\d+)[\.、]\s*(.*)/);
+                                    if(m) anaMap[m[1]] = m[2].trim();
+                                });
                             }
                         }
 
-                        // 假设有10道题
-                        for(let i=1; i<=10; i++) {
-                            const ans = ansMap[i] || (i===1 ? q.answer : ''); // 如果没解析出来，第一行显示全部
-                            const ana = analysisMap[i] || (i===1 && Object.keys(analysisMap).length===0 ? q.analysis : '');
+                        // 3. 渲染表格行
+                        const allKeys = new Set([...Object.keys(ansMap), ...Object.keys(anaMap)]);
+                        const sortedKeys = Array.from(allKeys).map(Number).filter(n => !isNaN(n)).sort((a,b)=>a-b);
 
-                            if(ans || ana) {
+                        if (sortedKeys.length > 0) {
+                            sortedKeys.forEach(k => {
                                 answersHtml += `
                                 <tr>
-                                    <td class="text-center fw-bold">${i}</td>
-                                    <td class="text-primary fw-bold">${ans}</td>
-                                    <td class="small text-muted text-break">${ana}</td>
-                                </tr>
-                                `;
-                            }
+                                    <td class="text-center fw-bold">${k}</td>
+                                    <td class="text-primary fw-bold">${ansMap[k] || ''}</td>
+                                    <td class="small text-muted text-break text-start">${anaMap[k] || ''}</td>
+                                </tr>`;
+                            });
+                        } else {
+                            // 实在无法拆分，回退到显示整段文本
+                            answersHtml += `
+                                <tr>
+                                    <td class="text-center fw-bold">-</td>
+                                    <td class="text-primary fw-bold">${q.answer}</td>
+                                    <td class="small text-muted text-break text-start">${q.analysis || ''}</td>
+                                </tr>`;
                         }
                     }
                 } else {
@@ -1137,7 +1192,7 @@
             this.setupAxios();
             this.bindEvents();
             const isDark = localStorage.getItem('novi_theme') === 'dark';
-            document.getElementById('themeSwitch').checked = isDark;
+            document.querySelectorAll('.theme-switcher').forEach(el => el.checked = isDark);
             if (isDark) document.documentElement.setAttribute('data-bs-theme', 'dark');
 
             if (this.state.token) this.initLoggedInState();
@@ -1148,8 +1203,10 @@
         },
 
         switchMode(mode) {
-            if (mode === 'chat') ui.navigateTo('chat-view');
-            else if (mode === 'exam') {
+            if (mode === 'chat') {
+                ui.navigateTo('chat-view');
+                this.loadSessions(); // 切换回对话模式时刷新会话列表
+            } else if (mode === 'exam') {
                 ui.navigateTo('exam-view');
                 exam.loadHistory(); // 切换到出题模式时刷新历史
             }
@@ -1180,11 +1237,7 @@
                     password: document.getElementById('regPass').value
                 }, true);
             });
-            document.getElementById('themeSwitch').addEventListener('change', e => {
-                const theme = e.target.checked ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-bs-theme', theme);
-                localStorage.setItem('novi_theme', theme);
-            });
+            // 绑定主题切换事件已移至 ui.toggleTheme 统一处理
             document.getElementById('messageInput').addEventListener('keydown', e => {
                 if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.sendMessage(); }
             });
