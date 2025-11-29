@@ -80,4 +80,17 @@ public class QuestionGenerationController {
         questionGenerationService.deleteGenerationRecord(recordId, userId);
         return Result.success(null);
     }
+
+    /**
+     * 批量删除出题记录
+     *
+     * @param recordIds 记录ID列表
+     * @return 成功提示
+     */
+    @DeleteMapping("/history")
+    public Result<Void> deleteRecords(@RequestBody List<Long> recordIds) {
+        Long userId = LoginUserContext.getUserId();
+        questionGenerationService.deleteGenerationRecords(recordIds, userId);
+        return Result.success(null);
+    }
 }

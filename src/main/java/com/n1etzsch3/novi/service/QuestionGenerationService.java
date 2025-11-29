@@ -55,4 +55,12 @@ public interface QuestionGenerationService {
      * @param userId   用户ID
      */
     void deleteGenerationRecord(Long recordId, Long userId);
+
+    /**
+     * 批量删除出题记录
+     *
+     * @param recordIds 记录ID列表
+     * @param userId    用户ID
+     */
+    void deleteGenerationRecords(List<Long> recordIds, Long userId);
 }

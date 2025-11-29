@@ -1,7 +1,5 @@
 package com.n1etzsch3.novi.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.n1etzsch3.novi.domain.po.AiModelConfig;
 import com.n1etzsch3.novi.mapper.AiModelConfigMapper;
 import com.n1etzsch3.novi.service.impl.AiModelConfigServiceImpl;

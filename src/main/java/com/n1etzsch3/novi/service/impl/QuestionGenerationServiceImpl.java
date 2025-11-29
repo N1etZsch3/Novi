@@ -222,6 +222,22 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         log.info("Deleted question generation record with ID: {}", recordId);
     }
 
+    @Override
+    public void deleteGenerationRecords(List<Long> recordIds, Long userId) {
+        if (recordIds == null || recordIds.isEmpty()) {
+            return;
+        }
+
+        // 批量删除属于该用户的记录
+        // 使用 delete(wrapper) 确保只能删除自己的记录
+        int deletedCount = questionGenerationRecordMapper.delete(
+                new LambdaQueryWrapper<QuestionGenerationRecord>()
+                        .in(QuestionGenerationRecord::getId, recordIds)
+                        .eq(QuestionGenerationRecord::getUserId, userId));
+
+        log.info("Batch deleted {} question generation records for user {}", deletedCount, userId);
+    }
+
     /**
      * 清理AI返回的内容，提取有效的JSON部分
      */
