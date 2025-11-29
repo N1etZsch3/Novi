@@ -36,6 +36,22 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
     }
 
     @Override
+    public String getSystemPromptByContext(com.n1etzsch3.novi.enums.PromptContextType contextType) {
+        // 根据上下文类型构建配置键
+        String configKey = "system_prompt_" + contextType.getCode();
+
+        AiPromptConfig config = aiPromptConfigMapper.selectById(configKey);
+        if (config != null) {
+            log.info("Using context-specific prompt: {}", configKey);
+            return config.getConfigValue();
+        }
+
+        // 如果没有找到特定上下文的提示词，回退到默认提示词
+        log.warn("Context-specific prompt '{}' not found, falling back to default", configKey);
+        return getSystemPromptTemplate();
+    }
+
+    @Override
     public String getConfigValue(String key) {
         AiPromptConfig config = aiPromptConfigMapper.selectById(key);
         return config != null ? config.getConfigValue() : null;

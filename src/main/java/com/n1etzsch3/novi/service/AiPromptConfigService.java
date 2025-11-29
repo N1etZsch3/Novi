@@ -20,6 +20,17 @@ public interface AiPromptConfigService {
     String getSystemPromptTemplate();
 
     /**
+     * 根据上下文类型获取对应的系统提示词模板
+     * <p>
+     * 用于不同场景下的智能提示词切换。
+     * </p>
+     *
+     * @param contextType 上下文类型
+     * @return 对应场景的系统提示词模板
+     */
+    String getSystemPromptByContext(com.n1etzsch3.novi.enums.PromptContextType contextType);
+
+    /**
      * 根据 Key 获取配置值 (无回退)。
      *
      * @param key 配置 Key。

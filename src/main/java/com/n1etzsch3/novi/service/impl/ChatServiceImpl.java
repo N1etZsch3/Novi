@@ -173,67 +173,91 @@ public class ChatServiceImpl implements ChatService {
     /**
      * 【新增】抽取公共方法，构建动态的 System Message
      * 避免代码重复，保证流式和阻塞式的人设一致
+     * 默认使用好友聊天上下文
      */
     private Message buildSystemMessage(Long userId, String userMessage) {
+        return buildSystemMessage(userId, userMessage, com.n1etzsch3.novi.enums.PromptContextType.FRIENDLY_CHAT);
+    }
+
+    /**
+     * 【新增】抽取公共方法，构建动态的 System Message（支持上下文类型）
+     * 避免代码重复，保证流式和阻塞式的人设一致
+     * 
+     * @param userId      用户ID
+     * @param userMessage 用户消息
+     * @param contextType 提示词上下文类型
+     * @return 构建好的系统消息
+     */
+    private Message buildSystemMessage(Long userId, String userMessage,
+            com.n1etzsch3.novi.enums.PromptContextType contextType) {
         // 1. 获取用户信息
         UserAccount user = userAccountMapper.selectById(userId);
 
-        // 2. 获取用户偏好
-        NoviPersonaSettings settings = userPreferenceService.getPersonaSettings(userId);
-        if (settings == null) {
-            settings = new NoviPersonaSettings(); // 兜底
+        // 2. 根据上下文类型获取对应的系统提示词模板
+        String systemPromptTemplateStr = aiPromptConfigService.getSystemPromptByContext(contextType);
+        log.info("Using {} context for user {}", contextType.getDescription(), userId);
+
+        // 3. 如果是好友聊天上下文，需要构建个性化设置
+        if (contextType == com.n1etzsch3.novi.enums.PromptContextType.FRIENDLY_CHAT) {
+            // 获取用户偏好
+            NoviPersonaSettings settings = userPreferenceService.getPersonaSettings(userId);
+            if (settings == null) {
+                settings = new NoviPersonaSettings(); // 兜底
+            }
+
+            // 确定称呼
+            String nickname = StringUtils.hasText(settings.getUserAddressName())
+                    ? settings.getUserAddressName()
+                    : (StringUtils.hasText(user.getNickname()) ? user.getNickname() : "老铁");
+
+            // 构建自然语言的人设描述
+            String personalityDesc = buildPersonalityDescription(settings);
+            log.info("用户 {} 的最终人设 Prompt: {}", userId, personalityDesc);
+
+            // 获取记忆
+            String memories = "（暂无特殊记忆，就像平时一样闲聊）";
+
+            // 时间信息
+            LocalDateTime now = LocalDateTime.now();
+            String timeStr = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+            String dateStr = now.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日"));
+            String weekStr = now.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.CHINA);
+
+            // 季节提示
+            int month = now.getMonthValue();
+            String seasonHint;
+            if (month >= 3 && month <= 5)
+                seasonHint = "春季，气温回暖";
+            else if (month >= 6 && month <= 8)
+                seasonHint = "夏季，天气炎热";
+            else if (month >= 9 && month <= 11)
+                seasonHint = "秋季，天气转凉";
+            else
+                seasonHint = "冬季，天气寒冷";
+
+            // 构建并返回 System Message
+            SystemPromptTemplate systemTemplate = new SystemPromptTemplate(systemPromptTemplateStr);
+            Map<String, Object> promptVars = Map.of(
+                    "nickname", nickname,
+                    "personality", personalityDesc,
+                    "current_time", timeStr,
+                    "memories", memories,
+                    "user_message", userMessage,
+                    "current_date", dateStr + " " + weekStr,
+                    "season_hint", seasonHint);
+
+            return systemTemplate.createMessage(promptVars);
+        } else {
+            // 专业场景：只填充时间等基本信息
+            LocalDateTime now = LocalDateTime.now();
+            String timeStr = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+
+            SystemPromptTemplate systemTemplate = new SystemPromptTemplate(systemPromptTemplateStr);
+            Map<String, Object> promptVars = Map.of(
+                    "current_time", timeStr);
+
+            return systemTemplate.createMessage(promptVars);
         }
-
-        // 3. 确定称呼 (逻辑：偏好设置中的称呼 > 账号昵称 > "老铁")
-        String nickname = StringUtils.hasText(settings.getUserAddressName())
-                ? settings.getUserAddressName()
-                : (StringUtils.hasText(user.getNickname()) ? user.getNickname() : "老铁");
-
-        // 4. 构建自然语言的人设描述 (将配置项转换为 Prompt)
-        String personalityDesc = buildPersonalityDescription(settings);
-
-        log.info("用户 {} 的最终人设 Prompt: {}", userId, personalityDesc);
-
-        // 5. 获取记忆 (TODO: 接入向量数据库或检索逻辑)
-        String memories = "（暂无特殊记忆，就像平时一样闲聊）";
-
-        // === 修改开始：增强时间感知 ===
-        LocalDateTime now = LocalDateTime.now();
-
-        // 1. 基础时间: 16:30
-        String timeStr = now.format(DateTimeFormatter.ofPattern("HH:mm"));
-
-        // 2. 日期与星期: 2025年11月21日 星期五
-        String dateStr = now.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日"));
-        String weekStr = now.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.CHINA);
-
-        // 3. 简单的季节/体感推断 (根据月份给 AI 一个环境暗示)
-        int month = now.getMonthValue();
-        String seasonHint;
-        if (month >= 3 && month <= 5)
-            seasonHint = "春季，气温回暖";
-        else if (month >= 6 && month <= 8)
-            seasonHint = "夏季，天气炎热";
-        else if (month >= 9 && month <= 11)
-            seasonHint = "秋季，天气转凉";
-        else
-            seasonHint = "冬季，天气寒冷";
-
-        // === 修改结束 ===
-
-        // 6. 构建并返回 System Message
-        String systemPromptTemplateStr = aiPromptConfigService.getSystemPromptTemplate();
-        SystemPromptTemplate systemTemplate = new SystemPromptTemplate(systemPromptTemplateStr);
-        Map<String, Object> promptVars = Map.of(
-                "nickname", nickname,
-                "personality", personalityDesc,
-                "current_time", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")),
-                "memories", memories,
-                "user_message", userMessage,
-                "current_date", dateStr + " " + weekStr,
-                "season_hint", seasonHint);
-
-        return systemTemplate.createMessage(promptVars);
     }
 
     /**

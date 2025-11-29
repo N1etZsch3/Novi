@@ -1,0 +1,26 @@
+2025-11-29 01:38:38.397 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2025-11-29 01:38:38.406 [main] INFO  com.n1etzsch3.novi.NoviApplication - Starting NoviApplication using Java 25 with PID 82925 (/Users/n1etzsch3/Documents/Novi/target/classes started by n1etzsch3 in /Users/n1etzsch3/Documents/Novi)
+2025-11-29 01:38:38.406 [main] INFO  com.n1etzsch3.novi.NoviApplication - No active profile set, falling back to 1 default profile: "default"
+2025-11-29 01:38:38.691 [main] TRACE o.s.a.m.c.m.r.j.a.JdbcChatMemoryRepositoryAutoConfiguration$OnJdbcChatMemoryRepositoryDatasourceInitializationCondition - Condition JdbcChatMemoryRepositoryAutoConfiguration.OnJdbcChatMemoryRepositoryDatasourceInitializationCondition on org.springframework.ai.model.chat.memory.repository.jdbc.autoconfigure.JdbcChatMemoryRepositoryAutoConfiguration#jdbcChatMemoryScriptDatabaseInitializer matched due to Jdbc Chat Memory RepositoryDatabase Initialization default value is EMBEDDED
+2025-11-29 01:38:38.911 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-11-29 01:38:38.916 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-11-29 01:38:38.917 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-29 01:38:38.917 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-11-29 01:38:38.930 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-29 01:38:38.930 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 510 ms
+2025-11-29 01:38:39.022 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-29 01:38:40.940 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@55c46ec1
+2025-11-29 01:38:40.943 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-29 01:38:41.112 [main] DEBUG o.s.a.m.t.a.ToolCallingAutoConfiguration - Cannot load class: org.springframework.security.oauth2.client.ClientAuthorizationException
+2025-11-29 01:38:41.117 [main] INFO  com.n1etzsch3.novi.config.ChatConfig - Initializing ChatClient with auto-configured OpenAiChatModel
+2025-11-29 01:38:41.302 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-11-29 01:38:41.338 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-11-29 01:38:41.341 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-11-29 01:38:41.347 [main] INFO  com.n1etzsch3.novi.NoviApplication - Started NoviApplication in 3.187 seconds (process running for 3.55)
+2025-11-29 01:38:41.517 [RMI TCP Connection(1)-127.0.0.1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-29 01:38:41.517 [RMI TCP Connection(1)-127.0.0.1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-11-29 01:38:41.518 [RMI TCP Connection(1)-127.0.0.1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-11-29 01:38:55.591 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-29 01:38:55.602 [tomcat-shutdown] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-11-29 01:38:55.605 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-11-29 01:38:55.607 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
