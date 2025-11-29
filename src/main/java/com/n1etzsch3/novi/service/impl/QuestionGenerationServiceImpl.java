@@ -47,30 +47,83 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
     public QuestionGenerationResponse generateQuestions(Long userId, QuestionGenerationRequest request) {
         log.info("Starting question generation for user: {}, subject: {}", userId, request.getSubject());
 
+        // 0. 校验数量 (防止滥用，最多3道)
+        if (request.getQuantity() > 3) {
+            throw new IllegalArgumentException("To ensure quality, you can generate at most 3 questions at a time.");
+        }
+
         // 1. 查询示例题目 (Few-Shot)
+        // 优化：优先查询指定难度的示例，如果没有，则降级使用 medium 难度
         List<QuestionExample> examples = questionExampleMapper.selectList(
                 new LambdaQueryWrapper<QuestionExample>()
                         .eq(QuestionExample::getSubject, request.getSubject())
                         .eq(QuestionExample::getQuestionType, request.getQuestionType())
                         .eq(QuestionExample::getDifficulty, request.getDifficulty())
-                        .last("LIMIT 3") // 限制示例数量
+                        .last("LIMIT 3"));
+
+        if (examples.isEmpty()) {
+            log.info("No examples found for difficulty: {}, falling back to 'medium'", request.getDifficulty());
+            examples = questionExampleMapper.selectList(
+                    new LambdaQueryWrapper<QuestionExample>()
+                            .eq(QuestionExample::getSubject, request.getSubject())
+                            .eq(QuestionExample::getQuestionType, request.getQuestionType())
+                            .eq(QuestionExample::getDifficulty, "medium")
+                            .last("LIMIT 3"));
+        }
+
+        // 2. 循环调用AI生成题目
+        List<Object> allQuestions = new java.util.ArrayList<>();
+        int quantity = request.getQuantity();
+
+        // 创建单题请求对象 (用于构建提示词)
+        QuestionGenerationRequest singleRequest = new QuestionGenerationRequest(
+                request.getSubject(),
+                request.getQuestionType(),
+                request.getTheme(),
+                request.getDifficulty(),
+                1 // 强制每次只生成1道
         );
 
-        // 2. 构建提示词
-        String promptText = questionPromptBuilder.buildPrompt(request, examples);
-        log.info("Generated prompt: {}", promptText);
+        for (int i = 0; i < quantity; i++) {
+            try {
+                // 构建提示词
+                String promptText = questionPromptBuilder.buildPrompt(singleRequest, examples);
+                log.info("Generating question {}/{}. Prompt: {}", i + 1, quantity, promptText);
 
-        // 3. 调用AI模型
-        OpenAiChatModel chatModel = dynamicChatModelFactory.createChatModel();
-        ChatResponse response = chatModel.call(new Prompt(promptText));
-        String rawContent = response.getResults().get(0).getOutput().getText();
-        log.info("AI Response: {}", rawContent);
+                // 调用AI (带重试)
+                String jsonContent = callAiWithRetry(promptText);
 
-        // 4. 清理和解析JSON
-        String jsonContent = cleanJsonContent(rawContent);
-        validateJson(jsonContent);
+                // 解析并添加到总列表
+                // AI返回的是一个数组，我们需要把里面的元素取出来放进总列表
+                com.fasterxml.jackson.databind.JsonNode rootNode = objectMapper.readTree(jsonContent);
+                if (rootNode.isArray()) {
+                    for (com.fasterxml.jackson.databind.JsonNode node : rootNode) {
+                        allQuestions.add(node);
+                    }
+                } else {
+                    allQuestions.add(rootNode);
+                }
 
-        // 5. 保存记录
+            } catch (Exception e) {
+                log.error("Failed to generate question {}/{}", i + 1, quantity, e);
+                // 可以选择继续生成剩下的，或者直接报错。这里选择继续，尽可能返回部分结果
+                // 但如果一个都生成不出来，最后会是空的
+            }
+        }
+
+        if (allQuestions.isEmpty()) {
+            throw new RuntimeException("Failed to generate any questions after attempts.");
+        }
+
+        // 3. 序列化结果
+        String finalJson;
+        try {
+            finalJson = objectMapper.writeValueAsString(allQuestions);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to serialize generated questions", e);
+        }
+
+        // 4. 保存记录
         QuestionGenerationRecord record = QuestionGenerationRecord.builder()
                 .userId(userId)
                 .subject(request.getSubject())
@@ -78,7 +131,7 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
                 .theme(request.getTheme())
                 .difficulty(request.getDifficulty())
                 .quantity(request.getQuantity())
-                .generatedQuestions(jsonContent)
+                .generatedQuestions(finalJson)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -86,11 +139,38 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         questionGenerationRecordMapper.insert(record);
         log.info("Saved question generation record with ID: {}", record.getId());
 
-        // 6. 返回结果
-        return new QuestionGenerationResponse(record.getId(), jsonContent);
+        // 5. 返回结果
+        return new QuestionGenerationResponse(record.getId(), finalJson);
     }
 
-    // ... (omitted methods)
+    /**
+     * 调用AI并带有重试机制
+     */
+    private String callAiWithRetry(String promptText) {
+        int maxRetries = 1;
+        int attempt = 0;
+        Exception lastException = null;
+
+        while (attempt <= maxRetries) {
+            try {
+                attempt++;
+                OpenAiChatModel chatModel = dynamicChatModelFactory.createChatModel();
+                ChatResponse response = chatModel.call(new Prompt(promptText));
+                String rawContent = response.getResults().get(0).getOutput().getText();
+                // log.debug("AI Response (Attempt {}): {}", attempt, rawContent);
+
+                // 清理和解析JSON
+                String jsonContent = cleanJsonContent(rawContent);
+                validateJson(jsonContent);
+
+                return jsonContent;
+            } catch (Exception e) {
+                log.warn("AI generation failed on attempt {}/{}: {}", attempt, maxRetries + 1, e.getMessage());
+                lastException = e;
+            }
+        }
+        throw new RuntimeException("Failed to generate valid questions after retries", lastException);
+    }
 
     @Override
     public List<QuestionHistoryItem> getGenerationHistory(Long userId) {
