@@ -58,13 +58,13 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
 
         // 2. 构建提示词
         String promptText = questionPromptBuilder.buildPrompt(request, examples);
-        log.debug("Generated prompt: {}", promptText);
+        log.info("Generated prompt: {}", promptText);
 
         // 3. 调用AI模型
         OpenAiChatModel chatModel = dynamicChatModelFactory.createChatModel();
         ChatResponse response = chatModel.call(new Prompt(promptText));
         String rawContent = response.getResults().get(0).getOutput().getText();
-        log.debug("AI Response: {}", rawContent);
+        log.info("AI Response: {}", rawContent);
 
         // 4. 清理和解析JSON
         String jsonContent = cleanJsonContent(rawContent);
@@ -89,6 +89,8 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         // 6. 返回结果
         return new QuestionGenerationResponse(record.getId(), jsonContent);
     }
+
+    // ... (omitted methods)
 
     @Override
     public List<QuestionHistoryItem> getGenerationHistory(Long userId) {
@@ -124,22 +126,49 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
     }
 
     /**
-     * 清理AI返回的内容，移除Markdown代码块标记
+     * 清理AI返回的内容，提取有效的JSON部分
      */
     private String cleanJsonContent(String content) {
         if (content == null) {
             return "[]";
         }
         String cleaned = content.trim();
-        if (cleaned.startsWith("```json")) {
-            cleaned = cleaned.substring(7);
-        } else if (cleaned.startsWith("```")) {
-            cleaned = cleaned.substring(3);
+
+        // 寻找第一个 '{' 或 '['
+        int firstBrace = cleaned.indexOf('{');
+        int firstBracket = cleaned.indexOf('[');
+
+        int start = -1;
+        if (firstBrace != -1 && firstBracket != -1) {
+            start = Math.min(firstBrace, firstBracket);
+        } else if (firstBrace != -1) {
+            start = firstBrace;
+        } else if (firstBracket != -1) {
+            start = firstBracket;
         }
-        if (cleaned.endsWith("```")) {
-            cleaned = cleaned.substring(0, cleaned.length() - 3);
+
+        if (start == -1) {
+            return "[]"; // 没有找到JSON起始符号
         }
-        return cleaned.trim();
+
+        // 寻找最后一个 '}' 或 ']'
+        int lastBrace = cleaned.lastIndexOf('}');
+        int lastBracket = cleaned.lastIndexOf(']');
+
+        int end = -1;
+        if (lastBrace != -1 && lastBracket != -1) {
+            end = Math.max(lastBrace, lastBracket);
+        } else if (lastBrace != -1) {
+            end = lastBrace;
+        } else if (lastBracket != -1) {
+            end = lastBracket;
+        }
+
+        if (end == -1 || end < start) {
+            return "[]"; // 没有找到JSON结束符号或顺序错误
+        }
+
+        return cleaned.substring(start, end + 1);
     }
 
     /**

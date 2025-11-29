@@ -15,18 +15,18 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Result {
+public class Result<T> {
     private Integer code;
     private String msg;
-    private Object data;
+    private T data;
 
     /**
      * 创建不带数据的成功结果。
      *
      * @return 成功的结果对象。
      */
-    public static Result success() {
-        Result result = new Result();
+    public static <T> Result<T> success() {
+        Result<T> result = new Result<>();
         result.setCode(1);
         result.setMsg("success");
         return result;
@@ -38,8 +38,10 @@ public class Result {
      * @param data 结果中包含的数据。
      * @return 带数据的成功结果对象。
      */
-    public static Result success(Object data) {
-        Result result = success();
+    public static <T> Result<T> success(T data) {
+        Result<T> result = new Result<>();
+        result.setCode(1);
+        result.setMsg("success");
         result.setData(data);
         return result;
     }
@@ -50,8 +52,8 @@ public class Result {
      * @param msg 错误消息。
      * @return 错误的结果对象。
      */
-    public static Result error(String msg) {
-        Result result = new Result();
+    public static <T> Result<T> error(String msg) {
+        Result<T> result = new Result<>();
         result.msg = msg;
         result.setCode(0);
         return result;

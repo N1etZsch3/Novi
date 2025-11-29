@@ -102,6 +102,37 @@ class QuestionGenerationServiceImplTest {
     }
 
     @Test
+    void generateQuestions_DirtyJson() {
+        // Mock dependencies
+        when(questionExampleMapper.selectList(any(LambdaQueryWrapper.class))).thenReturn(Collections.emptyList());
+        when(questionPromptBuilder.buildPrompt(any(), any())).thenReturn("Test Prompt");
+        when(dynamicChatModelFactory.createChatModel()).thenReturn(chatModel);
+
+        // Mock AI response with dirty JSON (markdown and extra text)
+        String dirtyJson = "Here is the result:\n```json\n[{\"content\":\"Question 1\"}]\n```\nHope it helps!";
+        String expectedJson = "[{\"content\":\"Question 1\"}]";
+
+        AssistantMessage message = new AssistantMessage(dirtyJson);
+        Generation generation = new Generation(message);
+        ChatResponse chatResponse = new ChatResponse(Collections.singletonList(generation));
+        when(chatModel.call(any(Prompt.class))).thenReturn(chatResponse);
+
+        // Mock DB save
+        when(questionGenerationRecordMapper.insert(any(QuestionGenerationRecord.class))).thenAnswer(invocation -> {
+            QuestionGenerationRecord record = invocation.getArgument(0);
+            record.setId(1L);
+            return 1;
+        });
+
+        // Execute
+        QuestionGenerationResponse response = questionGenerationService.generateQuestions(1L, request);
+
+        // Verify
+        assertNotNull(response);
+        assertEquals(expectedJson, response.getQuestions());
+    }
+
+    @Test
     void getGenerationHistory_Success() {
         // Mock DB
         QuestionGenerationRecord record = QuestionGenerationRecord.builder()

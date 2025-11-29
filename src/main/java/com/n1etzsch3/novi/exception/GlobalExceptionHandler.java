@@ -59,6 +59,16 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 捕获【非法参数异常】
+     * 通常由 Service 层抛出，用于参数校验或业务逻辑检查
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Result handleIllegalArgumentException(IllegalArgumentException e) {
+        log.warn("非法参数异常: {}", e.getMessage());
+        return Result.error(e.getMessage());
+    }
+
+    /**
      * 捕获所有【未知的服务器异常】(例如 NullPointerException)
      */
     @ExceptionHandler(Exception.class)

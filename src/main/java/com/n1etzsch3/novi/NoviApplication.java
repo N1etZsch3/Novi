@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 		org.springframework.ai.model.openai.autoconfigure.OpenAiEmbeddingAutoConfiguration.class,
 		org.springframework.ai.model.openai.autoconfigure.OpenAiModerationAutoConfiguration.class
 })
-@org.mybatis.spring.annotation.MapperScan("com.n1etzsch3.novi.mapper")
 public class NoviApplication {
 
 	public static void main(String[] args) {
