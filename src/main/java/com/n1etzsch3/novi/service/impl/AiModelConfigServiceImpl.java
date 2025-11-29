@@ -2,6 +2,7 @@ package com.n1etzsch3.novi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.n1etzsch3.novi.domain.dto.AiModelConfigDTO;
 import com.n1etzsch3.novi.domain.po.AiModelConfig;
 import com.n1etzsch3.novi.mapper.AiModelConfigMapper;
 import com.n1etzsch3.novi.service.AiModelConfigService;
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * AI模型配置服务实现类
  * <p>
- * 实现模型配置的管理和切换逻辑。
+ * 提供模型查询和切换功能。
  * </p>
  *
  * @author N1etzsch3
@@ -29,6 +31,56 @@ public class AiModelConfigServiceImpl implements AiModelConfigService {
     private final AiModelConfigMapper aiModelConfigMapper;
 
     @Override
+    public AiModelConfigDTO getActiveModelDTO() {
+        AiModelConfig activeModel = getActiveModel();
+        return convertToDTO(activeModel);
+    }
+
+    @Override
+    public List<AiModelConfigDTO> listAllModelsDTO() {
+        List<AiModelConfig> models = aiModelConfigMapper.selectList(null);
+        return models.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public boolean switchModelByName(String modelName) {
+        // 1. 根据模型名称查找模型
+        AiModelConfig targetModel = aiModelConfigMapper.selectOne(
+                new LambdaQueryWrapper<AiModelConfig>()
+                        .eq(AiModelConfig::getModelName, modelName));
+
+        if (targetModel == null) {
+            log.error("Model with name {} not found", modelName);
+            return false;
+        }
+
+        // 2. 将所有模型设置为非激活状态
+        aiModelConfigMapper.update(null,
+                new LambdaUpdateWrapper<AiModelConfig>()
+                        .set(AiModelConfig::getIsActive, false));
+
+        // 3. 激活目标模型
+        aiModelConfigMapper.update(null,
+                new LambdaUpdateWrapper<AiModelConfig>()
+                        .eq(AiModelConfig::getId, targetModel.getId())
+                        .set(AiModelConfig::getIsActive, true));
+
+        log.info("Successfully switched to model: {} (ID: {})", targetModel.getModelName(), targetModel.getId());
+        return true;
+    }
+
+    /**
+     * 获取当前激活的模型配置（内部使用）
+     * <p>
+     * 此方法返回完整的配置信息，仅供系统内部组件使用
+     * </p>
+     *
+     * @return 当前激活的模型配置，如果没有则返回 null
+     */
+    @Override
     public AiModelConfig getActiveModel() {
         AiModelConfig activeModel = aiModelConfigMapper.selectOne(
                 new LambdaQueryWrapper<AiModelConfig>()
@@ -41,89 +93,23 @@ public class AiModelConfigServiceImpl implements AiModelConfigService {
         return activeModel;
     }
 
-    @Override
-    @Transactional
-    public boolean switchModel(Long modelId) {
-        // 1. 检查目标模型是否存在
-        AiModelConfig targetModel = aiModelConfigMapper.selectById(modelId);
-        if (targetModel == null) {
-            log.error("Model with id {} not found", modelId);
-            return false;
+    /**
+     * 将 AiModelConfig 转换为 AiModelConfigDTO
+     * <p>
+     * 只包含安全字段，不暴露 API Key 等敏感信息
+     * </p>
+     *
+     * @param config 模型配置
+     * @return 模型配置DTO，如果config为null则返回null
+     */
+    private AiModelConfigDTO convertToDTO(AiModelConfig config) {
+        if (config == null) {
+            return null;
         }
-
-        // 2. 将所有模型设置为非激活状态
-        aiModelConfigMapper.update(null,
-                new LambdaUpdateWrapper<AiModelConfig>()
-                        .set(AiModelConfig::getIsActive, false));
-
-        // 3. 激活目标模型
-        aiModelConfigMapper.update(null,
-                new LambdaUpdateWrapper<AiModelConfig>()
-                        .eq(AiModelConfig::getId, modelId)
-                        .set(AiModelConfig::getIsActive, true));
-
-        log.info("Successfully switched to model: {} (ID: {})", targetModel.getModelName(), modelId);
-        return true;
-    }
-
-    @Override
-    public List<AiModelConfig> listAllModels() {
-        return aiModelConfigMapper.selectList(null);
-    }
-
-    @Override
-    public boolean addModel(AiModelConfig config) {
-        try {
-            // 如果是第一个模型，自动设为激活状态
-            long count = aiModelConfigMapper.selectCount(null);
-            if (count == 0) {
-                config.setIsActive(true);
-            } else {
-                config.setIsActive(false);
-            }
-
-            aiModelConfigMapper.insert(config);
-            log.info("Added new AI model: {}", config.getModelName());
-            return true;
-        } catch (Exception e) {
-            log.error("Failed to add model: {}", config.getModelName(), e);
-            return false;
-        }
-    }
-
-    @Override
-    public boolean deleteModel(Long modelId) {
-        try {
-            AiModelConfig model = aiModelConfigMapper.selectById(modelId);
-            if (model == null) {
-                log.error("Model with id {} not found", modelId);
-                return false;
-            }
-
-            // 不允许删除激活的模型
-            if (Boolean.TRUE.equals(model.getIsActive())) {
-                log.error("Cannot delete active model: {}", model.getModelName());
-                return false;
-            }
-
-            aiModelConfigMapper.deleteById(modelId);
-            log.info("Deleted model: {}", model.getModelName());
-            return true;
-        } catch (Exception e) {
-            log.error("Failed to delete model with id: {}", modelId, e);
-            return false;
-        }
-    }
-
-    @Override
-    public boolean updateModel(AiModelConfig config) {
-        try {
-            aiModelConfigMapper.updateById(config);
-            log.info("Updated model: {}", config.getModelName());
-            return true;
-        } catch (Exception e) {
-            log.error("Failed to update model: {}", config.getModelName(), e);
-            return false;
-        }
+        return new AiModelConfigDTO(
+                config.getId(),
+                config.getModelName(),
+                config.getDescription(),
+                config.getIsActive());
     }
 }

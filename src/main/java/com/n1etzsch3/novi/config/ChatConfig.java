@@ -7,19 +7,13 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * 聊天配置类
  * <p>
- * 配置ChatClient，支持持久化内存。
- * </p>
- * <p>
- * TODO: 模型热重载功能 - 当前使用 application.yml 配置。
- * AiModelConfigService 已就绪用于管理数据库中的模型配置。
- * 完整的动态模型切换需要实现 ChatClient 刷新机制（如使用 @RefreshScope 或手动刷新）。
+ * 配置ChatClient，支持持久化内存和动态模型切换。
  * </p>
  *
  * @author N1etzsch3
@@ -31,21 +25,25 @@ import org.springframework.context.annotation.Configuration;
 public class ChatConfig {
 
         private final NoviDatabaseChatMemory noviDatabaseChatMemory;
+        private final DynamicChatModelFactory dynamicChatModelFactory;
 
         /**
-         * 创建 ChatClient bean, 现已配置持久化内存
-         * 
-         * @param openAiChatModel 自动配置的 AI 模型（来自 application.yml）
+         * 创建 ChatClient bean，支持动态模型切换
+         * <p>
+         * 通过 DynamicChatModelFactory 从数据库读取当前激活的模型配置。
+         * ChatClient会在每次调用时通过工厂获取最新的模型配置。
+         * </p>
          */
         @Bean
-        public ChatClient chatClient(OpenAiChatModel openAiChatModel) {
-                log.info("Initializing ChatClient with auto-configured OpenAiChatModel");
+        public ChatClient chatClient() {
+                log.info("Initializing ChatClient with dynamic model configuration");
 
                 MessageChatMemoryAdvisor memoryAdvisor = MessageChatMemoryAdvisor.builder(noviDatabaseChatMemory)
                                 .conversationId(ChatMemory.CONVERSATION_ID)
                                 .build();
 
-                return ChatClient.builder(openAiChatModel)
+                log.info("ChatClient initialized successfully with dynamic model");
+                return ChatClient.builder(dynamicChatModelFactory.createChatModel())
                                 .defaultAdvisors(
                                                 new SimpleLoggerAdvisor(),
                                                 memoryAdvisor)
