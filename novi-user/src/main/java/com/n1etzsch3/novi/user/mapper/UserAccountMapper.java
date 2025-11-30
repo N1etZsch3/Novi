@@ -1,0 +1,18 @@
+package com.n1etzsch3.novi.user.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.n1etzsch3.novi.common.pojo.entity.UserAccount;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ * 用户账户 Mapper
+ * <p>
+ * 用户账户的数据访问对象。
+ * </p>
+ *
+ * @author N1etzsch3
+ * @since 2025-11-26
+ */
+@Mapper
+public interface UserAccountMapper extends BaseMapper<UserAccount> {
+}

@@ -75,14 +75,11 @@ AI_API_KEY=""
 ## 📂 目录结构
 
 ```Plaintext
-com.n1etzsch3.novi
-├── config/          # Spring Security, WebMvc, AiConfig 配置
-├── controller/      # REST API 控制器 (User, Chat, Session)
-├── service/         # 业务逻辑层 (Chat, User, AiPrompt)
-├── mapper/          # MyBatis 数据访问接口
-├── repository/      # Spring AI ChatMemory 自定义实现
-├── pojo/            # 实体类 (Entity) 与 数据传输对象 (DTO)
-├── utils/           # JWT, ThreadLocal 工具类
-├── interceptor/     # 登录拦截器
-└── exception/       # 全局异常处理
+Novi (Root)
+├── novi-common      # 公共模块：实体类(Entity), DTO, 工具类(Utils), 异常(Exception), 枚举(Enums)
+├── novi-user        # 用户模块：用户管理 Service, Mapper, DTO, 拦截器
+├── novi-chat        # 聊天模块：聊天 Service, Mapper, Repository (ChatMemory), DTO
+├── novi-question    # 出题模块：AI出题 Service, Mapper, DTO
+├── novi-ai-config   # AI配置模块：模型与提示词配置 Service, Mapper, Factory, DTO
+└── novi-web         # Web模块：启动类, 控制器(Controller), 全局配置(Config), 资源文件(Resources)
 ```
