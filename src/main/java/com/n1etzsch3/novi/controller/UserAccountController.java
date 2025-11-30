@@ -36,11 +36,11 @@ public class UserAccountController {
      */
     @PostMapping("/register") // 路径: /api/v1/users/register
     public Result register(@Validated @RequestBody RegistrationRequest registrationRequest) {
-        // return Result.error("内部测试期间，暂不开放注册。请联系管理员获取账号。");
-        userAccountService.registerUser(registrationRequest);
-        log.info("User registered successfully: {}",
-                registrationRequest.getUsername());
-        return Result.success();
+        return Result.error("内部测试期间，暂不开放注册。请联系管理员获取账号。");
+        // userAccountService.registerUser(registrationRequest);
+        // log.info("User registered successfully: {}",
+        //         registrationRequest.getUsername());
+        // return Result.success();
     }
 
     /**

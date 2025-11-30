@@ -11970,3 +11970,836 @@ Caused by: com.fasterxml.jackson.core.JsonParseException: Unexpected character (
 2025-11-29 23:27:33.261 [tomcat-shutdown] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Graceful shutdown complete
 2025-11-29 23:27:33.269 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2025-11-29 23:27:33.270 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-11-29 23:29:36.496 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2025-11-29 23:29:36.507 [main] INFO  com.n1etzsch3.novi.NoviApplication - Starting NoviApplication using Java 25 with PID 83826 (/Users/n1etzsch3/Documents/Novi/target/classes started by n1etzsch3 in /Users/n1etzsch3/Documents/Novi)
+2025-11-29 23:29:36.507 [main] INFO  com.n1etzsch3.novi.NoviApplication - No active profile set, falling back to 1 default profile: "default"
+2025-11-29 23:29:36.776 [main] TRACE o.s.a.m.c.m.r.j.a.JdbcChatMemoryRepositoryAutoConfiguration$OnJdbcChatMemoryRepositoryDatasourceInitializationCondition - Condition JdbcChatMemoryRepositoryAutoConfiguration.OnJdbcChatMemoryRepositoryDatasourceInitializationCondition on org.springframework.ai.model.chat.memory.repository.jdbc.autoconfigure.JdbcChatMemoryRepositoryAutoConfiguration#jdbcChatMemoryScriptDatabaseInitializer matched due to Jdbc Chat Memory RepositoryDatabase Initialization default value is EMBEDDED
+2025-11-29 23:29:37.021 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-11-29 23:29:37.027 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-11-29 23:29:37.028 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-29 23:29:37.028 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-11-29 23:29:37.044 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-29 23:29:37.044 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 523 ms
+2025-11-29 23:29:37.147 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-29 23:29:37.842 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@19a7906c
+2025-11-29 23:29:37.844 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-29 23:29:37.916 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'webMvcConfig': Unsatisfied dependency expressed through field 'jwtAuthInterceptor': Error creating bean with name 'jwtAuthInterceptor': Unsatisfied dependency expressed through field 'jwtUtils': Error creating bean with name 'jwtUtils': Injection of autowired dependencies failed
+2025-11-29 23:29:37.916 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-11-29 23:29:37.917 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-11-29 23:29:37.918 [main] INFO  org.apache.catalina.core.StandardService - Stopping service [Tomcat]
+2025-11-29 23:29:37.928 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-11-29 23:29:37.934 [main] ERROR org.springframework.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'webMvcConfig': Unsatisfied dependency expressed through field 'jwtAuthInterceptor': Error creating bean with name 'jwtAuthInterceptor': Unsatisfied dependency expressed through field 'jwtUtils': Error creating bean with name 'jwtUtils': Injection of autowired dependencies failed
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1228)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1194)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1130)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:990)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.n1etzsch3.novi.NoviApplication.main(NoviApplication.java:17)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtAuthInterceptor': Unsatisfied dependency expressed through field 'jwtUtils': Error creating bean with name 'jwtUtils': Injection of autowired dependencies failed
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1708)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1653)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 22 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jwtUtils': Injection of autowired dependencies failed
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:515)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1708)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1653)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 35 common frames omitted
+Caused by: org.springframework.util.PlaceholderResolutionException: Could not resolve placeholder 'JWT_SECRET_KEY' in value "${JWT_SECRET_KEY}" <-- "${novi.jwt.secret-key}"
+	at org.springframework.util.PlaceholderResolutionException.withValue(PlaceholderResolutionException.java:81)
+	at org.springframework.util.PlaceholderParser$ParsedValue.resolve(PlaceholderParser.java:298)
+	at org.springframework.util.PlaceholderParser.replacePlaceholders(PlaceholderParser.java:131)
+	at org.springframework.util.PropertyPlaceholderHelper.replacePlaceholders(PropertyPlaceholderHelper.java:114)
+	at org.springframework.core.env.AbstractPropertyResolver.doResolvePlaceholders(AbstractPropertyResolver.java:293)
+	at org.springframework.core.env.AbstractPropertyResolver.resolveRequiredPlaceholders(AbstractPropertyResolver.java:264)
+	at org.springframework.context.support.PropertySourcesPlaceholderConfigurer.lambda$processProperties$0(PropertySourcesPlaceholderConfigurer.java:186)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveEmbeddedValue(AbstractBeanFactory.java:970)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1675)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1653)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	... 45 common frames omitted
+2025-11-29 23:31:19.445 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2025-11-29 23:31:19.455 [main] INFO  com.n1etzsch3.novi.NoviApplication - Starting NoviApplication using Java 25 with PID 83855 (/Users/n1etzsch3/Documents/Novi/target/classes started by n1etzsch3 in /Users/n1etzsch3/Documents/Novi)
+2025-11-29 23:31:19.455 [main] INFO  com.n1etzsch3.novi.NoviApplication - No active profile set, falling back to 1 default profile: "default"
+2025-11-29 23:31:19.711 [main] TRACE o.s.a.m.c.m.r.j.a.JdbcChatMemoryRepositoryAutoConfiguration$OnJdbcChatMemoryRepositoryDatasourceInitializationCondition - Condition JdbcChatMemoryRepositoryAutoConfiguration.OnJdbcChatMemoryRepositoryDatasourceInitializationCondition on org.springframework.ai.model.chat.memory.repository.jdbc.autoconfigure.JdbcChatMemoryRepositoryAutoConfiguration#jdbcChatMemoryScriptDatabaseInitializer matched due to Jdbc Chat Memory RepositoryDatabase Initialization default value is EMBEDDED
+2025-11-29 23:31:19.935 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-11-29 23:31:19.940 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-11-29 23:31:19.940 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-29 23:31:19.940 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-11-29 23:31:19.957 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-29 23:31:19.957 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 489 ms
+2025-11-29 23:31:20.053 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-29 23:31:20.780 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@389008d1
+2025-11-29 23:31:20.782 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-29 23:31:20.873 [main] INFO  com.n1etzsch3.novi.config.ChatConfig - Initializing ChatClient with dynamic model configuration
+2025-11-29 23:31:20.878 [main] INFO  com.n1etzsch3.novi.config.ChatConfig - ChatClient initialized successfully with dynamic model
+2025-11-29 23:31:20.980 [main] INFO  com.n1etzsch3.novi.config.DynamicChatModelFactory - Creating new ChatModel with configuration: deepseek-r1-0528
+2025-11-29 23:31:21.035 [main] INFO  com.n1etzsch3.novi.config.DynamicChatModelFactory - Successfully created and cached ChatModel for: deepseek-r1-0528
+2025-11-29 23:31:21.156 [main] DEBUG o.s.a.m.t.a.ToolCallingAutoConfiguration - Cannot load class: org.springframework.security.oauth2.client.ClientAuthorizationException
+2025-11-29 23:31:21.228 [main] INFO  o.s.b.actuate.endpoint.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-11-29 23:31:21.257 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-11-29 23:31:21.261 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-11-29 23:31:21.268 [main] INFO  com.n1etzsch3.novi.NoviApplication - Started NoviApplication in 2.009 seconds (process running for 2.285)
+2025-11-29 23:31:21.708 [RMI TCP Connection(4)-127.0.0.1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-29 23:31:21.708 [RMI TCP Connection(4)-127.0.0.1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-11-29 23:31:21.709 [RMI TCP Connection(4)-127.0.0.1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-11-29 23:31:38.653 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:31:38.653 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:31:38.663 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDIwODA4MSwiZXhwIjoxNzY0Mjk0NDgxfQ.7qnZ5uuWkCCZXBT_YcgAmJwE98pOww3-ZiFSx4KJ4JM
+2025-11-29 23:31:38.663 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDIwODA4MSwiZXhwIjoxNzY0Mjk0NDgxfQ.7qnZ5uuWkCCZXBT_YcgAmJwE98pOww3-ZiFSx4KJ4JM
+2025-11-29 23:31:38.702 [http-nio-8080-exec-3] ERROR com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token parsing error: JWT expired 135817702 milliseconds ago at 2025-11-28T01:48:01.000Z. Current time: 2025-11-29T15:31:38.702Z. Allowed clock skew: 0 milliseconds.
+2025-11-29 23:31:38.703 [http-nio-8080-exec-1] ERROR com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token parsing error: JWT expired 135817702 milliseconds ago at 2025-11-28T01:48:01.000Z. Current time: 2025-11-29T15:31:38.702Z. Allowed clock skew: 0 milliseconds.
+2025-11-29 23:31:55.042 [http-nio-8080-exec-5] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 用户登录成功: User1
+2025-11-29 23:31:55.042 [http-nio-8080-exec-5] INFO  c.n1etzsch3.novi.controller.UserAccountController - User logged in successfully
+2025-11-29 23:31:55.571 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:31:55.571 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:31:55.575 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:31:55.575 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:31:55.682 [http-nio-8080-exec-6] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-29 23:31:55.683 [http-nio-8080-exec-7] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 获取用户详情: User1
+2025-11-29 23:31:55.684 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:31:55.684 [http-nio-8080-exec-7] INFO  c.n1etzsch3.novi.controller.UserAccountController - Retrieved current user profile: User1
+2025-11-29 23:31:55.688 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:31:55.695 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:31:55.695 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:31:55.697 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:31:55.699 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/preferences, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:31:55.701 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:31:55.702 [http-nio-8080-exec-10] INFO  c.n.novi.controller.UserPreferenceController - Retrieved persona settings for user: 166
+2025-11-29 23:31:55.750 [http-nio-8080-exec-8] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-29 23:31:55.752 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:31:55.753 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:31:56.751 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:31:56.756 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:31:56.758 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:31:56.875 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:32:08.906 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:32:08.911 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/generate, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:32:08.913 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:32:08.928 [http-nio-8080-exec-4] INFO  c.n.novi.controller.QuestionGenerationController - Received question generation request from user: 166
+2025-11-29 23:32:08.934 [http-nio-8080-exec-4] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.service.impl.QuestionGenerationServiceImpl.generateQuestions]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,-java.lang.Exception
+2025-11-29 23:32:08.999 [http-nio-8080-exec-4] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1194380668 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] for JDBC transaction
+2025-11-29 23:32:09.004 [http-nio-8080-exec-4] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1194380668 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] to manual commit
+2025-11-29 23:32:09.054 [http-nio-8080-exec-4] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Starting question generation for user: 166, subject: 湖北专升本英语
+2025-11-29 23:32:09.110 [http-nio-8080-exec-4] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - No examples found for difficulty: simple, falling back to 'medium'
+2025-11-29 23:32:09.233 [http-nio-8080-exec-4] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Generating question 1/1. Prompt: # Role
+# 注意输出字符的编码为UTF-8！
+           你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
+
+           # Task
+           请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
+           假如主题为 {theme}
+
+           # Constraints & Rules
+           1.  **文章难度**: 难度为simple，词汇量控制在 2500 词以内，句子结构简单，主要考察基础语法，符合专升本英语基础水平。
+           2.  **题型结构 (每道大题)**:
+               *   包含一篇约 300-350 词的英文短文。
+               *   **必须而且只能包含 10 个挖空处** (序号 1-10)。
+               *   挖空类型必须混合：
+                   *   *给词填空* (括号内给出一个词，要求填其正确形式(主要有：名词、副词、代词、形容词、动词、数词)，如 adj->adv, v->tense)。
+                   *   *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
+               *   题目头说明必须包含：“Part Ⅰ 语法填空（本大题共10小题，每小题2分，共20分）
+阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词，并将答案写在答题卡相应题号后的横线上”
+
+           3.  **格式严格匹配**: 输出必须严格遵守下方的【Few-Shot Example】格式。
+           4.  **输出格式**: 请以 JSON 格式输出。
+           5.  **JSON格式要求**:
+               *   请严格按照JSON数组格式输出，包裹在[]中。
+               *   不要包含任何Markdown标记（如```json），直接返回JSON字符串。
+               *   ⚠️重要：确保所有字符串值内部的双引号都使用反斜杠转义（例如 " -> "）。
+               *   JSON结构必须包含以下字段：
+                   - content: 题目完整文本（包含题头说明、指令和带挖空的原文）。挖空处请使用 "【1】 ______ (word)" 或 "【2】 ______" 的形式。注意必须要用下划线。不要有其他符号，例如**
+                   - answer与analysis: 正确答案与解析（1-10题的答案，格式为："8": {
+                                               "answer": "promotes",
+                                               "analysis": "动词第三人称单数形式，主语为The Spring Festival，遵循主谓一致原则。"
+                                               }）。
+                   - difficulty: 难度（simple/medium/hard）
+                   - type: 题型（固定为“语法填空”）
+
+           # Few-Shot Example (参考样本)
+           示例 1:
+{"title": "Part Ⅰ 语法填空", "instructions": "阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词。", "article_content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March.\nThis is the 1 (big) award of all in architecture. He is the second person from China to win it.\n\nLiu lives in Chengdu and has worked 2 40 years. In 1999, he 3 (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, 4 city plans.\n\nLiu does not follow one style. He uses local materials and simple designs to make 5 (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made “rebirth bricks” from broken buildings — a symbol of hope.\n\nLiu also 6 (design) for ordinary people. For example, West Village in Chengdu, 7 (finish) in 2015, has a soccer field, a market and paths for running, 8 (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place.\n\n“The purpose of architecture is to create 9 pleasant and wonderful environment. People’s 10 (happy) is what we work for,” he said."}
+
+
+2025-11-29 23:32:38.992 [http-nio-8080-exec-4] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Saved question generation record with ID: 38
+2025-11-29 23:32:39.003 [http-nio-8080-exec-4] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction commit
+2025-11-29 23:32:39.004 [http-nio-8080-exec-4] DEBUG o.s.jdbc.support.JdbcTransactionManager - Committing JDBC transaction on Connection [HikariProxyConnection@1194380668 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1]
+2025-11-29 23:32:39.137 [http-nio-8080-exec-4] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1194380668 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] after transaction
+2025-11-29 23:32:39.140 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:32:39.154 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:32:39.156 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:32:39.292 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:40.600 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:42:40.598 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:42:40.602 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:42:40.602 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:42:40.724 [http-nio-8080-exec-9] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-29 23:42:40.725 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:40.727 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:42:40.727 [http-nio-8080-exec-8] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 获取用户详情: User1
+2025-11-29 23:42:40.727 [http-nio-8080-exec-8] INFO  c.n1etzsch3.novi.controller.UserAccountController - Retrieved current user profile: User1
+2025-11-29 23:42:40.728 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:42:40.728 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:40.729 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:42:40.730 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:42:40.776 [http-nio-8080-exec-10] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-29 23:42:40.776 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:40.779 [http-nio-8080-exec-2] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 获取用户详情: User1
+2025-11-29 23:42:40.779 [http-nio-8080-exec-2] INFO  c.n1etzsch3.novi.controller.UserAccountController - Retrieved current user profile: User1
+2025-11-29 23:42:40.779 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:42:40.780 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:40.780 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:42:40.845 [http-nio-8080-exec-3] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-29 23:42:40.846 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:40.848 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:42:40.848 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:42:40.927 [http-nio-8080-exec-1] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-29 23:42:40.928 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:44.914 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:42:44.916 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:42:45.050 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:46.348 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:42:46.354 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/38, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:42:46.355 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:42:46.471 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:21.581 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/generate, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:21.583 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:21.586 [http-nio-8080-exec-7] INFO  c.n.novi.controller.QuestionGenerationController - Received question generation request from user: 166
+2025-11-29 23:43:21.587 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.service.impl.QuestionGenerationServiceImpl.generateQuestions]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,-java.lang.Exception
+2025-11-29 23:43:21.640 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1286077350 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] for JDBC transaction
+2025-11-29 23:43:21.642 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1286077350 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] to manual commit
+2025-11-29 23:43:21.709 [http-nio-8080-exec-7] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Starting question generation for user: 166, subject: 湖北专升本英语
+2025-11-29 23:43:21.862 [http-nio-8080-exec-7] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Generating question 1/1. Prompt: # Role
+# 注意输出字符的编码为UTF-8！
+           你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
+
+           # Task
+           请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
+           假如主题为 {theme}
+
+           # Constraints & Rules
+           1.  **文章难度**: 难度为medium，词汇量控制在 4000 词以内，词汇范围大概是高考英语词汇范围，句子结构适中，大概十五句话，可以有几句长难句，符合专升本学生标准水平。
+           2.  **题型结构 (每道大题)**:
+               *   包含一篇约 300-350 词的英文短文。
+               *   **必须而且只能包含 10 个挖空处** (序号 1-10)。
+               *   挖空类型必须混合：
+                   *   *给词填空* (括号内给出一个词，要求填其正确形式(主要有：名词、副词、代词、形容词、动词、数词)，如 adj->adv, v->tense)。
+                   *   *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
+               *   题目头说明必须包含：“Part Ⅰ 语法填空（本大题共10小题，每小题2分，共20分）
+阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词，并将答案写在答题卡相应题号后的横线上”
+
+           3.  **格式严格匹配**: 输出必须严格遵守下方的【Few-Shot Example】格式。
+           4.  **输出格式**: 请以 JSON 格式输出。
+           5.  **JSON格式要求**:
+               *   请严格按照JSON数组格式输出，包裹在[]中。
+               *   不要包含任何Markdown标记（如```json），直接返回JSON字符串。
+               *   ⚠️重要：确保所有字符串值内部的双引号都使用反斜杠转义（例如 " -> "）。
+               *   JSON结构必须包含以下字段：
+                   - content: 题目完整文本（包含题头说明、指令和带挖空的原文）。挖空处请使用 "【1】 ______ (word)" 或 "【2】 ______" 的形式。注意必须要用下划线。不要有其他符号，例如**
+                   - answer与analysis: 正确答案与解析（1-10题的答案，格式为："8": {
+                                               "answer": "promotes",
+                                               "analysis": "动词第三人称单数形式，主语为The Spring Festival，遵循主谓一致原则。"
+                                               }）。
+                   - difficulty: 难度（simple/medium/hard）
+                   - type: 题型（固定为“语法填空”）
+
+           # Few-Shot Example (参考样本)
+           示例 1:
+{"title": "Part Ⅰ 语法填空", "instructions": "阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词。", "article_content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March.\nThis is the 1 (big) award of all in architecture. He is the second person from China to win it.\n\nLiu lives in Chengdu and has worked 2 40 years. In 1999, he 3 (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, 4 city plans.\n\nLiu does not follow one style. He uses local materials and simple designs to make 5 (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made “rebirth bricks” from broken buildings — a symbol of hope.\n\nLiu also 6 (design) for ordinary people. For example, West Village in Chengdu, 7 (finish) in 2015, has a soccer field, a market and paths for running, 8 (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place.\n\n“The purpose of architecture is to create 9 pleasant and wonderful environment. People’s 10 (happy) is what we work for,” he said."}
+
+
+2025-11-29 23:43:27.030 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:27.035 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:27.036 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:27.157 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:28.246 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/38, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:28.247 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:28.349 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:31.548 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/38, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:31.553 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:31.770 [http-nio-8080-exec-2] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Deleted question generation record with ID: 38
+2025-11-29 23:43:31.772 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:31.781 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:31.782 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:31.845 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:34.246 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:34.252 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:34.253 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:34.410 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:35.145 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:35.146 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:35.288 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:35.862 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:35.863 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:35.962 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:36.395 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:36.399 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/35, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:36.401 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:36.453 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:37.361 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:37.362 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:37.466 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:37.896 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:37.897 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:37.954 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:39.495 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/35, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:39.496 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:39.605 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:41.662 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/35, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:41.664 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:41.896 [http-nio-8080-exec-4] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Deleted question generation record with ID: 35
+2025-11-29 23:43:41.898 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:43:41.905 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:43:41.907 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:43:41.963 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:44:27.867 [http-nio-8080-exec-7] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Saved question generation record with ID: 39
+2025-11-29 23:44:27.868 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction commit
+2025-11-29 23:44:27.868 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Committing JDBC transaction on Connection [HikariProxyConnection@1286077350 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1]
+2025-11-29 23:44:28.299 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1286077350 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] after transaction
+2025-11-29 23:44:28.302 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:44:28.309 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:44:28.310 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:44:28.617 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:04.526 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:04.534 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/39, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:04.544 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:04.670 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:05.094 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:05.096 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:05.158 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:05.611 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:05.613 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:05.720 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:06.775 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:06.775 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:06.913 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:07.678 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/39, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:07.680 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:07.791 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:10.228 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:10.229 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:10.331 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:12.861 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:12.863 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:12.980 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:15.495 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/39, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:15.497 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:15.599 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:27.494 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/39, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:27.496 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:27.604 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:46:34.545 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/generate, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:46:34.547 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:46:34.549 [http-nio-8080-exec-10] INFO  c.n.novi.controller.QuestionGenerationController - Received question generation request from user: 166
+2025-11-29 23:46:34.550 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.service.impl.QuestionGenerationServiceImpl.generateQuestions]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,-java.lang.Exception
+2025-11-29 23:46:34.593 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1421955988 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] for JDBC transaction
+2025-11-29 23:46:34.593 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1421955988 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] to manual commit
+2025-11-29 23:46:34.638 [http-nio-8080-exec-10] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Starting question generation for user: 166, subject: 湖北专升本英语
+2025-11-29 23:46:34.686 [http-nio-8080-exec-10] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - No examples found for difficulty: hard, falling back to 'medium'
+2025-11-29 23:46:34.792 [http-nio-8080-exec-10] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Generating question 1/1. Prompt: # Role
+# 注意输出字符的编码为UTF-8！
+           你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
+
+           # Task
+           请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
+           假如主题为 {theme}
+
+           # Constraints & Rules
+           1.  **文章难度**: 难度为hard，词汇量控制在 4500 词以内，增加长难句和生僻词，20+句话，考察综合语言运用能力，语法知识点更难，难度略高于专升本平均水平。
+           2.  **题型结构 (每道大题)**:
+               *   包含一篇约 300-350 词的英文短文。
+               *   **必须而且只能包含 10 个挖空处** (序号 1-10)。
+               *   挖空类型必须混合：
+                   *   *给词填空* (括号内给出一个词，要求填其正确形式(主要有：名词、副词、代词、形容词、动词、数词)，如 adj->adv, v->tense)。
+                   *   *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
+               *   题目头说明必须包含：“Part Ⅰ 语法填空（本大题共10小题，每小题2分，共20分）
+阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词，并将答案写在答题卡相应题号后的横线上”
+
+           3.  **格式严格匹配**: 输出必须严格遵守下方的【Few-Shot Example】格式。
+           4.  **输出格式**: 请以 JSON 格式输出。
+           5.  **JSON格式要求**:
+               *   请严格按照JSON数组格式输出，包裹在[]中。
+               *   不要包含任何Markdown标记（如```json），直接返回JSON字符串。
+               *   ⚠️重要：确保所有字符串值内部的双引号都使用反斜杠转义（例如 " -> "）。
+               *   JSON结构必须包含以下字段：
+                   - content: 题目完整文本（包含题头说明、指令和带挖空的原文）。挖空处请使用 "【1】(word)" 或 "【2】" 的形式。不要有其他符号，例如**
+                   - answer与analysis: 正确答案与解析（1-10题的答案，格式为："8": {
+                                               "answer": "promotes",
+                                               "analysis": "动词第三人称单数形式，主语为The Spring Festival，遵循主谓一致原则。"
+                                               }）。
+                   - difficulty: 难度（simple/medium/hard）
+                   - type: 题型（固定为“语法填空”）
+
+           # Few-Shot Example (参考样本)
+           示例 1:
+{"title": "Part Ⅰ 语法填空", "instructions": "阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词。", "article_content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March.\nThis is the 1 (big) award of all in architecture. He is the second person from China to win it.\n\nLiu lives in Chengdu and has worked 2 40 years. In 1999, he 3 (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, 4 city plans.\n\nLiu does not follow one style. He uses local materials and simple designs to make 5 (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made “rebirth bricks” from broken buildings — a symbol of hope.\n\nLiu also 6 (design) for ordinary people. For example, West Village in Chengdu, 7 (finish) in 2015, has a soccer field, a market and paths for running, 8 (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place.\n\n“The purpose of architecture is to create 9 pleasant and wonderful environment. People’s 10 (happy) is what we work for,” he said."}
+
+
+2025-11-29 23:47:05.995 [http-nio-8080-exec-10] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Saved question generation record with ID: 40
+2025-11-29 23:47:05.996 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction commit
+2025-11-29 23:47:05.996 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Committing JDBC transaction on Connection [HikariProxyConnection@1421955988 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a]
+2025-11-29 23:47:06.094 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1421955988 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] after transaction
+2025-11-29 23:47:06.096 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:47:06.104 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:47:06.107 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:47:06.208 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:47:34.162 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:47:34.167 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/40, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:47:34.169 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:47:34.274 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:47:34.810 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/39, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:47:34.811 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:47:34.907 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:47:35.527 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:47:35.528 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:47:35.683 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:47:36.627 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:47:36.628 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:47:36.736 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:47:40.294 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/40, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:47:40.295 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:47:40.387 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:47:54.963 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/generate, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:47:54.964 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:47:54.965 [http-nio-8080-exec-9] INFO  c.n.novi.controller.QuestionGenerationController - Received question generation request from user: 166
+2025-11-29 23:47:54.966 [http-nio-8080-exec-9] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.service.impl.QuestionGenerationServiceImpl.generateQuestions]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,-java.lang.Exception
+2025-11-29 23:47:55.015 [http-nio-8080-exec-9] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@986795363 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] for JDBC transaction
+2025-11-29 23:47:55.016 [http-nio-8080-exec-9] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@986795363 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] to manual commit
+2025-11-29 23:47:55.062 [http-nio-8080-exec-9] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Starting question generation for user: 166, subject: 湖北专升本英语
+2025-11-29 23:47:55.113 [http-nio-8080-exec-9] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - No examples found for difficulty: hard, falling back to 'medium'
+2025-11-29 23:47:55.205 [http-nio-8080-exec-9] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Generating question 1/1. Prompt: # Role
+# 注意输出字符的编码为UTF-8！
+           你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
+
+           # Task
+           请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
+           假如主题为 {theme}
+
+           # Constraints & Rules
+           1.  **文章难度**: 难度为hard，词汇量控制在 4500 词以内，增加长难句和生僻词，20+句话，考察综合语言运用能力，语法知识点更难，难度略高于专升本平均水平。
+           2.  **题型结构 (每道大题)**:
+               *   包含一篇约 300-350 词的英文短文。
+               *   **必须而且只能包含 10 个挖空处** (序号 1-10)。
+               *   挖空类型必须混合：
+                   *   *给词填空* (括号内给出一个词，要求填其正确形式(主要有：名词、副词、代词、形容词、动词、数词)，如 adj->adv, v->tense)。
+                   *   *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
+               *   题目头说明必须包含：“Part Ⅰ 语法填空（本大题共10小题，每小题2分，共20分）
+阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词，并将答案写在答题卡相应题号后的横线上”
+
+           3.  **格式严格匹配**: 输出必须严格遵守下方的【Few-Shot Example】格式。
+           4.  **输出格式**: 请以 JSON 格式输出。
+           5.  **JSON格式要求**:
+               *   请严格按照JSON数组格式输出，包裹在[]中。
+               *   不要包含任何Markdown标记（如```json），直接返回JSON字符串。
+               *   ⚠️重要：确保所有字符串值内部的双引号都使用反斜杠转义（例如 " -> "）。
+               *   JSON结构必须包含以下字段：
+                   - content: 题目完整文本（包含题头说明、指令和带挖空的原文）。挖空处请使用 "【1】(word)" 或 "【2】" 的形式。不要有其他符号，例如**
+                   - answer与analysis: 正确答案与解析（1-10题的答案，格式为："8": {
+                                               "answer": "promotes",
+                                               "analysis": "动词第三人称单数形式，主语为The Spring Festival，遵循主谓一致原则。"
+                                               }）。
+                   - difficulty: 难度（simple/medium/hard）
+                   - type: 题型（固定为“语法填空”）
+
+           # Few-Shot Example (参考样本)
+           示例 1:
+{"title": "Part Ⅰ 语法填空", "instructions": "阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词。", "article_content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March.\nThis is the 1 (big) award of all in architecture. He is the second person from China to win it.\n\nLiu lives in Chengdu and has worked 2 40 years. In 1999, he 3 (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, 4 city plans.\n\nLiu does not follow one style. He uses local materials and simple designs to make 5 (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made “rebirth bricks” from broken buildings — a symbol of hope.\n\nLiu also 6 (design) for ordinary people. For example, West Village in Chengdu, 7 (finish) in 2015, has a soccer field, a market and paths for running, 8 (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place.\n\n“The purpose of architecture is to create 9 pleasant and wonderful environment. People’s 10 (happy) is what we work for,” he said."}
+
+
+2025-11-29 23:48:34.090 [http-nio-8080-exec-9] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Saved question generation record with ID: 41
+2025-11-29 23:48:34.092 [http-nio-8080-exec-9] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction commit
+2025-11-29 23:48:34.092 [http-nio-8080-exec-9] DEBUG o.s.jdbc.support.JdbcTransactionManager - Committing JDBC transaction on Connection [HikariProxyConnection@986795363 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a]
+2025-11-29 23:48:34.211 [http-nio-8080-exec-9] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@986795363 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] after transaction
+2025-11-29 23:48:34.214 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:48:34.229 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:48:34.231 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:48:34.369 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:10.481 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/40, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:10.483 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:10.600 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:11.176 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/39, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:11.178 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:11.285 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:13.926 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:13.927 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:14.034 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:14.493 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:14.494 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:14.588 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:16.526 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:16.527 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:16.634 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:42.893 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:42.896 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:43.002 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:45.126 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/36, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:45.127 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:45.335 [http-nio-8080-exec-6] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Deleted question generation record with ID: 36
+2025-11-29 23:50:45.337 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:45.344 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:45.346 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:45.446 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:45.908 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:45.910 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:45.972 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:46.892 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/39, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:46.893 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:46.991 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:49.060 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/39, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:49.061 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:49.275 [http-nio-8080-exec-2] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Deleted question generation record with ID: 39
+2025-11-29 23:50:49.278 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:49.284 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:49.285 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:49.347 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:50.225 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/40, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:50.227 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:50.336 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:50.891 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:50.896 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/41, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:50.897 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:50.999 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:55.242 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/40, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:55.244 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:55.363 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:57.093 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/40, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:57.094 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:57.312 [http-nio-8080-exec-6] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Deleted question generation record with ID: 40
+2025-11-29 23:50:57.314 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:57.321 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:57.322 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:57.410 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:59.459 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/41, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:59.460 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:59.659 [http-nio-8080-exec-8] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Deleted question generation record with ID: 41
+2025-11-29 23:50:59.661 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:50:59.667 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:50:59.668 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:50:59.734 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:51:01.777 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/37, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:51:01.778 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:51:02.003 [http-nio-8080-exec-2] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Deleted question generation record with ID: 37
+2025-11-29 23:51:02.006 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:51:02.012 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:51:02.014 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:51:02.058 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:51:38.227 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/generate, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:51:38.228 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:51:38.233 [http-nio-8080-exec-1] INFO  c.n.novi.controller.QuestionGenerationController - Received question generation request from user: 166
+2025-11-29 23:51:38.234 [http-nio-8080-exec-1] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.service.impl.QuestionGenerationServiceImpl.generateQuestions]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,-java.lang.Exception
+2025-11-29 23:51:38.285 [http-nio-8080-exec-1] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1459429297 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] for JDBC transaction
+2025-11-29 23:51:38.285 [http-nio-8080-exec-1] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1459429297 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] to manual commit
+2025-11-29 23:51:38.332 [http-nio-8080-exec-1] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Starting question generation for user: 166, subject: 湖北专升本英语
+2025-11-29 23:51:38.383 [http-nio-8080-exec-1] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - No examples found for difficulty: simple, falling back to 'medium'
+2025-11-29 23:51:38.486 [http-nio-8080-exec-1] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Generating question 1/1. Prompt: # Role
+# 注意输出字符的编码为UTF-8！
+           你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
+
+           # Task
+           请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
+           假如主题为 一篇高质量的短文，介绍中国三峡大坝
+
+           # Constraints & Rules
+           1.  **文章难度**: 难度为simple，词汇量控制在 2500 词以内，句子结构简单，主要考察基础语法，符合专升本英语基础水平。
+           2.  **题型结构 (每道大题)**:
+               *   包含一篇约 300-350 词的英文短文。
+               *   **必须而且只能包含 10 个挖空处** (序号 1-10)。
+               *   挖空类型必须混合：
+                   *   *给词填空* (括号内给出一个词，要求填其正确形式(主要有：名词、副词、代词、形容词、动词、数词)，如 adj->adv, v->tense)。
+                   *   *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
+               *   题目头说明必须包含：“Part Ⅰ 语法填空（本大题共10小题，每小题2分，共20分）
+阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词，并将答案写在答题卡相应题号后的横线上”
+
+           3.  **格式严格匹配**: 输出必须严格遵守下方的【Few-Shot Example】格式。
+           4.  **输出格式**: 请以 JSON 格式输出。
+           5.  **JSON格式要求**:
+               *   请严格按照JSON数组格式输出，包裹在[]中。
+               *   不要包含任何Markdown标记（如```json），直接返回JSON字符串。
+               *   ⚠️重要：确保所有字符串值内部的双引号都使用反斜杠转义（例如 " -> "）。
+               *   JSON结构必须包含以下字段：
+                   - content: 题目完整文本（包含题头说明、指令和带挖空的原文）。挖空处请使用 "【1】(word)" 或 "【2】" 的形式。不要有其他符号，例如**
+                   - answer与analysis: 正确答案与解析（1-10题的答案，格式为："8": {
+                                               "answer": "promotes",
+                                               "analysis": "动词第三人称单数形式，主语为The Spring Festival，遵循主谓一致原则。"
+                                               }）。
+                   - difficulty: 难度（simple/medium/hard）
+                   - type: 题型（固定为“语法填空”）
+
+           # Few-Shot Example (参考样本)
+           示例 1:
+{"title": "Part Ⅰ 语法填空", "instructions": "阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词。", "article_content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March.\nThis is the 1 (big) award of all in architecture. He is the second person from China to win it.\n\nLiu lives in Chengdu and has worked 2 40 years. In 1999, he 3 (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, 4 city plans.\n\nLiu does not follow one style. He uses local materials and simple designs to make 5 (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made “rebirth bricks” from broken buildings — a symbol of hope.\n\nLiu also 6 (design) for ordinary people. For example, West Village in Chengdu, 7 (finish) in 2015, has a soccer field, a market and paths for running, 8 (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place.\n\n“The purpose of architecture is to create 9 pleasant and wonderful environment. People’s 10 (happy) is what we work for,” he said."}
+
+
+2025-11-29 23:52:12.146 [http-nio-8080-exec-1] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Saved question generation record with ID: 42
+2025-11-29 23:52:12.147 [http-nio-8080-exec-1] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction commit
+2025-11-29 23:52:12.147 [http-nio-8080-exec-1] DEBUG o.s.jdbc.support.JdbcTransactionManager - Committing JDBC transaction on Connection [HikariProxyConnection@1459429297 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1]
+2025-11-29 23:52:12.250 [http-nio-8080-exec-1] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1459429297 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] after transaction
+2025-11-29 23:52:12.252 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:52:12.261 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:52:12.262 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:52:12.374 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:52:42.274 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/generate, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:52:42.275 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:52:42.277 [http-nio-8080-exec-5] INFO  c.n.novi.controller.QuestionGenerationController - Received question generation request from user: 166
+2025-11-29 23:52:42.277 [http-nio-8080-exec-5] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.service.impl.QuestionGenerationServiceImpl.generateQuestions]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,-java.lang.Exception
+2025-11-29 23:52:42.328 [http-nio-8080-exec-5] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@813092536 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] for JDBC transaction
+2025-11-29 23:52:42.328 [http-nio-8080-exec-5] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@813092536 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] to manual commit
+2025-11-29 23:52:42.371 [http-nio-8080-exec-5] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Starting question generation for user: 166, subject: 湖北专升本英语
+2025-11-29 23:52:42.480 [http-nio-8080-exec-5] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Generating question 1/1. Prompt: # Role
+# 注意输出字符的编码为UTF-8！
+           你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
+
+           # Task
+           请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
+           假如主题为 一篇高质量的短文，介绍中国的新年
+
+           # Constraints & Rules
+           1.  **文章难度**: 难度为medium，词汇量控制在 4000 词以内，词汇范围大概是高考英语词汇范围，句子结构适中，大概十五句话，可以有几句长难句，符合专升本学生标准水平。
+           2.  **题型结构 (每道大题)**:
+               *   包含一篇约 300-350 词的英文短文。
+               *   **必须而且只能包含 10 个挖空处** (序号 1-10)。
+               *   挖空类型必须混合：
+                   *   *给词填空* (括号内给出一个词，要求填其正确形式(主要有：名词、副词、代词、形容词、动词、数词)，如 adj->adv, v->tense)。
+                   *   *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
+               *   题目头说明必须包含：“Part Ⅰ 语法填空（本大题共10小题，每小题2分，共20分）
+阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词，并将答案写在答题卡相应题号后的横线上”
+
+           3.  **格式严格匹配**: 输出必须严格遵守下方的【Few-Shot Example】格式。
+           4.  **输出格式**: 请以 JSON 格式输出。
+           5.  **JSON格式要求**:
+               *   请严格按照JSON数组格式输出，包裹在[]中。
+               *   不要包含任何Markdown标记（如```json），直接返回JSON字符串。
+               *   ⚠️重要：确保所有字符串值内部的双引号都使用反斜杠转义（例如 " -> "）。
+               *   JSON结构必须包含以下字段：
+                   - content: 题目完整文本（包含题头说明、指令和带挖空的原文）。挖空处请使用 "【1】(word)" 或 "【2】" 的形式。不要有其他符号，例如**
+                   - answer与analysis: 正确答案与解析（1-10题的答案，格式为："8": {
+                                               "answer": "promotes",
+                                               "analysis": "动词第三人称单数形式，主语为The Spring Festival，遵循主谓一致原则。"
+                                               }）。
+                   - difficulty: 难度（simple/medium/hard）
+                   - type: 题型（固定为“语法填空”）
+
+           # Few-Shot Example (参考样本)
+           示例 1:
+{"title": "Part Ⅰ 语法填空", "instructions": "阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词。", "article_content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March.\nThis is the 1 (big) award of all in architecture. He is the second person from China to win it.\n\nLiu lives in Chengdu and has worked 2 40 years. In 1999, he 3 (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, 4 city plans.\n\nLiu does not follow one style. He uses local materials and simple designs to make 5 (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made “rebirth bricks” from broken buildings — a symbol of hope.\n\nLiu also 6 (design) for ordinary people. For example, West Village in Chengdu, 7 (finish) in 2015, has a soccer field, a market and paths for running, 8 (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place.\n\n“The purpose of architecture is to create 9 pleasant and wonderful environment. People’s 10 (happy) is what we work for,” he said."}
+
+
+2025-11-29 23:53:27.613 [http-nio-8080-exec-5] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Saved question generation record with ID: 43
+2025-11-29 23:53:27.614 [http-nio-8080-exec-5] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction commit
+2025-11-29 23:53:27.614 [http-nio-8080-exec-5] DEBUG o.s.jdbc.support.JdbcTransactionManager - Committing JDBC transaction on Connection [HikariProxyConnection@813092536 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a]
+2025-11-29 23:53:27.700 [http-nio-8080-exec-5] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@813092536 wrapping com.mysql.cj.jdbc.ConnectionImpl@1c3698a] after transaction
+2025-11-29 23:53:27.702 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:53:27.711 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:53:27.713 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:53:27.825 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:07.707 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:07.707 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/users/me, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:07.709 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:07.709 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:07.814 [http-nio-8080-exec-8] INFO  c.n.novi.service.impl.UserAccountServiceImpl - 获取用户详情: User1
+2025-11-29 23:55:07.814 [http-nio-8080-exec-8] INFO  c.n1etzsch3.novi.controller.UserAccountController - Retrieved current user profile: User1
+2025-11-29 23:55:07.815 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:07.815 [http-nio-8080-exec-9] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-29 23:55:07.816 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:07.817 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:07.817 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:07.860 [http-nio-8080-exec-10] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-29 23:55:07.860 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:09.321 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:09.322 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:09.425 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:12.173 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:12.178 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/43, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:12.179 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:12.291 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:12.955 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:12.957 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/42, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:12.957 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:13.062 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:13.588 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/43, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:13.590 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:13.698 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:14.206 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/42, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:14.207 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:14.306 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:14.856 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/42, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:14.857 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:14.981 [http-nio-8080-exec-8] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:55:15.639 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/43, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:55:15.641 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:55:15.814 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:56:03.107 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/generate, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:56:03.109 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:56:03.112 [http-nio-8080-exec-10] INFO  c.n.novi.controller.QuestionGenerationController - Received question generation request from user: 166
+2025-11-29 23:56:03.114 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.service.impl.QuestionGenerationServiceImpl.generateQuestions]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,-java.lang.Exception
+2025-11-29 23:56:03.167 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@146056256 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] for JDBC transaction
+2025-11-29 23:56:03.167 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@146056256 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] to manual commit
+2025-11-29 23:56:03.216 [http-nio-8080-exec-10] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Starting question generation for user: 166, subject: 湖北专升本英语
+2025-11-29 23:56:03.274 [http-nio-8080-exec-10] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - No examples found for difficulty: hard, falling back to 'medium'
+2025-11-29 23:56:03.396 [http-nio-8080-exec-10] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Generating question 1/1. Prompt: # Role
+# 注意输出字符的编码为UTF-8！
+           你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
+
+           # Task
+           请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
+           假如主题为 一篇高质量短文，介绍来中国留学的tom同学的日常生活
+
+           # Constraints & Rules
+           1.  **文章难度**: 难度为hard，词汇量控制在 4500 词以内，增加长难句和生僻词，20+句话，考察综合语言运用能力，语法知识点更难，难度略高于专升本平均水平。
+           2.  **题型结构 (每道大题)**:
+               *   包含一篇约 300-350 词的英文短文。
+               *   **必须而且只能包含 10 个挖空处** (序号 1-10)。
+               *   挖空类型必须混合：
+                   *   *给词填空* (括号内给出一个词，要求填其正确形式(主要有：名词、副词、代词、形容词、动词、数词)，如 adj->adv, v->tense)。
+                   *   *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
+               *   题目头说明必须包含：“Part Ⅰ 语法填空（本大题共10小题，每小题2分，共20分）
+阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词，并将答案写在答题卡相应题号后的横线上”
+
+           3.  **格式严格匹配**: 输出必须严格遵守下方的【Few-Shot Example】格式。
+           4.  **输出格式**: 请以 JSON 格式输出。
+           5.  **JSON格式要求**:
+               *   请严格按照JSON数组格式输出，包裹在[]中。
+               *   不要包含任何Markdown标记（如```json），直接返回JSON字符串。
+               *   ⚠️重要：确保所有字符串值内部的双引号都使用反斜杠转义（例如 " -> "）。
+               *   JSON结构必须包含以下字段：
+                   - content: 题目完整文本（包含题头说明、指令和带挖空的原文）。挖空处请使用 "【1】(word)" 或 "【2】" 的形式。不要有其他符号，例如**
+                   - answer与analysis: 正确答案与解析（1-10题的答案，格式为："8": {
+                                               "answer": "promotes",
+                                               "analysis": "动词第三人称单数形式，主语为The Spring Festival，遵循主谓一致原则。"
+                                               }）。
+                   - difficulty: 难度（simple/medium/hard）
+                   - type: 题型（固定为“语法填空”）
+
+           # Few-Shot Example (参考样本)
+           示例 1:
+{"title": "Part Ⅰ 语法填空", "instructions": "阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词。", "article_content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March.\nThis is the 1 (big) award of all in architecture. He is the second person from China to win it.\n\nLiu lives in Chengdu and has worked 2 40 years. In 1999, he 3 (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, 4 city plans.\n\nLiu does not follow one style. He uses local materials and simple designs to make 5 (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made “rebirth bricks” from broken buildings — a symbol of hope.\n\nLiu also 6 (design) for ordinary people. For example, West Village in Chengdu, 7 (finish) in 2015, has a soccer field, a market and paths for running, 8 (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place.\n\n“The purpose of architecture is to create 9 pleasant and wonderful environment. People’s 10 (happy) is what we work for,” he said."}
+
+
+2025-11-29 23:56:54.542 [http-nio-8080-exec-10] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Saved question generation record with ID: 44
+2025-11-29 23:56:54.543 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction commit
+2025-11-29 23:56:54.543 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Committing JDBC transaction on Connection [HikariProxyConnection@146056256 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1]
+2025-11-29 23:56:54.651 [http-nio-8080-exec-10] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@146056256 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] after transaction
+2025-11-29 23:56:54.653 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:56:54.662 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:56:54.664 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:56:54.770 [http-nio-8080-exec-3] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:57:42.756 [http-nio-8080-exec-1] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:57:42.760 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history/44, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:57:42.761 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:57:43.004 [http-nio-8080-exec-4] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Deleted question generation record with ID: 44
+2025-11-29 23:57:43.006 [http-nio-8080-exec-4] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:57:43.011 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:57:43.012 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:57:43.074 [http-nio-8080-exec-5] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:58:29.770 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/generate, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:58:29.790 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:58:29.801 [http-nio-8080-exec-7] INFO  c.n.novi.controller.QuestionGenerationController - Received question generation request from user: 166
+2025-11-29 23:58:29.802 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Creating new transaction with name [com.n1etzsch3.novi.service.impl.QuestionGenerationServiceImpl.generateQuestions]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,-java.lang.Exception
+2025-11-29 23:58:29.872 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Acquired Connection [HikariProxyConnection@1524804844 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] for JDBC transaction
+2025-11-29 23:58:29.873 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Switching JDBC Connection [HikariProxyConnection@1524804844 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] to manual commit
+2025-11-29 23:58:29.922 [http-nio-8080-exec-7] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Starting question generation for user: 166, subject: 湖北专升本英语
+2025-11-29 23:58:29.973 [http-nio-8080-exec-7] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - No examples found for difficulty: hard, falling back to 'medium'
+2025-11-29 23:58:30.092 [http-nio-8080-exec-7] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Generating question 1/1. Prompt: # Role
+# 注意输出字符的编码为UTF-8！
+           你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
+
+           # Task
+           请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
+           以 一篇高质量短文，介绍来中国留学的tom同学的日常生活 为主题的题目
+
+           # Constraints & Rules
+           1.  **文章难度**: 难度为hard，词汇量控制在 4500 词以内，增加长难句和生僻词，20+句话，考察综合语言运用能力，语法知识点更难，难度略高于专升本平均水平。
+           2.  **题型结构 (每道大题)**:
+               *   包含一篇约 300-350 词的英文短文。
+               *   **必须而且只能包含 10 个挖空处** (序号 1-10)。
+               *   挖空类型必须混合：
+                   *   *给词填空* (括号内给出一个词，要求填其正确形式(主要有：名词、副词、代词、形容词、动词、数词)，如 adj->adv, v->tense)。
+                   *   *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
+               *   题目头说明必须包含：“Part Ⅰ 语法填空（本大题共10小题，每小题2分，共20分）
+阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词，并将答案写在答题卡相应题号后的横线上”
+
+           3.  **格式严格匹配**: 输出必须严格遵守下方的【Few-Shot Example】格式。
+           4.  **输出格式**: 请以 JSON 格式输出。
+           5.  **JSON格式要求**:
+               *   请严格按照JSON数组格式输出，包裹在[]中。
+               *   不要包含任何Markdown标记（如```json），直接返回JSON字符串。
+               *   ⚠️重要：确保所有字符串值内部的双引号都使用反斜杠转义（例如 " -> "）。
+               *   JSON结构必须包含以下字段：
+                   - content: 题目完整文本（包含题头说明、指令和带挖空的原文）。挖空处请使用 "【1】(word)" 或 "【2】" 的形式。不要有其他符号，例如**
+                   - answer与analysis: 正确答案与解析（1-10题的答案，格式为："8": {
+                                               "answer": "promotes",
+                                               "analysis": "动词第三人称单数形式，主语为The Spring Festival，遵循主谓一致原则。"
+                                               }）。
+                   - difficulty: 难度（simple/medium/hard）
+                   - type: 题型（固定为“语法填空”）
+
+           # Few-Shot Example (参考样本)
+           示例 1:
+{"title": "Part Ⅰ 语法填空", "instructions": "阅读下面短文，在题号（第1-10题）空白处填入括号内提示词的正确形式，若无提示词则填入一个适当的单词。", "article_content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March.\nThis is the 1 (big) award of all in architecture. He is the second person from China to win it.\n\nLiu lives in Chengdu and has worked 2 40 years. In 1999, he 3 (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, 4 city plans.\n\nLiu does not follow one style. He uses local materials and simple designs to make 5 (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made “rebirth bricks” from broken buildings — a symbol of hope.\n\nLiu also 6 (design) for ordinary people. For example, West Village in Chengdu, 7 (finish) in 2015, has a soccer field, a market and paths for running, 8 (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place.\n\n“The purpose of architecture is to create 9 pleasant and wonderful environment. People’s 10 (happy) is what we work for,” he said."}
+
+
+2025-11-29 23:59:00.733 [http-nio-8080-exec-7] INFO  c.n.n.service.impl.QuestionGenerationServiceImpl - Saved question generation record with ID: 45
+2025-11-29 23:59:00.734 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Initiating transaction commit
+2025-11-29 23:59:00.734 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Committing JDBC transaction on Connection [HikariProxyConnection@1524804844 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1]
+2025-11-29 23:59:00.835 [http-nio-8080-exec-7] DEBUG o.s.jdbc.support.JdbcTransactionManager - Releasing JDBC Connection [HikariProxyConnection@1524804844 wrapping com.mysql.cj.jdbc.ConnectionImpl@389008d1] after transaction
+2025-11-29 23:59:00.838 [http-nio-8080-exec-7] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-29 23:59:00.847 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-29 23:59:00.847 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-29 23:59:00.948 [http-nio-8080-exec-6] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-30 00:00:30.846 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-30 00:00:30.847 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-30 00:00:30.956 [http-nio-8080-exec-9] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-30 00:00:30.958 [http-nio-8080-exec-9] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-30 00:00:34.021 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/questions/history, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-30 00:00:34.022 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-30 00:00:34.199 [http-nio-8080-exec-2] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-30 00:00:34.586 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Request URI: /api/v1/sessions, Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE2NiwidXNlcm5hbWUiOiJVc2VyMSIsInN1YiI6IjE2NiIsImlhdCI6MTc2NDQzMDMxNSwiZXhwIjoxNzY0NTE2NzE1fQ.ZzVBv_NSC-UVBTaY3fhwYmQjtkn0Q4bk4QAxTle8sZE
+2025-11-30 00:00:34.587 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Token validated successfully for user: 166
+2025-11-30 00:00:34.647 [http-nio-8080-exec-10] INFO  c.n1etzsch3.novi.controller.ChatSessionController - Retrieved session list for user: 166
+2025-11-30 00:00:34.649 [http-nio-8080-exec-10] INFO  com.n1etzsch3.novi.interceptor.JwtAuthInterceptor - Cleaned up ThreadLocal for user.
+2025-11-30 00:01:22.912 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-30 00:01:22.923 [tomcat-shutdown] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-11-30 00:01:22.928 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-11-30 00:01:22.929 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

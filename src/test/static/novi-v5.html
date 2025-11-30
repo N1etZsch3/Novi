@@ -1177,8 +1177,8 @@
 
                     <div class="form-floating mb-3">
                         <select class="form-select rounded-3" id="examType" aria-label="题型">
-                            <!-- 显示为"完形填空"，但值传"语法填空"以匹配后端示例库 -->
-                            <option value="语法填空">完形填空</option>
+                            <!-- 显示为"语法填空"，但值传"语法填空"以匹配后端示例库 -->
+                            <option value="语法填空">语法填空</option>
                         </select>
                         <label for="examType">题型</label>
                     </div>
@@ -1586,7 +1586,7 @@
             // 监听题型选择，控制主题输入框显示
             const typeSelect = document.getElementById('examType');
             const topicDiv = document.getElementById('customTopicDiv');
-            // 默认显示自定义主题（因为目前只有完形填空）
+            // 默认显示自定义主题（因为目前只有语法填空）
             if (topicDiv) {
                 topicDiv.classList.remove('d-none');
             }
@@ -1676,7 +1676,7 @@
                     const html = res.data.data.map(item => {
                         const timeStr = new Date(item.createdAt).toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
                         const themeDisplay = item.theme ? ` | ${item.theme}` : '';
-                        const typeDisplay = item.questionType === '语法填空' ? '完形填空' : item.questionType;
+                        const typeDisplay = item.questionType === '语法填空' ? '语法填空' : item.questionType;
 
                         // 使用 data-id 而不是 id 避免冲突
                         return `
@@ -1942,7 +1942,7 @@
                     subtitleEl.classList.add('d-none');
                 }
 
-                const displayType = (meta.type === '语法填空' || meta.type === '完形填空') ? '完形填空' : (meta.type || '综合');
+                const displayType = (meta.type === '语法填空' || meta.type === '语法填空') ? '语法填空' : (meta.type || '综合');
                 document.getElementById('tagType').innerText = `题型：${displayType}`;
                 document.getElementById('tagDiff').innerText = `难度：${meta.difficulty || '标准'}`;
             }
@@ -1954,37 +1954,66 @@
                 let items = [];
 
                 // --- 1. 处理试题内容 ---
-                if (q.article_content) {
-                    // 渲染文章内容
-                    const paras = q.article_content.split('\n').filter(t => t.trim());
+                if (q.article_content || (q.content && q.type === '语法填空')) { // Expand condition to handle the provided example which uses 'content' for the article but type '语法填空'
+                    // The user's JSON example puts the text in 'content', not 'article_content'.
+                    // And the type is "语法填空".
+
+                    let textContent = q.article_content || q.content || "";
+
+                    // 渲染文章内容 (Support simple text with newlines)
+                    const paras = textContent.split('\n').filter(t => t.trim());
                     paras.forEach(p => {
-                        let formattedP = p.replace(/(\d+)\s*(\([a-zA-Z\s]+\)|_+)/g, (match, num, hint) => {
-                            const hintText = hint.replace(/[()_]/g, '').trim();
+                        let formattedP = p.replace(/【(\d+)】|(\d+)\s*(\([a-zA-Z\s]+\)|_+)/g, (match, num1, num2, hint) => {
+                            // The user's text uses 【1】 format.
+                            const num = num1 || num2;
+                            const hintText = hint ? hint.replace(/[()_]/g, '').trim() : '';
                             const displayHint = hintText ? `(${hintText})` : '';
                             return `<span class="fw-bold mx-1 text-primary">[${num}]</span><span class="blank-space">__________</span> <span class="text-muted small">${displayHint}</span>`;
                         });
                         contentHtml += `<p class="question-content" style="text-indent: 2em;">${formattedP}</p>`;
                     });
 
-                    // 解析答案和解析
-                    let ansMap = {};
-                    if (Array.isArray(q.answer)) {
-                        q.answer.forEach((a, i) => ansMap[i + 1] = a);
-                    } else {
-                        ansMap = this.parseListToMap(q.answer);
+                    // 尝试解析复合结构的答案对象
+                    let isCompositeObj = false;
+                    if (q.answer && typeof q.answer === 'object' && !Array.isArray(q.answer)) {
+                        // Check if values have 'answer' and 'analysis' keys
+                        const keys = Object.keys(q.answer);
+                        if (keys.length > 0 && q.answer[keys[0]] && typeof q.answer[keys[0]] === 'object' && 'answer' in q.answer[keys[0]]) {
+                            isCompositeObj = true;
+                            // Sort keys numerically
+                            keys.sort((a, b) => parseInt(a) - parseInt(b));
+                            keys.forEach(k => {
+                                const item = q.answer[k];
+                                items.push({
+                                    num: k,
+                                    ans: item.answer || '',
+                                    ana: item.analysis || ''
+                                });
+                            });
+                        }
                     }
 
-                    let anaMap = {};
-                    if (Array.isArray(q.analysis)) {
-                        q.analysis.forEach((a, i) => anaMap[i + 1] = a);
-                    } else {
-                        anaMap = this.parseListToMap(q.analysis);
-                    }
+                    if (!isCompositeObj) {
+                        // 解析答案和解析
+                        let ansMap = {};
+                        if (Array.isArray(q.answer)) {
+                            q.answer.forEach((a, i) => ansMap[i + 1] = a);
+                        } else {
+                            ansMap = this.parseListToMap(q.answer);
+                        }
 
-                    // 汇总该大题下的所有小题
-                    const maxKey = Math.max(...Object.keys(ansMap).map(Number), ...Object.keys(anaMap).map(Number), 0);
-                    for(let i=1; i<=maxKey; i++) {
-                        items.push({ num: i, ans: ansMap[i] || '', ana: anaMap[i] || '' });
+                        let anaMap = {};
+                        if (Array.isArray(q.analysis)) {
+                            q.analysis.forEach((a, i) => anaMap[i + 1] = a);
+                        } else {
+                            anaMap = this.parseListToMap(q.analysis);
+                        }
+
+                        // 汇总该大题下的所有小题
+                        const maxKey = Math.max(...Object.keys(ansMap).map(Number), ...Object.keys(anaMap).map(Number), 0);
+                        for(let i=1; i<=maxKey; i++) {
+                            items.push({ num: i, ans: ansMap[i] || '', ana: anaMap[i] || '' });
+                        }
                     }
 
                 } else {
@@ -2009,36 +2038,32 @@
 
                     answersContainerHtml += `<div class="mb-3"><h6 class="fw-bold text-secondary">题目 ${index + 1} 参考答案</h6>`;
 
-                    const rowsPerTable = 10;
-                    for (let i = 0; i < items.length; i += rowsPerTable) {
-                        const chunk = items.slice(i, i + rowsPerTable);
-
-                        answersContainerHtml += `
-                            <div class="table-responsive mb-4">
-                                <table class="table table-bordered table-hover align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th style="width: 60px;" class="text-center">序号</th>
-                                            <th style="width: 120px;" class="text-center">答案</th>
-                                            <th class="text-center">解析</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>`;
-
-                        chunk.forEach(item => {
-                            answersContainerHtml += `
+                    answersContainerHtml += `
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover align-middle mb-0 table-striped">
+                                <thead class="table-light">
                                     <tr>
-                                        <td class="text-center fw-bold text-secondary">${item.num}</td>
-                                        <td class="text-center text-primary fw-bold text-break">${item.ans}</td>
-                                        <td class="small text-muted text-break" style="text-align: left; line-height: 1.6;">${item.ana || '暂无详细解析'}</td>
-                                    </tr>`;
-                        });
+                                        <th style="width: 80px;" class="text-center">题号</th>
+                                        <th style="width: 200px;" class="text-center">答案</th>
+                                        <th class="text-start ps-4">解析</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
 
+                    items.forEach(item => {
                         answersContainerHtml += `
-                                    </tbody>
-                                </table>
-                            </div>`;
-                    }
+                                <tr>
+                                    <td class="text-center fw-bold text-secondary">${item.num}</td>
+                                    <td class="text-center text-primary fw-bold text-break">${item.ans}</td>
+                                    <td class="text-muted small text-break text-start ps-4" style="line-height: 1.6;">${item.ana || '暂无解析'}</td>
+                                </tr>`;
+                    });
+
+                    answersContainerHtml += `
+                                </tbody>
+                            </table>
+                        </div>`;
+
                     answersContainerHtml += `</div>`;
                 }
             });
