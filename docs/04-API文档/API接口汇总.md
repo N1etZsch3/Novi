@@ -283,7 +283,7 @@ Content-Type: application/json
 {
   "configKey": "gentle",
   "configValue": "你说话温柔体贴，善于倾听...",
-  "type": 1,
+  "configType": 1,
   "description": "温柔性格"
 }
 ```
@@ -299,11 +299,12 @@ Response:
   "code": 200,
   "data": [
     {
-      "id": 1,
       "configKey": "gentle",
       "configValue": "你说话温柔体贴...",
-      "type": 1,
-      "description": "温柔性格"
+      "configType": 1,
+      "description": "温柔性格",
+      "createTime": "2025-11-29T10:00:00",
+      "updateTime": "2025-11-29T10:00:00"
     }
   ]
 }
