@@ -42,6 +42,15 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 - **历史回溯**：随时加载查看任意会话的完整历史记录。
 - **软删除**：支持逻辑删除会话，保障数据安全。
 
+### 4. 📖 API 文档 (API Documentation)
+- **Knife4j 集成**：集成 Knife4j 4.4.0，提供美观、强大的在线接口文档。
+- **文档地址**：启动项目后访问 `http://localhost:8080/doc.html`。
+- **特性**：
+  - **接口分组**：按功能模块（如用户管理、AI聊天、AI出题等）清晰分组。
+  - **调试功能**：支持在线调试 API，方便前端开发与测试。
+  - **作者信息**：每个接口均标注作者信息 (N1etzsch3)，方便责任溯源。
+  - **JWT 支持**：文档页面已配置 JWT 认证，支持直接在文档中进行鉴权调试。
+
 ---
 
 ## 🚀 快速开始 (Quick Start)
@@ -65,7 +74,7 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 SPRING_DATASOURCE_URL=""
 SPRING_DATASOURCE_USERNAME=""
 SPRING_DATASOURCE_PASSWORD=""
-AI_API_KEY=""
+JWT_SECRET_KEY=""
 ```
 
 ### 4. 启动项目
@@ -81,5 +90,6 @@ Novi (Root)
 ├── novi-chat        # 聊天模块：聊天 Service, Mapper, Repository (ChatMemory), DTO
 ├── novi-question    # 出题模块：AI出题 Service, Mapper, DTO
 ├── novi-ai-config   # AI配置模块：模型与提示词配置 Service, Mapper, Factory, DTO
-└── novi-web         # Web模块：启动类, 控制器(Controller), 全局配置(Config), 资源文件(Resources)
+├── novi-web         # Web模块：启动类, 控制器(Controller), 全局配置(Config), 资源文件(Resources)
+└── novi-view        # 视图模块：包含控制台客户端 (Console Client) 和 GUI 客户端 (GUI Client)
 ```

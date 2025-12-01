@@ -4,6 +4,12 @@
 
 本文档汇总了 Novi 项目的所有 REST API 接口。
 
+> **推荐使用在线文档**：
+> 项目集成了 **Knife4j** 在线接口文档，提供了更详细的接口说明、调试功能和鉴权支持。
+> 
+> **访问地址**：`http://localhost:8080/doc.html`
+> **特色功能**：接口分组、在线调试、作者标注、JWT 鉴权支持。
+
 ## 🔐 认证说明
 
 大部分接口需要携带 JWT Token 进行认证：
@@ -326,6 +332,39 @@ Content-Type: application/json
 }
 ```
 
+## 7️⃣ AI 出题 API
+
+**Base Path**: `/api/v1/question`
+
+| 方法 | 路径 | 功能 |
+|------|------|------|
+| POST | `/generate` | 生成题目 |
+
+### 7.1 生成题目
+
+```http
+POST /api/v1/question/generate
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "subject": "湖北专升本英语",
+  "questionType": "语法填空",
+  "difficulty": "medium",
+  "quantity": 5
+}
+
+Response:
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "recordId": 101,
+    "questions": "[{\"question\": \"...\", \"options\": [...], \"answer\": \"A\"}, ...]"
+  }
+}
+```
+
 ## 🔍 错误码说明
 
 | 错误码 | 说明 |
@@ -388,6 +427,7 @@ function sendStreamMessage(token, sessionId, message) {
 
 ## 📚 相关文档
 
-- [AI聊天功能模块](file:///C:/Users/35666/.gemini/antigravity/brain/774ebe23-99e1-46d9-a3e1-52263e77b58e/AI聊天功能模块.md)
-- [会话管理模块](file:///C:/Users/35666/.gemini/antigravity/brain/774ebe23-99e1-46d9-a3e1-52263e77b58e/会话管理模块.md)
-- [AI模型配置模块](file:///C:/Users/35666/.gemini/antigravity/brain/774ebe23-99e1-46d9-a3e1-52263e77b58e/AI模型配置模块.md)
+- [AI聊天功能模块](file:///Users/n1etzsch3/Documents/Novi/docs/03-功能模块/AI聊天功能模块.md)
+- [会话管理模块](file:///Users/n1etzsch3/Documents/Novi/docs/03-功能模块/会话管理模块.md)
+- [AI模型配置模块](file:///Users/n1etzsch3/Documents/Novi/docs/03-功能模块/AI模型配置模块.md)
+- [AI出题功能模块](file:///Users/n1etzsch3/Documents/Novi/docs/03-功能模块/AI出题功能模块.md)

@@ -12,6 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 
 /**
  * 聊天会话控制器
@@ -26,6 +30,8 @@ import java.util.List;
 @RequestMapping("/api/v1/sessions")
 @AllArgsConstructor
 @Slf4j
+@Tag(name = "会话管理", description = "会话管理相关接口")
+@ApiSupport(author = "N1etzsch3", order = 3)
 public class ChatSessionController {
 
     private final ChatSessionService chatSessionService;
@@ -37,6 +43,8 @@ public class ChatSessionController {
      * @return 包含聊天会话列表的结果。
      */
     @GetMapping
+    @Operation(summary = "获取会话列表", description = "获取当前用户的聊天会话列表")
+    @ApiOperationSupport(author = "N1etzsch3", order = 1)
     public Result getSessionList() {
         Long userId = LoginUserContext.getUserId();
         List<ChatSession> sessions = chatSessionService.getUserSessions(userId);
@@ -51,6 +59,8 @@ public class ChatSessionController {
      * @return 包含聊天消息列表的结果。
      */
     @GetMapping("/{sessionId}/messages")
+    @Operation(summary = "获取会话消息", description = "获取特定会话的历史消息")
+    @ApiOperationSupport(author = "N1etzsch3", order = 2)
     public Result getSessionMessages(@PathVariable String sessionId) {
         Long userId = LoginUserContext.getUserId();
 
@@ -74,6 +84,8 @@ public class ChatSessionController {
      * @return 成功结果。
      */
     @DeleteMapping("/{sessionId}")
+    @Operation(summary = "删除会话", description = "删除指定会话及其所有消息")
+    @ApiOperationSupport(author = "N1etzsch3", order = 3)
     public Result deleteSession(@PathVariable String sessionId) {
         Long userId = LoginUserContext.getUserId();
         chatSessionService.deleteSession(sessionId, userId);

@@ -11,6 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+
 import java.util.List;
 
 /**
@@ -26,6 +31,8 @@ import java.util.List;
 @RequestMapping("/api/v1/questions")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "AI 出题", description = "AI 出题相关接口")
+@ApiSupport(author = "N1etzsch3", order = 5)
 public class QuestionGenerationController {
 
     private final QuestionGenerationService questionGenerationService;
@@ -37,6 +44,8 @@ public class QuestionGenerationController {
      * @return 生成结果
      */
     @PostMapping("/generate")
+    @Operation(summary = "生成题目", description = "根据请求参数生成 AI 题目")
+    @ApiOperationSupport(author = "N1etzsch3", order = 1)
     public Result<QuestionGenerationResponse> generateQuestions(
             @RequestBody @Validated QuestionGenerationRequest request) {
         Long userId = LoginUserContext.getUserId();
@@ -51,6 +60,8 @@ public class QuestionGenerationController {
      * @return 历史记录列表
      */
     @GetMapping("/history")
+    @Operation(summary = "获取历史记录", description = "获取用户的出题历史记录列表")
+    @ApiOperationSupport(author = "N1etzsch3", order = 2)
     public Result<List<QuestionHistoryItem>> getGenerationHistory() {
         Long userId = LoginUserContext.getUserId();
         return Result.success(questionGenerationService.getGenerationHistory(userId));
@@ -63,6 +74,8 @@ public class QuestionGenerationController {
      * @return 记录详情
      */
     @GetMapping("/history/{recordId}")
+    @Operation(summary = "获取记录详情", description = "获取指定出题记录的详细信息")
+    @ApiOperationSupport(author = "N1etzsch3", order = 3)
     public Result<QuestionGenerationResponse> getRecordDetail(@PathVariable Long recordId) {
         Long userId = LoginUserContext.getUserId();
         return Result.success(questionGenerationService.getRecordDetail(recordId, userId));
@@ -75,6 +88,8 @@ public class QuestionGenerationController {
      * @return 成功提示
      */
     @DeleteMapping("/history/{recordId}")
+    @Operation(summary = "删除记录", description = "删除指定的出题记录")
+    @ApiOperationSupport(author = "N1etzsch3", order = 4)
     public Result<Void> deleteRecord(@PathVariable Long recordId) {
         Long userId = LoginUserContext.getUserId();
         questionGenerationService.deleteGenerationRecord(recordId, userId);
@@ -88,6 +103,8 @@ public class QuestionGenerationController {
      * @return 成功提示
      */
     @DeleteMapping("/history")
+    @Operation(summary = "批量删除记录", description = "批量删除出题记录")
+    @ApiOperationSupport(author = "N1etzsch3", order = 5)
     public Result<Void> deleteRecords(@RequestBody List<Long> recordIds) {
         Long userId = LoginUserContext.getUserId();
         questionGenerationService.deleteGenerationRecords(recordIds, userId);

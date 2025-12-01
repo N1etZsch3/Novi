@@ -7,6 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+
 import java.util.List;
 
 /**
@@ -22,6 +27,8 @@ import java.util.List;
 @RequestMapping("/api/prompt/config")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "AI 提示词配置", description = "AI 提示词配置管理接口")
+@ApiSupport(author = "N1etzsch3", order = 6)
 public class AiPromptConfigController {
 
     private final AiPromptConfigService aiPromptConfigService;
@@ -33,6 +40,8 @@ public class AiPromptConfigController {
      * @return 成功结果。
      */
     @PostMapping
+    @Operation(summary = "添加配置", description = "添加新的 AI 提示词配置")
+    @ApiOperationSupport(author = "N1etzsch3", order = 1)
     public Result addConfig(@RequestBody AiPromptConfig config) {
         aiPromptConfigService.addConfig(config);
         log.info("Added new prompt config: {}", config.getConfigKey());
@@ -46,6 +55,8 @@ public class AiPromptConfigController {
      * @return 成功结果。
      */
     @DeleteMapping("/{key}")
+    @Operation(summary = "删除配置", description = "根据 Key 删除 AI 提示词配置")
+    @ApiOperationSupport(author = "N1etzsch3", order = 2)
     public Result removeConfig(@PathVariable String key) {
         aiPromptConfigService.removeConfig(key);
         log.info("Removed prompt config: {}", key);
@@ -59,6 +70,8 @@ public class AiPromptConfigController {
      * @return 包含配置列表的结果对象。
      */
     @GetMapping("/type/{type}")
+    @Operation(summary = "按类型列出配置", description = "根据类型获取 AI 提示词配置列表 (0:系统, 1:性格, 2:语气风格)")
+    @ApiOperationSupport(author = "N1etzsch3", order = 3)
     public Result listConfigsByType(@PathVariable Integer type) {
         List<AiPromptConfig> list = aiPromptConfigService.listConfigsByType(type);
         log.info("Listed prompt configs by type: {}", type);

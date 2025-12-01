@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * AI出题响应 DTO
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "AI出题响应")
 public class QuestionGenerationResponse {
 
     /**
@@ -26,6 +28,7 @@ public class QuestionGenerationResponse {
      * 用于标识此次生成记录，以便后续查询历史记录详情。
      * </p>
      */
+    @Schema(description = "出题记录ID", example = "1001")
     private Long recordId;
 
     /**
@@ -35,5 +38,6 @@ public class QuestionGenerationResponse {
      * 具体JSON结构依题型而定。
      * </p>
      */
+    @Schema(description = "题目内容 (JSON格式)", example = "[{\"question\": \"...\"}]")
     private String questions;
 }
