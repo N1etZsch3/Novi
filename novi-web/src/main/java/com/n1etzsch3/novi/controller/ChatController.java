@@ -11,10 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 聊天控制器
@@ -29,8 +25,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/chat")
 @Slf4j
-@Tag(name = "AI 聊天", description = "AI 聊天相关接口")
-@ApiSupport(author = "N1etzsch3", order = 2)
 public class ChatController {
 
     private final ChatService chatService;
@@ -45,8 +39,6 @@ public class ChatController {
      * @return 包含 AI 回复的结果对象。
      */
     @PostMapping("/send/call")
-    @Operation(summary = "发送消息 (阻塞式)", description = "发送消息并等待完整回复")
-    @ApiOperationSupport(author = "N1etzsch3", order = 1)
     public Result sendMessage(@Validated @RequestBody ChatRequest request) {
         // 鉴权: UserId 从 ThreadLocal 中获取 (由拦截器设置)
         Long userId = LoginUserContext.getUserId();
@@ -73,8 +65,6 @@ public class ChatController {
      * @return 代表事件流的 Flux<String> 对象。
      */
     @PostMapping(value = "/send/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @Operation(summary = "发送消息 (流式)", description = "发送消息并以 SSE 流式返回回复")
-    @ApiOperationSupport(author = "N1etzsch3", order = 2)
     public Flux<String> sendMessageStream(@Validated @RequestBody ChatRequest request) {
 
         // 鉴权: UserId 从 ThreadLocal 中获取

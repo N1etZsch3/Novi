@@ -87,7 +87,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         // 4.构建登录响应
         LoginRespond loginRespond = new LoginRespond();
-        loginRespond.setUserId(userAccount.getId());
+        loginRespond.setUserId(Math.toIntExact(userAccount.getId()));
         loginRespond.setToken(token);
 
         log.info("用户登录成功: {}", userAccount.getUsername());
@@ -110,7 +110,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
 
         UserProfileDto userProfileDto = new UserProfileDto();
-        userProfileDto.setId(userAccount.getId());
+        userProfileDto.setId(Math.toIntExact(userAccount.getId()));
         userProfileDto.setUsername(userAccount.getUsername());
         userProfileDto.setNickname(userAccount.getNickname());
         userProfileDto.setEmail(userAccount.getEmail());

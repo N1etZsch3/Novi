@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * AI出题请求 DTO
@@ -22,21 +21,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "AI出题请求")
 public class QuestionGenerationRequest {
 
     /**
      * 科目（如：湖北专升本英语、高等数学等）
      */
     @NotBlank(message = "科目不能为空")
-    @Schema(description = "科目", example = "湖北专升本英语")
     private String subject;
 
     /**
      * 题型（如：语法填空、阅读理解、选择题等）
      */
     @NotBlank(message = "题型不能为空")
-    @Schema(description = "题型", example = "选择题")
     private String questionType;
 
     /**
@@ -45,7 +41,6 @@ public class QuestionGenerationRequest {
      * 可选字段，某些题型如"语法填空"可能不需要指定主题。
      * </p>
      */
-    @Schema(description = "主题 (可选)", example = "虚拟语气")
     private String theme;
 
     /**
@@ -55,7 +50,6 @@ public class QuestionGenerationRequest {
      * </p>
      */
     @NotBlank(message = "难度不能为空")
-    @Schema(description = "难度 (simple, medium, hard)", example = "medium")
     private String difficulty;
 
     /**
@@ -66,6 +60,5 @@ public class QuestionGenerationRequest {
      */
     @NotNull(message = "题目数量不能为空")
     @Min(value = 1, message = "题目数量必须至少为1")
-    @Schema(description = "题目数量", example = "5")
     private Integer quantity;
 }

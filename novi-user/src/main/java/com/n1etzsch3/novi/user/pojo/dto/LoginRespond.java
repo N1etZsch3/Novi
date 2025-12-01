@@ -1,19 +1,15 @@
 package com.n1etzsch3.novi.user.pojo.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-@Schema(description = "用户登录响应")
+@AllArgsConstructor
 public class LoginRespond {
-    @Schema(description = "JWT Token", example = "eyJhbGciOiJIUzI1NiIs...")
     private String token;
-    @Schema(description = "用户ID", example = "1")
-    private Long userId;
-    @Schema(description = "用户名", example = "user123")
-    private String username;
+    private Integer userId;
 }

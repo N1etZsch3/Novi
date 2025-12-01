@@ -2,7 +2,7 @@
 
 ## 📋 功能概述
 
-AI 模型配置模块 (`novi-ai-config`) 提供了灵活的 AI 模型管理能力，支持多个模型配置、动态切换（热切换），无需重启应用即可更换 AI 模型。
+AI 模型配置模块提供了灵活的 AI 模型管理能力，支持多个模型配置、动态切换（热切换），无需重启应用即可更换 AI 模型。
 
 ## 🎯 核心特性
 
@@ -160,7 +160,7 @@ graph TD
 
 ### Controller 层
 
-**文件**：`AiModelConfigController.java` (位于 `novi-web` 模块)
+**文件**：[AiModelConfigController.java](file:///c:/Study/Novi/src/main/java/com/n1etzsch3/novi/controller/AiModelConfigController.java)
 
 **主要方法**：
 - `listAllModels()` - 列出所有模型（仅返回安全DTO）
@@ -169,7 +169,7 @@ graph TD
 
 ### Service 层
 
-**接口**：`AiModelConfigService.java` (位于 `novi-ai-config` 模块)
+**接口**：[AiModelConfigService.java](file:///c:/Study/Novi/src/main/java/com/n1etzsch3/novi/service/AiModelConfigService.java)
 
 **实现**：`AiModelConfigServiceImpl.java`
 
@@ -185,7 +185,7 @@ graph TD
 
 ### Factory 层
 
-**文件**：`DynamicChatModelFactory.java` (位于 `novi-ai-config` 模块)
+**文件**：[DynamicChatModelFactory.java](file:///c:/Study/Novi/src/main/java/com/n1etzsch3/novi/config/DynamicChatModelFactory.java)
 
 **主要职责**：
 - 动态创建 `ChatClient` 实例
@@ -368,5 +368,5 @@ async function getActiveModel() {
 
 ## 📚 相关文档
 
-- [AI聊天功能模块](file:///Users/n1etzsch3/Documents/Novi/docs/03-功能模块/AI聊天功能模块.md)
-- [AI提示词管理模块](file:///Users/n1etzsch3/Documents/Novi/docs/03-功能模块/AI提示词管理模块.md)
+- [AI聊天功能模块](file:///C:/Users/35666/.gemini/antigravity/brain/774ebe23-99e1-46d9-a3e1-52263e77b58e/AI聊天功能模块.md)
+- [AI提示词管理模块](file:///C:/Users/35666/.gemini/antigravity/brain/774ebe23-99e1-46d9-a3e1-52263e77b58e/AI提示词管理模块.md)

@@ -28,15 +28,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/v1/users/register", // 注册
                         "/error", // Spring Boot 默认错误页
                         "/index.html",
-                        "/api/prompt/config/**", // Exclude prompt config for testing/admin
-                        "/swagger-ui.html",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/webjars/**",
-                        "/doc.html",
-                        "/doc.html/**",
-                        "/swagger-resources/**",
-                        "/v2/api-docs/**");
+                        "/api/prompt/config/**" // Exclude prompt config for testing/admin
+                );
     }
 
     /**

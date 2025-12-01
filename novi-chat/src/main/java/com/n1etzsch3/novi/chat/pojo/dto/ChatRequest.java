@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * 聊天请求 DTO
@@ -20,7 +19,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "聊天请求")
 public class ChatRequest {
 
     /**
@@ -30,7 +28,6 @@ public class ChatRequest {
      * </p>
      */
     @NotBlank(message = "消息内容不能为空")
-    @Schema(description = "消息内容 (支持换行)", example = "你好，Novi！")
     private String message;
 
     /**
@@ -39,6 +36,5 @@ public class ChatRequest {
      * 如果为 null，将创建一个新会话。
      * </p>
      */
-    @Schema(description = "会话ID (为空则创建新会话)", example = "550e8400-e29b-41d4-a716-446655440000")
     private String sessionId;
 }

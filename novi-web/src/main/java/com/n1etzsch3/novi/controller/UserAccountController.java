@@ -7,10 +7,6 @@ import com.n1etzsch3.novi.question.pojo.dto.*;
 import com.n1etzsch3.novi.aiconfig.pojo.dto.*;
 import com.n1etzsch3.novi.user.service.UserAccountService;
 import com.n1etzsch3.novi.common.utils.LoginUserContext;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -29,8 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "User Account", description = "用户账户管理接口")
-@ApiSupport(author = "N1etzsch3", order = 1)
 public class UserAccountController {
 
     private final UserAccountService userAccountService;
@@ -45,13 +39,11 @@ public class UserAccountController {
      * @return 指示成功或失败的结果。
      */
     @PostMapping("/register") // 路径: /api/v1/users/register
-    @Operation(summary = "用户注册", description = "注册新用户（目前禁用）")
-    @ApiOperationSupport(author = "N1etzsch3", order = 1)
     public Result register(@Validated @RequestBody RegistrationRequest registrationRequest) {
         return Result.error("内部测试期间，暂不开放注册。请联系管理员获取账号。");
         // userAccountService.registerUser(registrationRequest);
         // log.info("User registered successfully: {}",
-        // registrationRequest.getUsername());
+        //         registrationRequest.getUsername());
         // return Result.success();
     }
 
@@ -62,8 +54,6 @@ public class UserAccountController {
      * @return 包含登录响应（令牌、用户信息）的结果。
      */
     @PostMapping("/login") // 路径: /api/v1/users/login
-    @Operation(summary = "用户登录", description = "用户登录并获取 JWT Token")
-    @ApiOperationSupport(author = "N1etzsch3", order = 2)
     public Result login(@Validated @RequestBody LoginRequest loginRequest) {
         LoginRespond loginRespond = userAccountService.login(loginRequest);
         log.info("User logged in successfully");
@@ -76,8 +66,6 @@ public class UserAccountController {
      * @return 包含用户个人资料 DTO 的结果。
      */
     @GetMapping("/me") // 路径: /api/v1/users/me
-    @Operation(summary = "获取当前用户信息", description = "获取当前登录用户的详细信息")
-    @ApiOperationSupport(author = "N1etzsch3", order = 3)
     public Result getCurrentUser() {
         Long userId = LoginUserContext.getUserId();
         UserProfileDto userProfileDto = userAccountService.getUserDetailsById(userId);
@@ -92,8 +80,6 @@ public class UserAccountController {
      * @return 包含更新后的用户个人资料 DTO 的结果。
      */
     @PutMapping("/me") // 路径: /api/v1/users/me
-    @Operation(summary = "更新当前用户信息", description = "更新当前登录用户的个人资料")
-    @ApiOperationSupport(author = "N1etzsch3", order = 4)
     public Result updateCurrentUser(@Validated @RequestBody UserProfileUpdateRequest updateRequest) {
         Long userId = LoginUserContext.getUserId();
         userAccountService.updateUserProfile(userId, updateRequest);
@@ -107,8 +93,6 @@ public class UserAccountController {
      * @return 包含用户偏好 Map 的结果。
      */
     @GetMapping("/preferences") // 路径: /api/v1/users/preferences
-    @Operation(summary = "获取用户偏好", description = "获取当前用户的偏好设置")
-    @ApiOperationSupport(author = "N1etzsch3", order = 5)
     public Result getUserPreferences() {
         Long userId = LoginUserContext.getUserId();
         java.util.Map<String, Object> preferences = userAccountService.getUserPreferences(userId);
@@ -123,8 +107,6 @@ public class UserAccountController {
      * @return 包含更新后的偏好设置 Map 的结果。
      */
     @PutMapping("/preferences") // 路径: /api/v1/users/preferences
-    @Operation(summary = "更新用户偏好", description = "更新当前用户的偏好设置")
-    @ApiOperationSupport(author = "N1etzsch3", order = 6)
     public Result updateUserPreferences(@RequestBody java.util.Map<String, Object> preferences) {
         Long userId = LoginUserContext.getUserId();
         java.util.Map<String, Object> updatedPreferences = userAccountService.updateUserPreferences(userId,

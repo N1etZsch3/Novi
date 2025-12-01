@@ -8,11 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-
 import java.util.List;
 
 /**
@@ -28,8 +23,6 @@ import java.util.List;
 @RequestMapping("/api/model/config")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "AI 模型配置", description = "AI 模型配置管理接口")
-@ApiSupport(author = "N1etzsch3", order = 4)
 public class AiModelConfigController {
 
     private final AiModelConfigService aiModelConfigService;
@@ -44,8 +37,6 @@ public class AiModelConfigController {
      * @return 包含所有模型配置DTO的结果对象
      */
     @GetMapping("/list")
-    @Operation(summary = "获取所有模型", description = "获取所有可用的 AI 模型配置列表")
-    @ApiOperationSupport(author = "N1etzsch3", order = 1)
     public Result listAllModels() {
         List<AiModelConfigDTO> models = aiModelConfigService.listAllModelsDTO();
         log.info("Listed {} AI models", models.size());
@@ -61,8 +52,6 @@ public class AiModelConfigController {
      * @return 包含当前激活模型DTO的结果对象
      */
     @GetMapping("/active")
-    @Operation(summary = "获取激活模型", description = "获取当前正在使用的 AI 模型配置")
-    @ApiOperationSupport(author = "N1etzsch3", order = 2)
     public Result getActiveModel() {
         AiModelConfigDTO activeModel = aiModelConfigService.getActiveModelDTO();
         if (activeModel == null) {
@@ -83,8 +72,6 @@ public class AiModelConfigController {
      * @return 切换结果
      */
     @PostMapping("/switch/{modelName}")
-    @Operation(summary = "切换模型", description = "根据模型名称切换当前使用的 AI 模型")
-    @ApiOperationSupport(author = "N1etzsch3", order = 3)
     public Result switchModel(@PathVariable String modelName) {
         log.info("Switching to model: {}", modelName);
         boolean success = aiModelConfigService.switchModelByName(modelName);
