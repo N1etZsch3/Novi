@@ -1,17 +1,17 @@
 package com.n1etzsch3.novi.config;
 
 import com.n1etzsch3.novi.user.interceptor.JwtAuthInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private JwtAuthInterceptor jwtAuthInterceptor;
+    private final JwtAuthInterceptor jwtAuthInterceptor;
 
     /**
      * 注册拦截器

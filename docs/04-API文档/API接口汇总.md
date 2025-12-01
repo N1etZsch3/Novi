@@ -30,8 +30,10 @@ Authorization: Bearer <your-jwt-token>
 |------|------|------|-------------|
 | POST | `/register` | 用户注册 | ❌ |
 | POST | `/login` | 用户登录 | ❌ |
-| GET | `/profile` | 获取用户信息 | ✅ |
-| PUT | `/profile` | 更新用户信息 | ✅ |
+| GET | `/me` | 获取用户信息 | ✅ |
+| PUT | `/me` | 更新用户信息 | ✅ |
+| GET | `/preferences` | 获取用户偏好(Map) | ✅ |
+| PUT | `/preferences` | 更新用户偏好(Map) | ✅ |
 
 ### 1.1 用户注册
 
@@ -45,6 +47,10 @@ Content-Type: application/json
   "email": "user@example.com",
   "nickname": "小明"
 }
+
+> [!WARNING]
+> 内部测试期间，暂不开放注册。请联系管理员获取账号。
+
 ```
 
 ### 1.2 用户登录
@@ -324,6 +330,51 @@ Content-Type: application/json
   "personalityKey": "gentle",
   "toneStyleKey": "casual"
 }
+
+## 7️⃣ AI 出题 API
+
+**Base Path**: `/api/v1/questions`
+
+| 方法 | 路径 | 功能 |
+|------|------|------|
+| POST | `/generate` | 生成题目 |
+| GET | `/history` | 获取出题历史 |
+| GET | `/history/{recordId}` | 获取记录详情 |
+| DELETE | `/history/{recordId}` | 删除记录 |
+| DELETE | `/history` | 批量删除记录 |
+
+### 7.1 生成题目
+
+```http
+POST /api/v1/questions/generate
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "topic": "Java基础",
+  "difficulty": "medium",
+  "count": 5
+}
+```
+
+### 7.2 获取历史记录
+
+```http
+GET /api/v1/questions/history
+Authorization: Bearer <token>
+
+Response:
+{
+  "code": 200,
+  "data": [
+    {
+      "id": 1,
+      "topic": "Java基础",
+      "createdAt": "2025-11-29T14:00:00"
+    }
+  ]
+}
+```
 ```
 
 ## 🔍 错误码说明
