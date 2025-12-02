@@ -160,14 +160,34 @@ public class QuestionPromptBuilder {
      * 清理用户输入，防止 Prompt Injection
      * 1. 移除 { 和 }，防止模板注入
      * 2. 限制长度
+     * 3. 移除常见的 Prompt 注入关键词
      */
     private String sanitizeInput(String input, int maxLength) {
         if (!StringUtils.hasText(input)) {
             return "";
         }
-        // 移除可能破坏模板的特殊字符
+        // 1. 移除可能破坏模板的特殊字符
         String safe = input.replace("{", "").replace("}", "");
-        // 截断过长的输入
+
+        // 2. 移除常见的 Prompt 注入关键词 (不区分大小写)
+        String lowerCaseInput = safe.toLowerCase();
+        String[] blackList = {
+                "ignore previous instructions",
+                "system prompt",
+                "忽略之前的指令",
+                "系统提示词",
+                "jailbreak"
+        };
+
+        for (String keyword : blackList) {
+            if (lowerCaseInput.contains(keyword.toLowerCase())) {
+                // 简单策略：直接移除关键词，或者替换为空
+                // 这里选择替换为空字符串，并记录日志(实际项目中)
+                safe = safe.replaceAll("(?i)" + java.util.regex.Pattern.quote(keyword), "");
+            }
+        }
+
+        // 3. 截断过长的输入
         if (safe.length() > maxLength) {
             safe = safe.substring(0, maxLength);
         }

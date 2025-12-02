@@ -235,7 +235,7 @@
             .sidebar-collapsed .sidebar #sessionList,
             .sidebar-collapsed .sidebar #examHistoryList,
             .sidebar-collapsed .sidebar #sidebar-chat-elements .d-flex.justify-content-between,
-            /* 隐藏管理栏 */
+                /* 隐藏管理栏 */
             .sidebar-collapsed .sidebar #sidebar-exam-elements .d-flex.justify-content-between {
                 display: none !important;
             }
@@ -1066,876 +1066,944 @@
 
 <body>
 
-    <!-- 全屏输入模态框 -->
-    <div class="modal fade" id="fullScreenInputModal" tabindex="-1">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content" style="background: var(--bg-body);">
-                <div class="modal-header border-bottom">
-                    <h5 class="modal-title fw-bold">沉浸式编辑</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-0">
-                    <div class="container h-100 py-4">
+<!-- 全屏输入模态框 -->
+<div class="modal fade" id="fullScreenInputModal" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content" style="background: var(--bg-body);">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold">沉浸式编辑</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="container h-100 py-4">
                         <textarea id="fullScreenTextarea" class="form-control border-0 h-100 shadow-none"
-                            style="font-size: 1.1rem; background: transparent; resize: none;"
-                            placeholder="在这里尽情输入..."></textarea>
-                    </div>
+                                  style="font-size: 1.1rem; background: transparent; resize: none;"
+                                  placeholder="在这里尽情输入..."></textarea>
                 </div>
-                <div class="modal-footer border-top">
-                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary rounded-pill px-4"
+            </div>
+            <div class="modal-footer border-top">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4"
                         onclick="ui.submitFullScreenInput()">完成</button>
-                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 全局提示与确认框 -->
-    <div class="toast-container" id="toastContainer"></div>
-    <div class="modal fade" id="confirmModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content p-3 rounded-4" style="background: var(--bg-card); color: var(--text-main);">
-                <div class="modal-body text-center">
-                    <h5 class="fw-bold mb-3">确认</h5>
-                    <p class="text-muted small mb-4" id="confirmMessage"></p>
-                    <div class="d-flex gap-2 justify-content-center">
-                        <button type="button" class="btn btn-light rounded-pill px-4"
+<!-- 全局提示与确认框 -->
+<div class="toast-container" id="toastContainer"></div>
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content p-3 rounded-4" style="background: var(--bg-card); color: var(--text-main);">
+            <div class="modal-body text-center">
+                <h5 class="fw-bold mb-3">确认</h5>
+                <p class="text-muted small mb-4" id="confirmMessage"></p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <button type="button" class="btn btn-light rounded-pill px-4"
                             data-bs-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-danger rounded-pill px-4" id="confirmBtnAction">确定</button>
-                    </div>
+                    <button type="button" class="btn btn-danger rounded-pill px-4" id="confirmBtnAction">确定</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 侧边栏设置菜单 (移动端) -->
-    <div class="offcanvas offcanvas-end rounded-start-4" tabindex="-1" id="settingsOffcanvas"
-        style="background: var(--bg-card); color: var(--text-main);">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title fw-bold">设置</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+<!-- 侧边栏设置菜单 (移动端) -->
+<div class="offcanvas offcanvas-end rounded-start-4" tabindex="-1" id="settingsOffcanvas"
+     style="background: var(--bg-card); color: var(--text-main);">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold">设置</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="nav flex-column nav-pills nav-pills-settings gap-2" id="mobileSettingsTabs"></div>
+    </div>
+</div>
+
+<!-- 1. 认证视图 -->
+<div id="auth-view" class="view-container active">
+    <div class="auth-card" id="authCard">
+        <div class="auth-header">
+            <h2 class="fw-bold mb-2" style="color: var(--primary-color);">Novi</h2>
+            <p class="text-muted">AI 挚友 · 懂你所想</p>
         </div>
-        <div class="offcanvas-body">
-            <div class="nav flex-column nav-pills nav-pills-settings gap-2" id="mobileSettingsTabs"></div>
+        <div class="auth-tabs-container" id="authTabs">
+            <div class="auth-tab-bg"></div>
+            <button class="auth-tab-btn active" onclick="ui.switchAuthTab('login')">登录</button>
+            <button class="auth-tab-btn" onclick="ui.switchAuthTab('register')">注册</button>
+        </div>
+        <div id="loginFormWrapper" class="auth-form-wrapper">
+            <form id="loginForm">
+                <div class="mb-3"><input type="text" class="form-control rounded-3 px-3 py-2" id="loginUser"
+                                         placeholder="用户名" required></div>
+                <div class="mb-4">
+                    <div class="input-group password-group">
+                        <input type="password" class="form-control rounded-start-3 px-3 py-2" id="loginPass"
+                               placeholder="密码" required>
+                        <span class="input-group-text rounded-end-3"
+                              onclick="ui.togglePassword('loginPass', this)"><i class="bi bi-eye-slash"></i></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">进入</button>
+            </form>
+        </div>
+        <div id="registerFormWrapper" class="auth-form-wrapper d-none">
+            <form id="registerForm">
+                <div class="mb-2"><input type="text" class="form-control rounded-3" id="regUser" placeholder="用户名"
+                                         required></div>
+                <div class="mb-2"><input type="text" class="form-control rounded-3" id="regNick" placeholder="昵称"
+                                         required></div>
+                <div class="mb-2"><input type="email" class="form-control rounded-3" id="regEmail" placeholder="邮箱"
+                                         required></div>
+                <div class="mb-4">
+                    <div class="input-group password-group">
+                        <input type="password" class="form-control rounded-start-3" id="regPass" placeholder="密码"
+                               required>
+                        <span class="input-group-text rounded-end-3" onclick="ui.togglePassword('regPass', this)"><i
+                                class="bi bi-eye-slash"></i></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm">注册</button>
+            </form>
         </div>
     </div>
+</div>
 
-    <!-- 1. 认证视图 -->
-    <div id="auth-view" class="view-container active">
-        <div class="auth-card" id="authCard">
-            <div class="auth-header">
-                <h2 class="fw-bold mb-2" style="color: var(--primary-color);">Novi</h2>
-                <p class="text-muted">AI 挚友 · 懂你所想</p>
-            </div>
-            <div class="auth-tabs-container" id="authTabs">
-                <div class="auth-tab-bg"></div>
-                <button class="auth-tab-btn active" onclick="ui.switchAuthTab('login')">登录</button>
-                <button class="auth-tab-btn" onclick="ui.switchAuthTab('register')">注册</button>
-            </div>
-            <div id="loginFormWrapper" class="auth-form-wrapper">
-                <form id="loginForm">
-                    <div class="mb-3"><input type="text" class="form-control rounded-3 px-3 py-2" id="loginUser"
-                            placeholder="用户名" required></div>
-                    <div class="mb-4">
-                        <div class="input-group password-group">
-                            <input type="password" class="form-control rounded-start-3 px-3 py-2" id="loginPass"
-                                placeholder="密码" required>
-                            <span class="input-group-text rounded-end-3"
-                                onclick="ui.togglePassword('loginPass', this)"><i class="bi bi-eye-slash"></i></span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">进入</button>
-                </form>
-            </div>
-            <div id="registerFormWrapper" class="auth-form-wrapper d-none">
-                <form id="registerForm">
-                    <div class="mb-2"><input type="text" class="form-control rounded-3" id="regUser" placeholder="用户名"
-                            required></div>
-                    <div class="mb-2"><input type="text" class="form-control rounded-3" id="regNick" placeholder="昵称"
-                            required></div>
-                    <div class="mb-2"><input type="email" class="form-control rounded-3" id="regEmail" placeholder="邮箱"
-                            required></div>
-                    <div class="mb-4">
-                        <div class="input-group password-group">
-                            <input type="password" class="form-control rounded-start-3" id="regPass" placeholder="密码"
-                                required>
-                            <span class="input-group-text rounded-end-3" onclick="ui.togglePassword('regPass', this)"><i
-                                    class="bi bi-eye-slash"></i></span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm">注册</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- 侧边栏模板 -->
-    <template id="sidebar-template">
-        <aside class="sidebar" id="sidebar">
-            <div class="p-3 d-flex justify-content-between align-items-center flex-shrink-0">
-                <button class="btn rounded-pill text-muted border-0 sidebar-toggle-btn"
+<!-- 侧边栏模板 -->
+<template id="sidebar-template">
+    <aside class="sidebar" id="sidebar">
+        <div class="p-3 d-flex justify-content-between align-items-center flex-shrink-0">
+            <button class="btn rounded-pill text-muted border-0 sidebar-toggle-btn"
                     onclick="ui.handleSidebarToggle()">
-                    <i class="bi bi-list fs-5"></i>
-                </button>
-                <span class="fw-bold ms-2 text-label" style="white-space: nowrap;">功能导航</span>
-                <div class="ms-auto"></div>
-            </div>
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <span class="fw-bold ms-2 text-label" style="white-space: nowrap;">功能导航</span>
+            <div class="ms-auto"></div>
+        </div>
 
-            <!-- 功能切换区 -->
-            <div class="mode-nav mt-2 flex-shrink-0">
-                <button class="mode-nav-btn active" id="nav-btn-chat" onclick="app.switchMode('chat')">
-                    <i class="bi bi-chat-text"></i>
-                    <span class="text-label">智能对话</span>
-                </button>
-                <button class="mode-nav-btn" id="nav-btn-exam" onclick="app.switchMode('exam')">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <span class="text-label">AI 出题</span>
-                </button>
-            </div>
+        <!-- 功能切换区 -->
+        <div class="mode-nav mt-2 flex-shrink-0">
+            <button class="mode-nav-btn active" id="nav-btn-chat" onclick="app.switchMode('chat')">
+                <i class="bi bi-chat-text"></i>
+                <span class="text-label">智能对话</span>
+            </button>
+            <button class="mode-nav-btn" id="nav-btn-exam" onclick="app.switchMode('exam')">
+                <i class="bi bi-file-earmark-text"></i>
+                <span class="text-label">AI 出题</span>
+            </button>
+        </div>
 
-            <hr class="mx-3 my-2 flex-shrink-0" style="border-color: var(--border-color);">
+        <hr class="mx-3 my-2 flex-shrink-0" style="border-color: var(--border-color);">
 
-            <!-- 1. 聊天模式侧边栏内容 (优化版：添加批量管理) -->
-            <div id="sidebar-chat-elements" class="d-flex flex-column flex-grow-1 overflow-hidden"
-                style="min-height: 0;">
-                <div class="px-3 mb-3 mt-2 flex-shrink-0">
-                    <button
+        <!-- 1. 聊天模式侧边栏内容 (优化版：添加批量管理) -->
+        <div id="sidebar-chat-elements" class="d-flex flex-column flex-grow-1 overflow-hidden"
+             style="min-height: 0;">
+            <div class="px-3 mb-3 mt-2 flex-shrink-0">
+                <button
                         class="btn btn-primary w-100 rounded-pill py-2 shadow-sm btn-new-chat d-flex align-items-center justify-content-center"
                         onclick="app.startNewChat()">
-                        <i class="bi bi-plus-lg me-2"></i>
-                        <span class="text-label">新对话</span>
-                    </button>
-                </div>
-
-                <!-- 头部操作区 -->
-                <div class="px-3 mb-2 mt-2 small text-muted text-label fw-bold flex-shrink-0 d-flex justify-content-between align-items-center"
-                    style="min-height: 32px;">
-                    <span id="chatHistoryTitle">历史记录</span>
-
-                    <!-- 默认视图：显示管理按钮 -->
-                    <button class="btn btn-link btn-sm p-0 text-muted text-decoration-none btn-manage-chat"
-                        onclick="app.toggleChatEditMode()" style="font-size: 0.85rem;">
-                        管理
-                    </button>
-
-                    <!-- 编辑视图：显示删除和取消 -->
-                    <div class="d-none align-items-center gap-2 chat-edit-controls">
-                        <button class="btn btn-danger btn-sm py-0 px-2 rounded-pill btn-batch-delete-chat"
-                            onclick="app.deleteSelectedSessions()" style="font-size: 0.8rem;">删除(0)</button>
-                        <button class="btn btn-secondary btn-sm py-0 px-2 rounded-pill"
-                            onclick="app.toggleChatEditMode()" style="font-size: 0.8rem;">取消</button>
-                    </div>
-                </div>
-
-                <!-- 全选栏 (仅在编辑模式下显示) -->
-                <div class="px-3 mb-2 d-none align-items-center border-bottom pb-2 chat-select-all-bar">
-                    <div class="form-check">
-                        <input class="form-check-input select-all-chat-top" type="checkbox"
-                            onchange="app.toggleSelectAllChat(this)">
-                        <label class="form-check-label small text-muted"
-                            onclick="this.previousElementSibling.click()">全选会话</label>
-                    </div>
-                </div>
-
-                <div class="flex-grow-1 overflow-auto px-2" id="sessionList"></div>
-            </div>
-
-            <!-- 2. 出题模式侧边栏内容 -->
-            <div id="sidebar-exam-elements" class="d-none flex-column flex-grow-1 overflow-hidden"
-                style="min-height: 0; position: relative;">
-
-                <!-- 头部操作区 -->
-                <div class="px-3 mb-2 mt-2 small text-muted text-label fw-bold flex-shrink-0 d-flex justify-content-between align-items-center"
-                    style="min-height: 32px;">
-                    <span id="historyHeaderTitle">生成历史</span>
-
-                    <!-- 默认视图：显示管理按钮 -->
-                    <button class="btn btn-link btn-sm p-0 text-muted text-decoration-none btn-manage-history"
-                        onclick="exam.toggleEditMode()" style="font-size: 0.85rem;">
-                        管理
-                    </button>
-
-                    <!-- 编辑视图：显示删除和取消 -->
-                    <div class="d-none align-items-center gap-2 history-edit-controls">
-                        <button class="btn btn-danger btn-sm py-0 px-2 rounded-pill btn-batch-delete"
-                            onclick="exam.deleteSelected()" style="font-size: 0.8rem;">删除(0)</button>
-                        <button class="btn btn-secondary btn-sm py-0 px-2 rounded-pill" onclick="exam.toggleEditMode()"
-                            style="font-size: 0.8rem;">取消</button>
-                    </div>
-                </div>
-
-                <!-- 全选栏 (仅在编辑模式下显示) -->
-                <div class="px-3 mb-2 d-none align-items-center border-bottom pb-2 history-select-all-bar">
-                    <div class="form-check">
-                        <input class="form-check-input select-all-history-top" type="checkbox"
-                            onchange="exam.toggleSelectAll(this)">
-                        <label class="form-check-label small text-muted"
-                            onclick="this.previousElementSibling.click()">全选所有记录</label>
-                    </div>
-                </div>
-
-                <div class="flex-grow-1 overflow-auto px-2" id="examHistoryList">
-                    <div class="text-center text-muted small mt-4 p-3">暂无生成记录</div>
-                </div>
-            </div>
-
-            <div class="mt-auto p-3 border-top flex-shrink-0">
-                <div class="dropdown dropup w-100" id="userDropdownContainer">
-                    <button
-                        class="btn w-100 d-flex align-items-center p-2 rounded hover-bg text-start border-0 user-dropdown-btn"
-                        data-bs-toggle="dropdown" style="color: var(--text-main);">
-                        <div class="avatar avatar-user me-2" style="width: 32px; height: 32px; font-size: 0.9rem;">U
-                        </div>
-                        <div class="flex-grow-1 overflow-hidden text-label">
-                            <div class="fw-bold text-truncate" id="userNickDisplay">User</div>
-                        </div>
-                        <i class="bi bi-three-dots-vertical text-muted"></i>
-                    </button>
-                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 mb-2">
-                        <li><a class="dropdown-item py-2" href="#" onclick="ui.navigateTo('settings-view')"><i
-                                    class="bi bi-gear me-2"></i>设置</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item text-danger py-2" href="#" onclick="app.logout()"><i
-                                    class="bi bi-box-arrow-right me-2"></i>退出</a></li>
-                    </ul>
-                </div>
-            </div>
-        </aside>
-    </template>
-
-    <!-- 2. 聊天视图 -->
-    <div id="chat-view" class="view-container">
-        <!-- Sidebar 会被动态插入到这里 -->
-        <main class="chat-main" onclick="ui.handleMainClick(event)">
-            <header class="chat-header d-flex align-items-center justify-content-between px-4 py-3"
-                style="background: var(--bg-header);">
-                <div class="d-flex align-items-center">
-                    <button class="btn btn-link p-0 me-3 d-md-none" style="color: var(--text-main);"
-                        onclick="ui.toggleSidebar(event)"><i class="bi bi-list fs-4"></i></button>
-                    <h6 class="mb-0 fw-bold" id="currentTitle" style="color: var(--text-main);">Novi AI</h6>
-                </div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="form-check form-switch mb-0" title="深色模式">
-                        <input class="form-check-input theme-switcher" type="checkbox" id="themeSwitchChat"
-                            onchange="ui.toggleTheme(this)">
-                        <label class="form-check-label" for="themeSwitchChat"><i class="bi bi-moon-stars"
-                                style="color: var(--text-main);"></i></label>
-                    </div>
-                    <div class="btn-group btn-group-sm">
-                        <input type="radio" class="btn-check" name="apiMode" id="modeStream" value="stream" checked>
-                        <label class="btn btn-outline-secondary" for="modeStream">流式</label>
-                        <input type="radio" class="btn-check" name="apiMode" id="modeCall" value="call">
-                        <label class="btn btn-outline-secondary" for="modeCall">普通</label>
-                    </div>
-                </div>
-            </header>
-
-            <div class="chat-window" id="chatWindow">
-                <div class="chat-container" id="chatContainer">
-                    <div class="text-center mt-5 pt-5">
-                        <div class="avatar avatar-ai mx-auto mb-3"
-                            style="width: 64px; height: 64px; font-size: 2rem; border: none; background: transparent;">
-                            <i class="bi bi-stars text-primary"></i>
-                        </div>
-                        <h3 class="fw-bold" style="color: var(--text-main);">你好，我是 Novi</h3>
-                        <p style="color: var(--text-sub);">我可以帮你写代码、做计划，或者仅仅聊聊天。</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 重构后的输入区域：上下分层 + 模型选择 (Dropdown版) -->
-            <div class="chat-input-area">
-                <div class="input-wrapper">
-                    <!-- 上层：文本输入 -->
-                    <textarea id="messageInput" class="form-control" rows="1" placeholder="输入消息..."></textarea>
-
-                    <!-- 下层：工具栏 -->
-                    <div class="input-toolbar">
-                        <!-- 使用 Bootstrap Dropdown 实现更美观的子菜单 -->
-                        <div class="model-selector dropdown">
-                            <button class="btn rounded-pill model-selector-btn d-flex align-items-center gap-2"
-                                type="button" data-bs-toggle="dropdown" aria-expanded="false" id="chatModelBtn">
-                                <i class="bi bi-robot"></i> <span id="chatModelLabel">豆包 (Doubao)</span> <i
-                                    class="bi bi-chevron-down small opacity-75"></i>
-                            </button>
-                            <ul class="dropdown-menu model-dropdown-menu shadow-lg rounded-4 p-2">
-                                <li><button class="dropdown-item rounded-3 active" type="button"
-                                        onclick="app.setChatModel('doubao-seed-1-6-flash-250828', '豆包 (Doubao)', this)">豆包
-                                        (Doubao)</button></li>
-                                <li><button class="dropdown-item rounded-3" type="button"
-                                        onclick="app.setChatModel('deepseek-r1-0528', 'DeepSeek-R1', this)">DeepSeek-R1</button>
-                                </li>
-                            </ul>
-                            <input type="hidden" id="chatModelSelect" value="doubao-seed-1-6-flash-250828">
-                        </div>
-
-                        <div class="input-actions">
-                            <button id="fullScreenBtn" onclick="ui.openFullScreenInput()" title="全屏编辑">
-                                <i class="bi bi-arrows-angle-expand"></i>
-                            </button>
-                            <button id="sendBtn" onclick="app.sendMessage()" title="发送消息">
-                                <i class="bi bi-send-fill"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- 3. AI 出题视图 -->
-    <div id="exam-view" class="view-container">
-        <!-- Sidebar 会被动态插入到这里 -->
-        <main class="chat-main">
-            <header class="chat-header d-flex align-items-center justify-content-between px-4 py-3 border-bottom"
-                style="background: var(--bg-header);">
-                <div class="d-flex align-items-center">
-                    <button class="btn btn-link p-0 me-3 d-md-none" style="color: var(--text-main);"
-                        onclick="ui.toggleSidebar(event)"><i class="bi bi-list fs-4"></i></button>
-                    <h6 class="mb-0 fw-bold" style="color: var(--text-main);">AI 智能出题助手</h6>
-                </div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="form-check form-switch mb-0" title="深色模式">
-                        <input class="form-check-input theme-switcher" type="checkbox" id="themeSwitchExam"
-                            onchange="ui.toggleTheme(this)">
-                        <label class="form-check-label" for="themeSwitchExam"><i class="bi bi-moon-stars"
-                                style="color: var(--text-main);"></i></label>
-                    </div>
-                    <button class="btn btn-outline-primary btn-sm rounded-pill px-3" onclick="exam.reset()">
-                        <i class="bi bi-arrow-clockwise me-1"></i> 重置
-                    </button>
-                </div>
-            </header>
-
-            <div class="exam-container">
-                <!-- 左侧：配置面板 -->
-                <div class="exam-config-panel">
-                    <h5 class="fw-bold mb-4">出题配置</h5>
-                    <form id="examForm" onsubmit="exam.generate(event)">
-                        <!-- 新增：模型选择 -->
-                        <div class="form-floating mb-3">
-                            <select class="form-select rounded-3" id="examModel" aria-label="选择模型">
-                                <option value="doubao-seed-1-6-flash-250828" selected>豆包 (Doubao)</option>
-                                <option value="deepseek-r1-0528">DeepSeek-R1</option>
-                            </select>
-                            <label for="examModel">AI 模型</label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <select class="form-select rounded-3" id="examSubject" aria-label="选择科目">
-                                <option value="湖北专升本英语" selected>湖北专升本英语</option>
-                            </select>
-                            <label for="examSubject">选择科目</label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <select class="form-select rounded-3" id="examType" aria-label="题型">
-                                <option value="语法填空">语法填空</option>
-                            </select>
-                            <label for="examType">题型</label>
-                        </div>
-
-                        <!-- 自定义主题始终显示 -->
-                        <div class="form-floating mb-4" id="customTopicDiv">
-                            <input type="text" class="form-control rounded-3" id="examTopic" placeholder="例如：科技、文化">
-                            <label for="examTopic">自定义主题 (可选)</label>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold text-muted">难度系数</label>
-                            <div class="btn-group w-100" role="group">
-                                <input type="radio" class="btn-check" name="examDifficulty" id="diffEasy" value="simple"
-                                    autocomplete="off">
-                                <label class="btn btn-outline-secondary" for="diffEasy">简单</label>
-
-                                <input type="radio" class="btn-check" name="examDifficulty" id="diffMedium"
-                                    value="medium" autocomplete="off" checked>
-                                <label class="btn btn-outline-secondary" for="diffMedium">标准</label>
-
-                                <input type="radio" class="btn-check" name="examDifficulty" id="diffHard" value="hard"
-                                    autocomplete="off">
-                                <label class="btn btn-outline-secondary" for="diffHard">困难</label>
-                            </div>
-                        </div>
-
-                        <div class="mb-5">
-                            <label class="form-label small fw-bold text-muted">题目数量</label>
-                            <input type="number" class="form-control rounded-3" id="examQuantity" value="1" min="1"
-                                max="5">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm mb-3">
-                            <i class="bi bi-magic me-2"></i>生成试题
-                        </button>
-                    </form>
-                </div>
-
-                <!-- 右侧：预览面板 -->
-                <div class="exam-preview-panel">
-                    <div id="paperLoading" class="loading-overlay d-none">
-                        <div class="text-center">
-                            <div class="spinner-border text-primary mb-3" role="status"></div>
-                            <h5 class="fw-bold">AI 正在根据考纲出题中...</h5>
-                            <p class="text-muted small">分析考点 · 组织文本 · 生成解析</p>
-                        </div>
-                    </div>
-
-                    <div id="paperEmpty"
-                        class="h-100 d-flex flex-direction-column align-items-center justify-content-center text-center text-muted">
-                        <div>
-                            <i class="bi bi-file-earmark-text display-1 opacity-25"></i>
-                            <p class="mt-3">在左侧配置参数后点击生成</p>
-                        </div>
-                    </div>
-
-                    <div id="paperContent" class="d-none">
-                        <div class="d-flex justify-content-end mb-3 gap-2">
-                            <div class="form-check form-switch pt-2">
-                                <input class="form-check-input" type="checkbox" id="showAnswersSwitch"
-                                    onchange="exam.toggleAnswers()">
-                                <label class="form-check-label" for="showAnswersSwitch">显示解析</label>
-                            </div>
-                            <button class="btn btn-success rounded-pill px-4" onclick="exam.exportWord()">
-                                <i class="bi bi-file-word me-1"></i> 导出 Word
-                            </button>
-                        </div>
-
-                        <div class="paper-card" id="paperExportArea">
-                            <div class="paper-title" id="paperTitleText">AI 智能生成试卷</div>
-                            <div id="paperSubtitleContainer" class="paper-subtitle d-none"></div>
-                            <div class="text-center mb-4">
-                                <span class="exam-meta-tag" id="tagSubject">科目：英语</span>
-                                <span class="exam-meta-tag" id="tagType">题型：语法填空</span>
-                                <span class="exam-meta-tag" id="tagDiff">难度：标准</span>
-                            </div>
-
-                            <div id="paperBody">
-                                <!-- JS 渲染内容 -->
-                            </div>
-
-                            <div id="paperAnswers" class="mt-5 pt-4 border-top d-none">
-                                <div id="answersBody"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- 4. 设置视图 -->
-    <div id="settings-view" class="view-container">
-        <div class="settings-container">
-            <div class="mb-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                    <button class="btn btn-icon rounded-circle me-3 hover-bg" onclick="ui.navigateTo('chat-view')"
-                        style="width:40px;height:40px;background:var(--bg-input);color:var(--text-main);"><i
-                            class="bi bi-arrow-left"></i></button>
-                    <h4 class="fw-bold mb-0">设置</h4>
-                </div>
-                <button class="btn btn-outline-secondary border-0 d-lg-none" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#settingsOffcanvas">
-                    <i class="bi bi-list fs-4"></i>
+                    <i class="bi bi-plus-lg me-2"></i>
+                    <span class="text-label">新对话</span>
                 </button>
             </div>
-            <div class="row g-4">
-                <div class="col-lg-3 d-none d-lg-block">
-                    <nav class="nav flex-column nav-pills nav-pills-settings" id="settingsDesktopNav">
-                        <button class="nav-link active text-start mb-2" data-bs-toggle="pill"
-                            data-bs-target="#tab-profile" onclick="ui.syncMobileNav('tab-profile')"><i
-                                class="bi bi-person me-2"></i>个人资料</button>
-                        <button class="nav-link text-start mb-2" data-bs-toggle="pill" data-bs-target="#tab-persona"
-                            onclick="ui.syncMobileNav('tab-persona')"><i class="bi bi-magic me-2"></i>AI 设定</button>
-                        <button class="nav-link text-start text-danger mt-4" onclick="app.logout()"><i
-                                class="bi bi-box-arrow-left me-2"></i>退出登录</button>
-                    </nav>
+
+            <!-- 头部操作区 -->
+            <div class="px-3 mb-2 mt-2 small text-muted text-label fw-bold flex-shrink-0 d-flex justify-content-between align-items-center"
+                 style="min-height: 32px;">
+                <span id="chatHistoryTitle">历史记录</span>
+
+                <!-- 默认视图：显示管理按钮 -->
+                <button class="btn btn-link btn-sm p-0 text-muted text-decoration-none btn-manage-chat"
+                        onclick="app.toggleChatEditMode()" style="font-size: 0.85rem;">
+                    管理
+                </button>
+
+                <!-- 编辑视图：显示删除和取消 -->
+                <div class="d-none align-items-center gap-2 chat-edit-controls">
+                    <button class="btn btn-danger btn-sm py-0 px-2 rounded-pill btn-batch-delete-chat"
+                            onclick="app.deleteSelectedSessions()" style="font-size: 0.8rem;">删除(0)</button>
+                    <button class="btn btn-secondary btn-sm py-0 px-2 rounded-pill"
+                            onclick="app.toggleChatEditMode()" style="font-size: 0.8rem;">取消</button>
                 </div>
-                <div class="col-lg-9">
-                    <div class="tab-content" id="settingsTabContent">
-                        <div class="tab-pane fade show active" id="tab-profile">
-                            <div class="settings-card">
-                                <h5 class="fw-bold mb-4">个人信息</h5>
-                                <form id="profileForm">
-                                    <div class="row g-3">
-                                        <div class="col-md-6"><label
-                                                class="form-label small fw-bold text-muted">用户名</label><input
-                                                type="text" class="form-control rounded-3" id="pfUsername" disabled>
-                                        </div>
-                                        <div class="col-md-6"><label
-                                                class="form-label small fw-bold text-muted">昵称</label><input type="text"
-                                                class="form-control rounded-3" id="pfNickname"></div>
-                                        <div class="col-12"><label
-                                                class="form-label small fw-bold text-muted">邮箱</label><input
-                                                type="email" class="form-control rounded-3" id="pfEmail"></div>
-                                    </div>
-                                    <div class="mt-4 text-end"><button class="btn btn-primary rounded-pill px-4"
-                                            type="button" onclick="app.saveProfile()">保存更改</button></div>
-                                </form>
-                            </div>
-                            <div class="settings-card">
-                                <h5 class="fw-bold mb-4 text-danger">安全设置</h5>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-bold text-muted">新密码</label>
-                                        <div class="input-group password-group">
-                                            <input type="password" class="form-control rounded-start-3" id="pfNewPass"
-                                                placeholder="如不修改请留空">
-                                            <span class="input-group-text rounded-end-3"
-                                                onclick="ui.togglePassword('pfNewPass', this)"><i
-                                                    class="bi bi-eye-slash"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-bold text-muted">当前密码</label>
-                                        <div class="input-group password-group">
-                                            <input type="password" class="form-control rounded-start-3"
-                                                id="pfCurrentPass" placeholder="修改密码需验证">
-                                            <span class="input-group-text rounded-end-3"
-                                                onclick="ui.togglePassword('pfCurrentPass', this)"><i
-                                                    class="bi bi-eye-slash"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-4 text-end"><button class="btn btn-outline-danger rounded-pill px-4"
-                                        type="button" onclick="app.saveProfile()">修改密码</button></div>
-                            </div>
+            </div>
+
+            <!-- 全选栏 (仅在编辑模式下显示) -->
+            <div class="px-3 mb-2 d-none align-items-center border-bottom pb-2 chat-select-all-bar">
+                <div class="form-check">
+                    <input class="form-check-input select-all-chat-top" type="checkbox"
+                           onchange="app.toggleSelectAllChat(this)">
+                    <label class="form-check-label small text-muted"
+                           onclick="this.previousElementSibling.click()">全选会话</label>
+                </div>
+            </div>
+
+            <div class="flex-grow-1 overflow-auto px-2" id="sessionList"></div>
+        </div>
+
+        <!-- 2. 出题模式侧边栏内容 -->
+        <div id="sidebar-exam-elements" class="d-none flex-column flex-grow-1 overflow-hidden"
+             style="min-height: 0; position: relative;">
+
+            <!-- 头部操作区 -->
+            <div class="px-3 mb-2 mt-2 small text-muted text-label fw-bold flex-shrink-0 d-flex justify-content-between align-items-center"
+                 style="min-height: 32px;">
+                <span id="historyHeaderTitle">生成历史</span>
+
+                <!-- 默认视图：显示管理按钮 -->
+                <button class="btn btn-link btn-sm p-0 text-muted text-decoration-none btn-manage-history"
+                        onclick="exam.toggleEditMode()" style="font-size: 0.85rem;">
+                    管理
+                </button>
+
+                <!-- 编辑视图：显示删除和取消 -->
+                <div class="d-none align-items-center gap-2 history-edit-controls">
+                    <button class="btn btn-danger btn-sm py-0 px-2 rounded-pill btn-batch-delete"
+                            onclick="exam.deleteSelected()" style="font-size: 0.8rem;">删除(0)</button>
+                    <button class="btn btn-secondary btn-sm py-0 px-2 rounded-pill" onclick="exam.toggleEditMode()"
+                            style="font-size: 0.8rem;">取消</button>
+                </div>
+            </div>
+
+            <!-- 全选栏 (仅在编辑模式下显示) -->
+            <div class="px-3 mb-2 d-none align-items-center border-bottom pb-2 history-select-all-bar">
+                <div class="form-check">
+                    <input class="form-check-input select-all-history-top" type="checkbox"
+                           onchange="exam.toggleSelectAll(this)">
+                    <label class="form-check-label small text-muted"
+                           onclick="this.previousElementSibling.click()">全选所有记录</label>
+                </div>
+            </div>
+
+            <div class="flex-grow-1 overflow-auto px-2" id="examHistoryList">
+                <div class="text-center text-muted small mt-4 p-3">暂无生成记录</div>
+            </div>
+        </div>
+
+        <div class="mt-auto p-3 border-top flex-shrink-0">
+            <div class="dropdown dropup w-100" id="userDropdownContainer">
+                <button
+                        class="btn w-100 d-flex align-items-center p-2 rounded hover-bg text-start border-0 user-dropdown-btn"
+                        data-bs-toggle="dropdown" style="color: var(--text-main);">
+                    <div class="avatar avatar-user me-2" style="width: 32px; height: 32px; font-size: 0.9rem;">U
+                    </div>
+                    <div class="flex-grow-1 overflow-hidden text-label">
+                        <div class="fw-bold text-truncate" id="userNickDisplay">User</div>
+                    </div>
+                    <i class="bi bi-three-dots-vertical text-muted"></i>
+                </button>
+                <ul class="dropdown-menu shadow-lg border-0 rounded-4 mb-2">
+                    <li><a class="dropdown-item py-2" href="#" onclick="ui.navigateTo('settings-view')"><i
+                            class="bi bi-gear me-2"></i>设置</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-danger py-2" href="#" onclick="app.logout()"><i
+                            class="bi bi-box-arrow-right me-2"></i>退出</a></li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+</template>
+
+<!-- 2. 聊天视图 -->
+<div id="chat-view" class="view-container">
+    <!-- Sidebar 会被动态插入到这里 -->
+    <main class="chat-main" onclick="ui.handleMainClick(event)">
+        <header class="chat-header d-flex align-items-center justify-content-between px-4 py-3"
+                style="background: var(--bg-header);">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link p-0 me-3 d-md-none" style="color: var(--text-main);"
+                        onclick="ui.toggleSidebar(event)"><i class="bi bi-list fs-4"></i></button>
+                <h6 class="mb-0 fw-bold" id="currentTitle" style="color: var(--text-main);">Novi AI</h6>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="form-check form-switch mb-0" title="深色模式">
+                    <input class="form-check-input theme-switcher" type="checkbox" id="themeSwitchChat"
+                           onchange="ui.toggleTheme(this)">
+                    <label class="form-check-label" for="themeSwitchChat"><i class="bi bi-moon-stars"
+                                                                             style="color: var(--text-main);"></i></label>
+                </div>
+                <div class="btn-group btn-group-sm">
+                    <input type="radio" class="btn-check" name="apiMode" id="modeStream" value="stream" checked>
+                    <label class="btn btn-outline-secondary" for="modeStream">流式</label>
+                    <input type="radio" class="btn-check" name="apiMode" id="modeCall" value="call">
+                    <label class="btn btn-outline-secondary" for="modeCall">普通</label>
+                </div>
+            </div>
+        </header>
+
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-container" id="chatContainer">
+                <div class="text-center mt-5 pt-5">
+                    <div class="avatar avatar-ai mx-auto mb-3"
+                         style="width: 64px; height: 64px; font-size: 2rem; border: none; background: transparent;">
+                        <i class="bi bi-stars text-primary"></i>
+                    </div>
+                    <h3 class="fw-bold" style="color: var(--text-main);">你好，我是 Novi</h3>
+                    <p style="color: var(--text-sub);">我可以帮你写代码、做计划，或者仅仅聊聊天。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 重构后的输入区域：上下分层 + 模型选择 (Dropdown版) -->
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <!-- 上层：文本输入 -->
+                <textarea id="messageInput" class="form-control" rows="1" placeholder="输入消息..."></textarea>
+
+                <!-- 下层：工具栏 -->
+                <div class="input-toolbar">
+                    <!-- 使用 Bootstrap Dropdown 实现更美观的子菜单 -->
+                    <div class="model-selector dropdown">
+                        <button class="btn rounded-pill model-selector-btn d-flex align-items-center gap-2"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false" id="chatModelBtn">
+                            <i class="bi bi-robot"></i> <span id="chatModelLabel">Loading...</span> <i
+                                class="bi bi-chevron-down small opacity-75"></i>
+                        </button>
+                        <ul class="dropdown-menu model-dropdown-menu shadow-lg rounded-4 p-2" id="chatModelDropdownList">
+                            <!-- 动态插入模型选项 -->
+                        </ul>
+                        <input type="hidden" id="chatModelSelect" value="">
+                    </div>
+
+                    <div class="input-actions">
+                        <button id="fullScreenBtn" onclick="ui.openFullScreenInput()" title="全屏编辑">
+                            <i class="bi bi-arrows-angle-expand"></i>
+                        </button>
+                        <button id="sendBtn" onclick="app.sendMessage()" title="发送消息">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- 3. AI 出题视图 -->
+<div id="exam-view" class="view-container">
+    <!-- Sidebar 会被动态插入到这里 -->
+    <main class="chat-main">
+        <header class="chat-header d-flex align-items-center justify-content-between px-4 py-3 border-bottom"
+                style="background: var(--bg-header);">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link p-0 me-3 d-md-none" style="color: var(--text-main);"
+                        onclick="ui.toggleSidebar(event)"><i class="bi bi-list fs-4"></i></button>
+                <h6 class="mb-0 fw-bold" style="color: var(--text-main);">AI 智能出题助手</h6>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="form-check form-switch mb-0" title="深色模式">
+                    <input class="form-check-input theme-switcher" type="checkbox" id="themeSwitchExam"
+                           onchange="ui.toggleTheme(this)">
+                    <label class="form-check-label" for="themeSwitchExam"><i class="bi bi-moon-stars"
+                                                                             style="color: var(--text-main);"></i></label>
+                </div>
+                <button class="btn btn-outline-primary btn-sm rounded-pill px-3" onclick="exam.reset()">
+                    <i class="bi bi-arrow-clockwise me-1"></i> 重置
+                </button>
+            </div>
+        </header>
+
+        <div class="exam-container">
+            <!-- 左侧：配置面板 -->
+            <div class="exam-config-panel">
+                <h5 class="fw-bold mb-4">出题配置</h5>
+                <form id="examForm" onsubmit="exam.generate(event)">
+                    <!-- 新增：模型选择 -->
+                    <div class="form-floating mb-3">
+                        <select class="form-select rounded-3" id="examModel" aria-label="选择模型">
+                            <!-- 动态插入 -->
+                        </select>
+                        <label for="examModel">AI 模型</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select rounded-3" id="examSubject" aria-label="选择科目">
+                            <option value="湖北专升本英语" selected>湖北专升本英语</option>
+                        </select>
+                        <label for="examSubject">选择科目</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select rounded-3" id="examType" aria-label="题型">
+                            <option value="语法填空">语法填空</option>
+                        </select>
+                        <label for="examType">题型</label>
+                    </div>
+
+                    <!-- 自定义主题始终显示 -->
+                    <div class="form-floating mb-4" id="customTopicDiv">
+                        <input type="text" class="form-control rounded-3" id="examTopic" placeholder="例如：科技、文化">
+                        <label for="examTopic">自定义主题 (可选)</label>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted">难度系数</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="examDifficulty" id="diffEasy" value="simple"
+                                   autocomplete="off">
+                            <label class="btn btn-outline-secondary" for="diffEasy">简单</label>
+
+                            <input type="radio" class="btn-check" name="examDifficulty" id="diffMedium"
+                                   value="medium" autocomplete="off" checked>
+                            <label class="btn btn-outline-secondary" for="diffMedium">标准</label>
+
+                            <input type="radio" class="btn-check" name="examDifficulty" id="diffHard" value="hard"
+                                   autocomplete="off">
+                            <label class="btn btn-outline-secondary" for="diffHard">困难</label>
                         </div>
-                        <div class="tab-pane fade" id="tab-persona">
-                            <div class="settings-card">
-                                <h5 class="fw-bold mb-4">核心性格</h5>
-                                <div class="row row-cols-2 row-cols-lg-3 g-3 mb-4" id="personalityGrid"></div>
-                                <div class="mt-3 d-none" id="customPersonaInputDiv">
-                                    <label class="form-label small fw-bold text-muted">自定义 Prompt</label>
-                                    <textarea class="form-control rounded-3" id="psCustomPersona" rows="3"
-                                        placeholder="输入你想要的 Prompt..."></textarea>
-                                </div>
-                            </div>
-                            <div class="settings-card">
-                                <h5 class="fw-bold mb-4">交互偏好</h5>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label small fw-bold text-muted">题目数量</label>
+                        <input type="number" class="form-control rounded-3" id="examQuantity" value="1" min="1"
+                               max="5">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm mb-3">
+                        <i class="bi bi-magic me-2"></i>生成试题
+                    </button>
+                </form>
+            </div>
+
+            <!-- 右侧：预览面板 -->
+            <div class="exam-preview-panel">
+                <div id="paperLoading" class="loading-overlay d-none">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-3" role="status"></div>
+                        <h5 class="fw-bold">AI 正在根据考纲出题中...</h5>
+                        <p class="text-muted small">分析考点 · 组织文本 · 生成解析</p>
+                    </div>
+                </div>
+
+                <div id="paperEmpty"
+                     class="h-100 d-flex flex-direction-column align-items-center justify-content-center text-center text-muted">
+                    <div>
+                        <i class="bi bi-file-earmark-text display-1 opacity-25"></i>
+                        <p class="mt-3">在左侧配置参数后点击生成</p>
+                    </div>
+                </div>
+
+                <div id="paperContent" class="d-none">
+                    <div class="d-flex justify-content-end mb-3 gap-2">
+                        <div class="form-check form-switch pt-2">
+                            <input class="form-check-input" type="checkbox" id="showAnswersSwitch"
+                                   onchange="exam.toggleAnswers()">
+                            <label class="form-check-label" for="showAnswersSwitch">显示解析</label>
+                        </div>
+                        <button class="btn btn-success rounded-pill px-4" onclick="exam.exportWord()">
+                            <i class="bi bi-file-word me-1"></i> 导出 Word
+                        </button>
+                    </div>
+
+                    <div class="paper-card" id="paperExportArea">
+                        <div class="paper-title" id="paperTitleText">AI 智能生成试卷</div>
+                        <div id="paperSubtitleContainer" class="paper-subtitle d-none"></div>
+                        <div class="text-center mb-4">
+                            <span class="exam-meta-tag" id="tagSubject">科目：英语</span>
+                            <span class="exam-meta-tag" id="tagType">题型：语法填空</span>
+                            <span class="exam-meta-tag" id="tagDiff">难度：标准</span>
+                        </div>
+
+                        <div id="paperBody">
+                            <!-- JS 渲染内容 -->
+                        </div>
+
+                        <div id="paperAnswers" class="mt-5 pt-4 border-top d-none">
+                            <div id="answersBody"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- 4. 设置视图 -->
+<div id="settings-view" class="view-container">
+    <div class="settings-container">
+        <div class="mb-4 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-icon rounded-circle me-3 hover-bg" onclick="ui.navigateTo('chat-view')"
+                        style="width:40px;height:40px;background:var(--bg-input);color:var(--text-main);"><i
+                        class="bi bi-arrow-left"></i></button>
+                <h4 class="fw-bold mb-0">设置</h4>
+            </div>
+            <button class="btn btn-outline-secondary border-0 d-lg-none" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#settingsOffcanvas">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 d-none d-lg-block">
+                <nav class="nav flex-column nav-pills nav-pills-settings" id="settingsDesktopNav">
+                    <button class="nav-link active text-start mb-2" data-bs-toggle="pill"
+                            data-bs-target="#tab-profile" onclick="ui.syncMobileNav('tab-profile')"><i
+                            class="bi bi-person me-2"></i>个人资料</button>
+                    <button class="nav-link text-start mb-2" data-bs-toggle="pill" data-bs-target="#tab-persona"
+                            onclick="ui.syncMobileNav('tab-persona')"><i class="bi bi-magic me-2"></i>AI 设定</button>
+                    <button class="nav-link text-start text-danger mt-4" onclick="app.logout()"><i
+                            class="bi bi-box-arrow-left me-2"></i>退出登录</button>
+                </nav>
+            </div>
+            <div class="col-lg-9">
+                <div class="tab-content" id="settingsTabContent">
+                    <div class="tab-pane fade show active" id="tab-profile">
+                        <div class="settings-card">
+                            <h5 class="fw-bold mb-4">个人信息</h5>
+                            <form id="profileForm">
                                 <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-bold text-muted">回复风格</label>
-                                        <select class="form-select rounded-3" id="psTone">
-                                            <option value="normal">默认</option>
-                                            <option value="emoji_heavy">✨ 活泼</option>
-                                            <option value="concise">简洁</option>
-                                            <option value="verbose">详细</option>
-                                        </select>
+                                    <div class="col-md-6"><label
+                                            class="form-label small fw-bold text-muted">用户名</label><input
+                                            type="text" class="form-control rounded-3" id="pfUsername" disabled>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-bold text-muted">语言</label>
-                                        <select class="form-select rounded-3" id="psLanguage">
-                                            <option value="">自动</option>
-                                            <option value="zh_CN">中文</option>
-                                            <option value="en_US">English</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label small fw-bold text-muted">如何称呼你</label>
-                                        <input type="text" class="form-control rounded-3" id="psAddressName">
-                                    </div>
+                                    <div class="col-md-6"><label
+                                            class="form-label small fw-bold text-muted">昵称</label><input type="text"
+                                                                                                           class="form-control rounded-3" id="pfNickname"></div>
+                                    <div class="col-12"><label
+                                            class="form-label small fw-bold text-muted">邮箱</label><input
+                                            type="email" class="form-control rounded-3" id="pfEmail"></div>
                                 </div>
                                 <div class="mt-4 text-end"><button class="btn btn-primary rounded-pill px-4"
-                                        onclick="app.savePreferences()">应用设置</button></div>
+                                                                   type="button" onclick="app.saveProfile()">保存更改</button></div>
+                            </form>
+                        </div>
+                        <div class="settings-card">
+                            <h5 class="fw-bold mb-4 text-danger">安全设置</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">新密码</label>
+                                    <div class="input-group password-group">
+                                        <input type="password" class="form-control rounded-start-3" id="pfNewPass"
+                                               placeholder="如不修改请留空">
+                                        <span class="input-group-text rounded-end-3"
+                                              onclick="ui.togglePassword('pfNewPass', this)"><i
+                                                class="bi bi-eye-slash"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">当前密码</label>
+                                    <div class="input-group password-group">
+                                        <input type="password" class="form-control rounded-start-3"
+                                               id="pfCurrentPass" placeholder="修改密码需验证">
+                                        <span class="input-group-text rounded-end-3"
+                                              onclick="ui.togglePassword('pfCurrentPass', this)"><i
+                                                class="bi bi-eye-slash"></i></span>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="mt-4 text-end"><button class="btn btn-outline-danger rounded-pill px-4"
+                                                               type="button" onclick="app.saveProfile()">修改密码</button></div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab-persona">
+                        <div class="settings-card">
+                            <h5 class="fw-bold mb-4">核心性格</h5>
+                            <div class="row row-cols-2 row-cols-lg-3 g-3 mb-4" id="personalityGrid"></div>
+                            <div class="mt-3 d-none" id="customPersonaInputDiv">
+                                <label class="form-label small fw-bold text-muted">自定义 Prompt</label>
+                                <textarea class="form-control rounded-3" id="psCustomPersona" rows="3"
+                                          placeholder="输入你想要的 Prompt..."></textarea>
+                            </div>
+                        </div>
+                        <div class="settings-card">
+                            <h5 class="fw-bold mb-4">交互偏好</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">回复风格</label>
+                                    <select class="form-select rounded-3" id="psTone">
+                                        <!-- 动态渲染 -->
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">语言</label>
+                                    <select class="form-select rounded-3" id="psLanguage">
+                                        <option value="">自动</option>
+                                        <option value="zh_CN">中文</option>
+                                        <option value="en_US">English</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted">如何称呼你</label>
+                                    <input type="text" class="form-control rounded-3" id="psAddressName">
+                                </div>
+                            </div>
+                            <div class="mt-4 text-end"><button class="btn btn-primary rounded-pill px-4"
+                                                               onclick="app.savePreferences()">应用设置</button></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Onboarding Modal -->
-    <div class="modal fade" id="onboardingModal" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content text-center p-5 border-0 shadow-lg rounded-5"
-                style="background-color: var(--bg-card); color: var(--text-main);">
-                <div class="mb-4">
-                    <div class="avatar avatar-ai mx-auto"
-                        style="width: 80px; height: 80px; font-size: 3rem; background: transparent;"><i
-                            class="bi bi-stars text-primary"></i></div>
-                </div>
-                <h2 class="fw-bold mb-3">欢迎来到 Novi</h2>
-                <p class="text-muted mb-5">初次见面，请选择你喜欢的 AI 性格</p>
-                <div class="text-start mb-4">
-                    <label class="form-label fw-bold small text-muted">性格偏好</label>
-                    <select class="form-select form-select-lg rounded-3" id="obPersonality">
-                        <option value="default">标准 (平衡理智)</option>
-                        <option value="witty">幽默 (风趣好玩)</option>
-                        <option value="gentle">温柔 (治愈系)</option>
-                        <option value="professional">专业 (严谨学术)</option>
-                        <option value="tsundere">傲娇 (哼，勉为其难)</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold fs-5"
-                    onclick="app.submitOnboarding()">开启旅程</button>
+<!-- Onboarding Modal -->
+<div class="modal fade" id="onboardingModal" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-5 border-0 shadow-lg rounded-5"
+             style="background-color: var(--bg-card); color: var(--text-main);">
+            <div class="mb-4">
+                <div class="avatar avatar-ai mx-auto"
+                     style="width: 80px; height: 80px; font-size: 3rem; background: transparent;"><i
+                        class="bi bi-stars text-primary"></i></div>
             </div>
+            <h2 class="fw-bold mb-3">欢迎来到 Novi</h2>
+            <p class="text-muted mb-5">初次见面，请选择你喜欢的 AI 性格</p>
+            <div class="text-start mb-4">
+                <label class="form-label fw-bold small text-muted">性格偏好</label>
+                <select class="form-select form-select-lg rounded-3" id="obPersonality">
+                    <option value="default">标准 (平衡理智)</option>
+                    <!-- 动态渲染更多选项 -->
+                </select>
+            </div>
+            <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold fs-5"
+                    onclick="app.submitOnboarding()">开启旅程</button>
         </div>
     </div>
+</div>
 
-    <!-- JS Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- JS Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <script>
-        const PERSONALITY_OPTIONS = [
-            { id: 'default', icon: 'bi-emoji-smile', title: '标准', desc: '平衡、理智' },
-            { id: 'witty', icon: 'bi-emoji-laughing', title: '幽默', desc: '风趣好玩' },
-            { id: 'gentle', icon: 'bi-flower1', title: '温柔', desc: '知心、治愈' },
-            { id: 'professional', icon: 'bi-briefcase', title: '专家', desc: '严谨、学术' },
-            { id: 'tsundere', icon: 'bi-lightning', title: '傲娇', desc: '口是心非' },
-            { id: 'custom', icon: 'bi-pencil-square', title: '自定义', desc: '完全由你决定' }
-        ];
+<script>
+    // 图标映射配置
+    const ICON_MAP = {
+        'default': 'bi-emoji-smile',
+        'witty': 'bi-emoji-laughing',
+        'gentle': 'bi-flower1',
+        'professional': 'bi-briefcase',
+        'tsundere': 'bi-lightning',
+        'custom': 'bi-pencil-square'
+    };
 
-        marked.use({ breaks: true, gfm: true });
+    // 辅助获取图标，如果未配置则返回默认星星
+    function getIcon(key) {
+        const shortKey = key.replace('personality_', '');
+        return ICON_MAP[shortKey] || 'bi-stars';
+    }
 
-        // 打字机效果
-        const Typewriter = {
-            queue: [], element: null, isTyping: false, timer: null, chatWindow: null, fullText: "",
-            start(element) { this.element = element; this.queue = []; this.fullText = ""; this.isTyping = true; this.chatWindow = document.getElementById('chatWindow'); this.processQueue(); },
-            push(text) { this.queue.push(...text.split('')); if (!this.isTyping) this.processQueue(); },
-            stop() {
-                this.isTyping = false; clearTimeout(this.timer);
-                if (this.queue.length > 0) { this.fullText += this.queue.join(''); this.queue = []; }
-                if (this.element) this.render(this.fullText || (this.element.dataset.raw || ''));
-            },
-            processQueue() {
-                if (this.queue.length === 0) { if (!this.isTyping) return; this.timer = setTimeout(() => this.processQueue(), 50); return; }
-                const speed = this.queue.length > 50 ? 5 : (this.queue.length > 20 ? 15 : 30);
-                let chunk = ''; for (let i = 0; i < (this.queue.length > 100 ? 10 : 2) && this.queue.length > 0; i++) chunk += this.queue.shift();
-                this.fullText += chunk; this.render(this.fullText); this.timer = setTimeout(() => this.processQueue(), speed);
-            },
-            render(rawText) {
-                if (!this.element) return; this.element.dataset.raw = rawText; this.element.innerHTML = marked.parse(rawText);
-                const win = this.chatWindow; if (!win) return;
-                if (win.scrollHeight - win.scrollTop - win.clientHeight < 150) win.scrollTo({ top: win.scrollHeight, behavior: 'smooth' });
-            }
-        };
+    marked.use({ breaks: true, gfm: true });
 
-        const ui = {
-            confirmModal: null, offcanvas: null, confirmCallback: null, fullScreenModal: null, lastToastTime: 0,
+    // 打字机效果
+    const Typewriter = {
+        queue: [], element: null, isTyping: false, timer: null, chatWindow: null, fullText: "",
+        start(element) { this.element = element; this.queue = []; this.fullText = ""; this.isTyping = true; this.chatWindow = document.getElementById('chatWindow'); this.processQueue(); },
+        push(text) { this.queue.push(...text.split('')); if (!this.isTyping) this.processQueue(); },
+        stop() {
+            this.isTyping = false; clearTimeout(this.timer);
+            if (this.queue.length > 0) { this.fullText += this.queue.join(''); this.queue = []; }
+            if (this.element) this.render(this.fullText || (this.element.dataset.raw || ''));
+        },
+        processQueue() {
+            if (this.queue.length === 0) { if (!this.isTyping) return; this.timer = setTimeout(() => this.processQueue(), 50); return; }
+            const speed = this.queue.length > 50 ? 5 : (this.queue.length > 20 ? 15 : 30);
+            let chunk = ''; for (let i = 0; i < (this.queue.length > 100 ? 10 : 2) && this.queue.length > 0; i++) chunk += this.queue.shift();
+            this.fullText += chunk; this.render(this.fullText); this.timer = setTimeout(() => this.processQueue(), speed);
+        },
+        render(rawText) {
+            if (!this.element) return; this.element.dataset.raw = rawText; this.element.innerHTML = marked.parse(rawText);
+            const win = this.chatWindow; if (!win) return;
+            if (win.scrollHeight - win.scrollTop - win.clientHeight < 150) win.scrollTo({ top: win.scrollHeight, behavior: 'smooth' });
+        }
+    };
 
-            init() {
-                this.confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
-                this.offcanvas = new bootstrap.Offcanvas(document.getElementById('settingsOffcanvas'));
-                this.fullScreenModal = new bootstrap.Modal(document.getElementById('fullScreenInputModal'));
+    const ui = {
+        confirmModal: null, offcanvas: null, confirmCallback: null, fullScreenModal: null, lastToastTime: 0,
 
-                document.getElementById('confirmBtnAction').addEventListener('click', () => { if (this.confirmCallback) this.confirmCallback(); this.confirmModal.hide(); });
-                this.renderPersonalityGrid();
-                this.initMobileSettingsNav();
-                this.renderSidebar();
+        init() {
+            this.confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            this.offcanvas = new bootstrap.Offcanvas(document.getElementById('settingsOffcanvas'));
+            this.fullScreenModal = new bootstrap.Modal(document.getElementById('fullScreenInputModal'));
 
-                const msgInput = document.getElementById('messageInput');
-                // 移除旧的全屏按钮检测逻辑，因为现在按钮是固定的
-                if (msgInput) {
-                    msgInput.addEventListener('input', function () {
-                        this.style.height = 'auto';
-                        // 限制最大高度，避免撑破布局
-                        const newHeight = Math.min(this.scrollHeight, 200);
-                        this.style.height = (this.value === '' ? '52px' : newHeight + 'px');
-                    });
-                    msgInput.style.height = '52px';
-                }
-            },
+            document.getElementById('confirmBtnAction').addEventListener('click', () => { if (this.confirmCallback) this.confirmCallback(); this.confirmModal.hide(); });
+            // renderPersonalityGrid 现在由 app.loadSystemOptions 调用
+            this.initMobileSettingsNav();
+            this.renderSidebar();
 
-            // 渲染侧边栏（同时注入到 Chat 和 Exam 视图）
-            renderSidebar() {
-                const tpl = document.getElementById('sidebar-template').content;
-                const chatSide = document.querySelector('#chat-view');
-                if (chatSide && !chatSide.querySelector('.sidebar')) chatSide.prepend(tpl.cloneNode(true));
-                const examSide = document.querySelector('#exam-view');
-                if (examSide && !examSide.querySelector('.sidebar')) examSide.prepend(tpl.cloneNode(true));
-            },
-
-            // 更新侧边栏状态（根据当前模式显示不同内容）
-            updateSidebarState(mode) {
-                document.querySelectorAll('.mode-nav-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll(`#nav-btn-${mode}`).forEach(btn => btn.classList.add('active'));
-                // 切换侧边栏列表内容
-                const showId = `sidebar-${mode}-elements`;
-                document.querySelectorAll(`[id^="sidebar-"][id$="-elements"]`).forEach(el => el.classList.add('d-none'));
-                document.querySelectorAll(`#${showId}`).forEach(el => {
-                    el.classList.remove('d-none');
-                    el.classList.add('d-flex');
+            const msgInput = document.getElementById('messageInput');
+            // 移除旧的全屏按钮检测逻辑，因为现在按钮是固定的
+            if (msgInput) {
+                msgInput.addEventListener('input', function () {
+                    this.style.height = 'auto';
+                    // 限制最大高度，避免撑破布局
+                    const newHeight = Math.min(this.scrollHeight, 200);
+                    this.style.height = (this.value === '' ? '52px' : newHeight + 'px');
                 });
-            },
-
-            togglePassword(inputId, btn) {
-                const input = document.getElementById(inputId); const icon = btn.querySelector('i');
-                if (input.type === 'password') { input.type = 'text'; icon.classList.replace('bi-eye-slash', 'bi-eye'); } else { input.type = 'password'; icon.classList.replace('bi-eye', 'bi-eye-slash'); }
-            },
-            openFullScreenInput() { document.getElementById('fullScreenTextarea').value = document.getElementById('messageInput').value; this.fullScreenModal.show(); },
-            submitFullScreenInput() { const mainInput = document.getElementById('messageInput'); mainInput.value = document.getElementById('fullScreenTextarea').value; mainInput.dispatchEvent(new Event('input')); this.fullScreenModal.hide(); mainInput.focus(); },
-            initMobileSettingsNav() {
-                const desktopNav = document.getElementById('settingsDesktopNav'); const mobileNav = document.getElementById('mobileSettingsTabs');
-                mobileNav.innerHTML = desktopNav.innerHTML;
-                mobileNav.querySelectorAll('.nav-link').forEach(btn => {
-                    if (btn.getAttribute('onclick').includes('logout')) return;
-                    btn.addEventListener('click', (e) => { this.syncMobileNav(e.currentTarget.getAttribute('data-bs-target').replace('#', '')); this.offcanvas.hide(); });
-                });
-            },
-            syncMobileNav(targetId) { const triggerEl = document.querySelector(`#settingsDesktopNav button[data-bs-target="#${targetId}"]`); bootstrap.Tab.getInstance(triggerEl).show(); },
-
-            navigateTo(viewId) {
-                document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-                document.getElementById(viewId).classList.add('active');
-                if (viewId === 'settings-view') { app.loadProfile(); app.loadPreferences(); }
-            },
-
-            switchAuthTab(tab) {
-                const loginWrapper = document.getElementById('loginFormWrapper'); const regWrapper = document.getElementById('registerFormWrapper');
-                const tabsContainer = document.getElementById('authTabs'); const btns = tabsContainer.querySelectorAll('.auth-tab-btn'); const card = document.getElementById('authCard');
-                if (tab === 'register') { tabsContainer.classList.add('register-mode'); btns[0].classList.remove('active'); btns[1].classList.add('active'); } else { tabsContainer.classList.remove('register-mode'); btns[0].classList.add('active'); btns[1].classList.remove('active'); }
-                card.style.height = card.offsetHeight + 'px';
-                const activeWrapper = tab === 'login' ? regWrapper : loginWrapper; const nextWrapper = tab === 'login' ? loginWrapper : regWrapper;
-                activeWrapper.classList.add('fading');
-                setTimeout(() => { activeWrapper.classList.add('d-none'); nextWrapper.classList.remove('d-none'); nextWrapper.classList.add('fading'); card.style.height = 'auto'; nextWrapper.classList.remove('fading'); }, 200);
-            },
-
-            toggleSidebar(e) { if (e) e.stopPropagation(); document.querySelectorAll('.view-container.active').forEach(el => el.classList.toggle('sidebar-open')); },
-            handleSidebarToggle() {
-                if (window.innerWidth <= 768) this.toggleSidebar();
-                else {
-                    document.getElementById('chat-view').classList.toggle('sidebar-collapsed');
-                    document.getElementById('exam-view').classList.toggle('sidebar-collapsed');
-                }
-            },
-            handleMainClick() { document.querySelectorAll('.view-container').forEach(el => el.classList.remove('sidebar-open')); },
-
-            toast(msg, type = 'info') {
-                const now = Date.now(); if (now - this.lastToastTime < 500) return; this.lastToastTime = now;
-                const container = document.getElementById('toastContainer'); const id = 'toast-' + now;
-                const bgClass = type === 'success' ? 'border-success' : (type === 'error' ? 'border-danger' : '');
-                const iconClass = type === 'success' ? 'bi-check-circle-fill text-success' : (type === 'error' ? 'bi-x-circle-fill text-danger' : 'bi-info-circle-fill text-primary');
-                const html = `<div id="${id}" class="toast align-items-center custom-toast ${bgClass} show" role="alert"><div class="d-flex p-3 align-items-center"><i class="bi ${iconClass} fs-5 me-3"></i><div class="toast-body p-0 fw-medium">${msg}</div><button type="button" class="btn-close me-2 m-auto" onclick="ui.closeToast('${id}')"></button></div></div>`;
-                container.insertAdjacentHTML('beforeend', html); setTimeout(() => ui.closeToast(id), 3000);
-            },
-            closeToast(id) { const el = document.getElementById(id); if (!el) return; el.classList.add('hiding'); el.addEventListener('animationend', () => el.remove()); },
-            confirm(msg, callback) { document.getElementById('confirmMessage').innerText = msg; this.confirmCallback = callback; this.confirmModal.show(); },
-            renderPersonalityGrid() {
-                const container = document.getElementById('personalityGrid');
-                container.innerHTML = PERSONALITY_OPTIONS.map(p => `<div class="col"><div class="persona-card" onclick="ui.selectPersona('${p.id}')" id="card-${p.id}"><i class="bi ${p.icon} fs-2 mb-2 d-block text-primary"></i><div class="fw-bold">${p.title}</div><div class="small text-muted mt-1">${p.desc}</div></div></div>`).join('');
-            },
-            selectPersona(id) {
-                document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected')); document.getElementById(`card-${id}`).classList.add('selected');
-                const customInput = document.getElementById('customPersonaInputDiv');
-                if (id === 'custom') { customInput.classList.remove('d-none'); app.currentPreferences.personalityMode = document.getElementById('psCustomPersona').value || 'custom'; } else { customInput.classList.add('d-none'); app.currentPreferences.personalityMode = id; }
-            },
-            toggleTheme(el) {
-                const theme = el.checked ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-bs-theme', theme);
-                localStorage.setItem('novi_theme', theme);
-                // 同步所有开关状态
-                document.querySelectorAll('.theme-switcher').forEach(chk => chk.checked = el.checked);
+                msgInput.style.height = '52px';
             }
-        };
+        },
 
-        /* ================= AI 出题模块逻辑 ================= */
-        const exam = {
-            data: null,
-            isEditMode: false,
+        // 渲染侧边栏（同时注入到 Chat 和 Exam 视图）
+        renderSidebar() {
+            const tpl = document.getElementById('sidebar-template').content;
+            const chatSide = document.querySelector('#chat-view');
+            if (chatSide && !chatSide.querySelector('.sidebar')) chatSide.prepend(tpl.cloneNode(true));
+            const examSide = document.querySelector('#exam-view');
+            if (examSide && !examSide.querySelector('.sidebar')) examSide.prepend(tpl.cloneNode(true));
+        },
 
-            init() {
-                // 监听题型选择，控制主题输入框显示
-                const typeSelect = document.getElementById('examType');
-                const topicDiv = document.getElementById('customTopicDiv');
-                // 默认显示自定义主题（因为目前只有语法填空）
-                if (topicDiv) {
-                    topicDiv.classList.remove('d-none');
+        // 更新侧边栏状态（根据当前模式显示不同内容）
+        updateSidebarState(mode) {
+            document.querySelectorAll('.mode-nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll(`#nav-btn-${mode}`).forEach(btn => btn.classList.add('active'));
+            // 切换侧边栏列表内容
+            const showId = `sidebar-${mode}-elements`;
+            document.querySelectorAll(`[id^="sidebar-"][id$="-elements"]`).forEach(el => el.classList.add('d-none'));
+            document.querySelectorAll(`#${showId}`).forEach(el => {
+                el.classList.remove('d-none');
+                el.classList.add('d-flex');
+            });
+        },
+
+        togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId); const icon = btn.querySelector('i');
+            if (input.type === 'password') { input.type = 'text'; icon.classList.replace('bi-eye-slash', 'bi-eye'); } else { input.type = 'password'; icon.classList.replace('bi-eye', 'bi-eye-slash'); }
+        },
+        openFullScreenInput() { document.getElementById('fullScreenTextarea').value = document.getElementById('messageInput').value; this.fullScreenModal.show(); },
+        submitFullScreenInput() { const mainInput = document.getElementById('messageInput'); mainInput.value = document.getElementById('fullScreenTextarea').value; mainInput.dispatchEvent(new Event('input')); this.fullScreenModal.hide(); mainInput.focus(); },
+        initMobileSettingsNav() {
+            const desktopNav = document.getElementById('settingsDesktopNav'); const mobileNav = document.getElementById('mobileSettingsTabs');
+            mobileNav.innerHTML = desktopNav.innerHTML;
+            mobileNav.querySelectorAll('.nav-link').forEach(btn => {
+                if (btn.getAttribute('onclick').includes('logout')) return;
+                btn.addEventListener('click', (e) => { this.syncMobileNav(e.currentTarget.getAttribute('data-bs-target').replace('#', '')); this.offcanvas.hide(); });
+            });
+        },
+        syncMobileNav(targetId) { const triggerEl = document.querySelector(`#settingsDesktopNav button[data-bs-target="#${targetId}"]`); bootstrap.Tab.getInstance(triggerEl).show(); },
+
+        navigateTo(viewId) {
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            if (viewId === 'settings-view') { app.loadProfile(); app.loadPreferences(); }
+        },
+
+        switchAuthTab(tab) {
+            const loginWrapper = document.getElementById('loginFormWrapper'); const regWrapper = document.getElementById('registerFormWrapper');
+            const tabsContainer = document.getElementById('authTabs'); const btns = tabsContainer.querySelectorAll('.auth-tab-btn'); const card = document.getElementById('authCard');
+            if (tab === 'register') { tabsContainer.classList.add('register-mode'); btns[0].classList.remove('active'); btns[1].classList.add('active'); } else { tabsContainer.classList.remove('register-mode'); btns[0].classList.add('active'); btns[1].classList.remove('active'); }
+            card.style.height = card.offsetHeight + 'px';
+            const activeWrapper = tab === 'login' ? regWrapper : loginWrapper; const nextWrapper = tab === 'login' ? loginWrapper : regWrapper;
+            activeWrapper.classList.add('fading');
+            setTimeout(() => { activeWrapper.classList.add('d-none'); nextWrapper.classList.remove('d-none'); nextWrapper.classList.add('fading'); card.style.height = 'auto'; nextWrapper.classList.remove('fading'); }, 200);
+        },
+
+        toggleSidebar(e) { if (e) e.stopPropagation(); document.querySelectorAll('.view-container.active').forEach(el => el.classList.toggle('sidebar-open')); },
+        handleSidebarToggle() {
+            if (window.innerWidth <= 768) this.toggleSidebar();
+            else {
+                document.getElementById('chat-view').classList.toggle('sidebar-collapsed');
+                document.getElementById('exam-view').classList.toggle('sidebar-collapsed');
+            }
+        },
+        handleMainClick() { document.querySelectorAll('.view-container').forEach(el => el.classList.remove('sidebar-open')); },
+
+        toast(msg, type = 'info') {
+            const now = Date.now(); if (now - this.lastToastTime < 500) return; this.lastToastTime = now;
+            const container = document.getElementById('toastContainer'); const id = 'toast-' + now;
+            const bgClass = type === 'success' ? 'border-success' : (type === 'error' ? 'border-danger' : '');
+            const iconClass = type === 'success' ? 'bi-check-circle-fill text-success' : (type === 'error' ? 'bi-x-circle-fill text-danger' : 'bi-info-circle-fill text-primary');
+            const html = `<div id="${id}" class="toast align-items-center custom-toast ${bgClass} show" role="alert"><div class="d-flex p-3 align-items-center"><i class="bi ${iconClass} fs-5 me-3"></i><div class="toast-body p-0 fw-medium">${msg}</div><button type="button" class="btn-close me-2 m-auto" onclick="ui.closeToast('${id}')"></button></div></div>`;
+            container.insertAdjacentHTML('beforeend', html); setTimeout(() => ui.closeToast(id), 3000);
+        },
+        closeToast(id) { const el = document.getElementById(id); if (!el) return; el.classList.add('hiding'); el.addEventListener('animationend', () => el.remove()); },
+        confirm(msg, callback) { document.getElementById('confirmMessage').innerText = msg; this.confirmCallback = callback; this.confirmModal.show(); },
+
+        // 动态渲染性格卡片
+        renderPersonalityGrid(list) {
+            const container = document.getElementById('personalityGrid');
+            // 先渲染从后端获取的性格
+            let html = list.map(p => {
+                // 去除 'personality_' 前缀作为 ID
+                const id = p.configKey.replace('personality_', '');
+                const icon = getIcon(p.configKey);
+                // description 字段通常是性格描述，configValue 是详细prompt
+                // 这里我们假设 description 是短标题或描述
+                const title = p.description ? p.description.split('性格')[0] : id; // 简单处理标题
+                const desc = p.configValue.length > 20 ? p.configValue.substring(0, 20) + '...' : p.configValue;
+
+                return `<div class="col"><div class="persona-card" onclick="ui.selectPersona('${id}')" id="card-${id}"><i class="bi ${icon} fs-2 mb-2 d-block text-primary"></i><div class="fw-bold">${title}</div><div class="small text-muted mt-1 text-truncate">${desc}</div></div></div>`;
+            }).join('');
+
+            // 追加自定义卡片
+            html += `<div class="col"><div class="persona-card" onclick="ui.selectPersona('custom')" id="card-custom"><i class="bi bi-pencil-square fs-2 mb-2 d-block text-primary"></i><div class="fw-bold">自定义</div><div class="small text-muted mt-1">完全由你决定</div></div></div>`;
+
+            container.innerHTML = html;
+
+            // 同时更新 Onboarding 弹窗中的下拉框
+            const obSelect = document.getElementById('obPersonality');
+            let optionsHtml = list.map(p => {
+                const id = p.configKey.replace('personality_', '');
+                const title = p.description || id;
+                return `<option value="${id}">${title}</option>`;
+            }).join('');
+            obSelect.innerHTML = optionsHtml;
+        },
+
+        // 动态渲染语气选项
+        renderToneOptions(list) {
+            const select = document.getElementById('psTone');
+            let html = '';
+            list.forEach(t => {
+                // 去除 'tone_' 前缀作为 value
+                const value = t.configKey.replace('tone_', '');
+                // 简单的描述处理
+                let label = t.description || value;
+                html += `<option value="${value}">${label}</option>`;
+            });
+            select.innerHTML = html;
+        },
+
+        // 动态渲染模型列表 (同时更新聊天和出题界面)
+        renderModelList(models) {
+            // 1. 聊天界面的 Dropdown
+            const chatDropdown = document.getElementById('chatModelDropdownList');
+            let chatHtml = '';
+            models.forEach(m => {
+                // 默认选中激活的模型
+                const activeClass = m.isActive ? 'active' : '';
+                chatHtml += `<li><button class="dropdown-item rounded-3 ${activeClass}" type="button" onclick="app.setChatModel('${m.modelName}', '${m.description || m.modelName}', this)">${m.description || m.modelName}</button></li>`;
+
+                // 如果当前是激活模型，初始化按钮显示
+                if (m.isActive && !localStorage.getItem('novi_chat_model')) {
+                    document.getElementById('chatModelLabel').innerText = m.description || m.modelName;
+                    document.getElementById('chatModelSelect').value = m.modelName;
                 }
-                if (typeSelect && topicDiv) {
-                    typeSelect.addEventListener('change', (e) => {
-                        // 根据题型判断是否显示主题，这里示例为选择题或阅读需要主题
-                        if (['阅读理解', '选择题', '语法填空'].includes(e.target.value)) topicDiv.classList.remove('d-none');
-                        else topicDiv.classList.add('d-none');
-                    });
-                }
+            });
+            chatDropdown.innerHTML = chatHtml;
 
-                // --- 修改：持久化 AI 模型选择 ---
-                const savedModel = localStorage.getItem('novi_exam_model');
-                if (savedModel) {
-                    const select = document.getElementById('examModel');
-                    if (select) select.value = savedModel;
-                }
-                const modelSelect = document.getElementById('examModel');
-                if (modelSelect) {
-                    modelSelect.addEventListener('change', (e) => {
-                        localStorage.setItem('novi_exam_model', e.target.value);
-                    });
-                }
-            },
+            // 2. 出题界面的 Select
+            const examSelect = document.getElementById('examModel');
+            let examHtml = '';
+            models.forEach(m => {
+                examHtml += `<option value="${m.modelName}">${m.description || m.modelName}</option>`;
+            });
+            examSelect.innerHTML = examHtml;
 
-            // 生成试卷 (调用后端 API)
-            async generate(e) {
-                e.preventDefault();
-                const subject = document.getElementById('examSubject').value;
-                const questionType = document.getElementById('examType').value;
-                const theme = document.getElementById('examTopic').value;
-                const difficulty = document.querySelector('input[name="examDifficulty"]:checked').value;
-                const quantity = document.getElementById('examQuantity').value;
-                const model = document.getElementById('examModel').value; // 新增：获取模型
+            // 恢复之前的选择
+            const savedExamModel = localStorage.getItem('novi_exam_model');
+            if(savedExamModel) examSelect.value = savedExamModel;
+        },
 
-                document.getElementById('paperLoading').classList.remove('d-none');
-                document.getElementById('paperEmpty').classList.add('d-none');
-                document.getElementById('paperContent').classList.add('d-none');
+        selectPersona(id) {
+            document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected')); document.getElementById(`card-${id}`).classList.add('selected');
+            const customInput = document.getElementById('customPersonaInputDiv');
+            if (id === 'custom') { customInput.classList.remove('d-none'); app.currentPreferences.personalityMode = document.getElementById('psCustomPersona').value || 'custom'; } else { customInput.classList.add('d-none'); app.currentPreferences.personalityMode = id; }
+        },
+        toggleTheme(el) {
+            const theme = el.checked ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('novi_theme', theme);
+            // 同步所有开关状态
+            document.querySelectorAll('.theme-switcher').forEach(chk => chk.checked = el.checked);
+        }
+    };
 
-                try {
-                    const res = await axios.post('/questions/generate', {
-                        subject, questionType, theme, difficulty, quantity: parseInt(quantity), model
-                    });
+    /* ================= AI 出题模块逻辑 ================= */
+    const exam = {
+        data: null,
+        isEditMode: false,
 
-                    if (res.data.code === 200 || res.data.code === 1) {
-                        const result = res.data.data;
-                        let questions = [];
+        init() {
+            // 监听题型选择，控制主题输入框显示
+            const typeSelect = document.getElementById('examType');
+            const topicDiv = document.getElementById('customTopicDiv');
+            // 默认显示自定义主题（因为目前只有语法填空）
+            if (topicDiv) {
+                topicDiv.classList.remove('d-none');
+            }
+            if (typeSelect && topicDiv) {
+                typeSelect.addEventListener('change', (e) => {
+                    // 根据题型判断是否显示主题，这里示例为选择题或阅读需要主题
+                    if (['阅读理解', '选择题', '语法填空'].includes(e.target.value)) topicDiv.classList.remove('d-none');
+                    else topicDiv.classList.add('d-none');
+                });
+            }
 
-                        // 【修复】处理返回单个对象的情况（后端返回的是字符串，parse后可能是一个对象或数组）
-                        try {
-                            const parsed = JSON.parse(result.questions);
-                            if (Array.isArray(parsed)) {
-                                questions = parsed;
-                            } else {
-                                // 如果是单个对象，包装成数组
-                                questions = [parsed];
-                            }
-                        } catch (err) {
-                            console.error("JSON Parse Error", err);
-                            throw new Error("题目数据解析失败");
+            // --- 修改：持久化 AI 模型选择 ---
+            const savedModel = localStorage.getItem('novi_exam_model');
+            if (savedModel) {
+                const select = document.getElementById('examModel');
+                if (select) select.value = savedModel;
+            }
+            const modelSelect = document.getElementById('examModel');
+            if (modelSelect) {
+                modelSelect.addEventListener('change', (e) => {
+                    localStorage.setItem('novi_exam_model', e.target.value);
+                });
+            }
+        },
+
+        // 生成试卷 (调用后端 API)
+        async generate(e) {
+            e.preventDefault();
+            const subject = document.getElementById('examSubject').value;
+            const questionType = document.getElementById('examType').value;
+            const theme = document.getElementById('examTopic').value;
+            const difficulty = document.querySelector('input[name="examDifficulty"]:checked').value;
+            const quantity = document.getElementById('examQuantity').value;
+            const model = document.getElementById('examModel').value; // 新增：获取模型
+
+            document.getElementById('paperLoading').classList.remove('d-none');
+            document.getElementById('paperEmpty').classList.add('d-none');
+            document.getElementById('paperContent').classList.add('d-none');
+
+            try {
+                const res = await axios.post('/questions/generate', {
+                    subject, questionType, theme, difficulty, quantity: parseInt(quantity), model
+                });
+
+                if (res.data.code === 200 || res.data.code === 1) {
+                    const result = res.data.data;
+                    let questions = [];
+
+                    // 【修复】处理返回单个对象的情况（后端返回的是字符串，parse后可能是一个对象或数组）
+                    try {
+                        const parsed = JSON.parse(result.questions);
+                        if (Array.isArray(parsed)) {
+                            questions = parsed;
+                        } else {
+                            // 如果是单个对象，包装成数组
+                            questions = [parsed];
                         }
-
-                        this.data = { questions, recordId: result.recordId };
-
-                        this.renderPaper(this.data);
-                        this.loadHistory(); // 刷新历史
-                        ui.toast('试卷生成成功！', 'success');
-                    } else {
-                        throw new Error(res.data.msg || '生成失败');
+                    } catch (err) {
+                        console.error("JSON Parse Error", err);
+                        throw new Error("题目数据解析失败");
                     }
-                } catch (err) {
-                    ui.toast(err.message || '网络请求失败', 'error');
-                    document.getElementById('paperEmpty').classList.remove('d-none');
-                } finally {
-                    document.getElementById('paperLoading').classList.add('d-none');
-                    if (this.data) document.getElementById('paperContent').classList.remove('d-none');
+
+                    this.data = { questions, recordId: result.recordId };
+
+                    this.renderPaper(this.data);
+                    this.loadHistory(); // 刷新历史
+                    ui.toast('试卷生成成功！', 'success');
+                } else {
+                    throw new Error(res.data.msg || '生成失败');
                 }
-            },
+            } catch (err) {
+                ui.toast(err.message || '网络请求失败', 'error');
+                document.getElementById('paperEmpty').classList.remove('d-none');
+            } finally {
+                document.getElementById('paperLoading').classList.add('d-none');
+                if (this.data) document.getElementById('paperContent').classList.remove('d-none');
+            }
+        },
 
-            // 加载出题历史
-            async loadHistory() {
-                try {
-                    const res = await axios.get('/questions/history');
-                    // 注意：因为有两个侧边栏，所以会有多个 ID 相同的元素，querySelectorAll 获取所有
-                    const lists = document.querySelectorAll('#examHistoryList');
-                    if (res.data.code === 200 || res.data.code === 1) {
-                        const html = res.data.data.map(item => {
-                            const timeStr = new Date(item.createdAt).toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
-                            const themeDisplay = item.theme ? ` | ${item.theme}` : '';
-                            const typeDisplay = item.questionType === '语法填空' ? '语法填空' : item.questionType;
+        // 加载出题历史
+        async loadHistory() {
+            try {
+                const res = await axios.get('/questions/history');
+                // 注意：因为有两个侧边栏，所以会有多个 ID 相同的元素，querySelectorAll 获取所有
+                const lists = document.querySelectorAll('#examHistoryList');
+                if (res.data.code === 200 || res.data.code === 1) {
+                    const html = res.data.data.map(item => {
+                        const timeStr = new Date(item.createdAt).toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+                        const themeDisplay = item.theme ? ` | ${item.theme}` : '';
+                        const typeDisplay = item.questionType === '语法填空' ? '语法填空' : item.questionType;
 
-                            // 使用 data-id 而不是 id 避免冲突
-                            return `
+                        // 使用 data-id 而不是 id 避免冲突
+                        return `
                             <div class="session-item d-flex align-items-center ${this.isEditMode ? 'editing-mode' : ''}"
                                  onclick="exam.handleItemClick(${item.id}, event)"
                                  data-id="${item.id}">
@@ -1955,347 +2023,347 @@
                                     <div class="small text-muted text-truncate">${item.subject} · ${item.difficulty}</div>
                                 </div>
                             </div>`;
-                        }).join('');
-                        lists.forEach(el => el.innerHTML = html || '<div class="text-center text-muted small mt-4 p-3">暂无生成记录</div>');
+                    }).join('');
+                    lists.forEach(el => el.innerHTML = html || '<div class="text-center text-muted small mt-4 p-3">暂无生成记录</div>');
 
-                        // 恢复编辑状态（如果处于编辑模式）
-                        if (this.isEditMode) {
-                            this.applyEditModeStyles(true);
-                        }
+                    // 恢复编辑状态（如果处于编辑模式）
+                    if (this.isEditMode) {
+                        this.applyEditModeStyles(true);
                     }
-                } catch (e) { console.error('History Load Failed', e); }
-            },
+                }
+            } catch (e) { console.error('History Load Failed', e); }
+        },
 
-            // --- 新增：批量删除相关逻辑 ---
-            toggleEditMode() {
-                this.isEditMode = !this.isEditMode;
-                this.applyEditModeStyles(this.isEditMode);
-            },
+        // --- 新增：批量删除相关逻辑 ---
+        toggleEditMode() {
+            this.isEditMode = !this.isEditMode;
+            this.applyEditModeStyles(this.isEditMode);
+        },
 
-            applyEditModeStyles(isEdit) {
-                // 使用类选择器来同时控制两个侧边栏中的元素
-                const toggle = (selector, show) => {
-                    document.querySelectorAll(selector).forEach(el => {
-                        if (show) {
-                            el.classList.remove('d-none');
-                            if (el.classList.contains('history-edit-controls') || el.classList.contains('history-select-all-bar')) {
-                                el.classList.add('d-flex');
-                            }
-                        } else {
-                            el.classList.add('d-none');
-                            el.classList.remove('d-flex');
+        applyEditModeStyles(isEdit) {
+            // 使用类选择器来同时控制两个侧边栏中的元素
+            const toggle = (selector, show) => {
+                document.querySelectorAll(selector).forEach(el => {
+                    if (show) {
+                        el.classList.remove('d-none');
+                        if (el.classList.contains('history-edit-controls') || el.classList.contains('history-select-all-bar')) {
+                            el.classList.add('d-flex');
                         }
-                    });
-                };
-
-                toggle('.btn-manage-history', !isEdit);
-                toggle('.history-edit-controls', isEdit);
-                toggle('.history-select-all-bar', isEdit);
-
-                // 切换列表项样式和复选框显示
-                document.querySelectorAll('#examHistoryList .session-item').forEach(item => {
-                    if (isEdit) item.classList.add('editing-mode');
-                    else item.classList.remove('editing-mode', 'item-selected');
+                    } else {
+                        el.classList.add('d-none');
+                        el.classList.remove('d-flex');
+                    }
                 });
+            };
 
-                document.querySelectorAll('.history-checkbox-wrapper').forEach(el => {
-                    if (isEdit) el.classList.remove('d-none'); else el.classList.add('d-none');
-                });
+            toggle('.btn-manage-history', !isEdit);
+            toggle('.history-edit-controls', isEdit);
+            toggle('.history-select-all-bar', isEdit);
 
-                // 切换单个删除按钮显示状态
-                document.querySelectorAll('.history-delete-btn').forEach(el => {
-                    if (isEdit) el.classList.add('d-none'); else el.classList.remove('d-none');
-                });
+            // 切换列表项样式和复选框显示
+            document.querySelectorAll('#examHistoryList .session-item').forEach(item => {
+                if (isEdit) item.classList.add('editing-mode');
+                else item.classList.remove('editing-mode', 'item-selected');
+            });
 
-                // 重置选择状态
-                if (!isEdit) {
-                    document.querySelectorAll('.history-checkbox').forEach(chk => chk.checked = false);
-                    document.querySelectorAll('.select-all-history-top').forEach(chk => chk.checked = false);
+            document.querySelectorAll('.history-checkbox-wrapper').forEach(el => {
+                if (isEdit) el.classList.remove('d-none'); else el.classList.add('d-none');
+            });
+
+            // 切换单个删除按钮显示状态
+            document.querySelectorAll('.history-delete-btn').forEach(el => {
+                if (isEdit) el.classList.add('d-none'); else el.classList.remove('d-none');
+            });
+
+            // 重置选择状态
+            if (!isEdit) {
+                document.querySelectorAll('.history-checkbox').forEach(chk => chk.checked = false);
+                document.querySelectorAll('.select-all-history-top').forEach(chk => chk.checked = false);
+                this.updateSelectionUI();
+            }
+        },
+
+        // 处理列表项点击：编辑模式下选中，普通模式下加载
+        handleItemClick(id, event) {
+            if (this.isEditMode) {
+                // 如果点击的是复选框本身，不需要额外处理
+                if (event.target.type === 'checkbox') return;
+
+                // 在当前点击的行内查找复选框
+                const checkbox = event.currentTarget.querySelector('.history-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
                     this.updateSelectionUI();
                 }
-            },
+            } else {
+                this.loadRecord(id);
+            }
+        },
 
-            // 处理列表项点击：编辑模式下选中，普通模式下加载
-            handleItemClick(id, event) {
-                if (this.isEditMode) {
-                    // 如果点击的是复选框本身，不需要额外处理
-                    if (event.target.type === 'checkbox') return;
+        toggleSelectAll(source) {
+            // 仅在当前可见的侧边栏范围内操作，或者操作所有复选框
+            // 为了简单一致，操作所有复选框
+            document.querySelectorAll('.history-checkbox').forEach(chk => chk.checked = source.checked);
+            // 同步顶部的全选按钮状态（处理另一个侧边栏的同步）
+            document.querySelectorAll('.select-all-history-top').forEach(chk => chk.checked = source.checked);
+            this.updateSelectionUI();
+        },
 
-                    // 在当前点击的行内查找复选框
-                    const checkbox = event.currentTarget.querySelector('.history-checkbox');
-                    if (checkbox) {
-                        checkbox.checked = !checkbox.checked;
-                        this.updateSelectionUI();
-                    }
+        updateSelectionUI() {
+            const checkboxes = document.querySelectorAll('.history-checkbox');
+            let count = 0;
+
+            // 统计选中的数量（去重后的 ID 数量，因为有两个侧边栏）
+            const checkedIds = new Set();
+
+            checkboxes.forEach(chk => {
+                const item = chk.closest('.session-item');
+                if (chk.checked) {
+                    checkedIds.add(chk.value);
+                    if (item) item.classList.add('item-selected');
                 } else {
-                    this.loadRecord(id);
+                    if (item) item.classList.remove('item-selected');
                 }
-            },
+            });
 
-            toggleSelectAll(source) {
-                // 仅在当前可见的侧边栏范围内操作，或者操作所有复选框
-                // 为了简单一致，操作所有复选框
-                document.querySelectorAll('.history-checkbox').forEach(chk => chk.checked = source.checked);
-                // 同步顶部的全选按钮状态（处理另一个侧边栏的同步）
-                document.querySelectorAll('.select-all-history-top').forEach(chk => chk.checked = source.checked);
-                this.updateSelectionUI();
-            },
+            count = checkedIds.size;
 
-            updateSelectionUI() {
-                const checkboxes = document.querySelectorAll('.history-checkbox');
-                let count = 0;
+            document.querySelectorAll('.btn-batch-delete').forEach(btn => {
+                btn.textContent = `删除(${count})`;
+            });
+        },
 
-                // 统计选中的数量（去重后的 ID 数量，因为有两个侧边栏）
-                const checkedIds = new Set();
+        async deleteSelected() {
+            const checked = document.querySelectorAll('.history-checkbox:checked');
+            if (checked.length === 0) return ui.toast('请先选择记录', 'info');
 
-                checkboxes.forEach(chk => {
-                    const item = chk.closest('.session-item');
-                    if (chk.checked) {
-                        checkedIds.add(chk.value);
-                        if (item) item.classList.add('item-selected');
-                    } else {
-                        if (item) item.classList.remove('item-selected');
-                    }
-                });
+            // 去重 ID
+            const ids = [...new Set(Array.from(checked).map(cb => cb.value))];
+            const confirmMsg = `确认删除这 ${ids.length} 条记录吗？`;
 
-                count = checkedIds.size;
-
-                document.querySelectorAll('.btn-batch-delete').forEach(btn => {
-                    btn.textContent = `删除(${count})`;
-                });
-            },
-
-            async deleteSelected() {
-                const checked = document.querySelectorAll('.history-checkbox:checked');
-                if (checked.length === 0) return ui.toast('请先选择记录', 'info');
-
-                // 去重 ID
-                const ids = [...new Set(Array.from(checked).map(cb => cb.value))];
-                const confirmMsg = `确认删除这 ${ids.length} 条记录吗？`;
-
-                ui.confirm(confirmMsg, async () => {
-                    try {
-                        const promises = ids.map(id => axios.delete(`/questions/history/${id}`));
-                        await Promise.all(promises);
-
-                        ui.toast(`成功删除 ${ids.length} 条记录`, 'success');
-
-                        // 如果当前显示的记录被删除了，重置视图
-                        if (this.data && ids.includes(String(this.data.recordId))) {
-                            this.reset();
-                        }
-
-                        this.loadHistory();
-                        this.toggleEditMode();
-                    } catch (e) {
-                        ui.toast('批量删除过程中出现错误', 'error');
-                        this.loadHistory();
-                    }
-                });
-            },
-
-            // 单个删除
-            deleteRecord(id, e) {
-                e.stopPropagation();
-                ui.confirm('确认删除这条出题记录吗？', async () => {
-                    try {
-                        await axios.delete(`/questions/history/${id}`);
-                        this.loadHistory();
-                        if (this.data && this.data.recordId === id) {
-                            this.reset();
-                        }
-                        ui.toast('删除成功', 'success');
-                    } catch (e) {
-                        ui.toast('删除失败', 'error');
-                    }
-                });
-            },
-
-            // 加载单条记录详情
-            async loadRecord(id) {
-                if (this.isEditMode) return;
-
+            ui.confirm(confirmMsg, async () => {
                 try {
-                    const res = await axios.get(`/questions/history/${id}`);
-                    if (res.data.code === 200 || res.data.code === 1) {
-                        const result = res.data.data;
-                        let questions = [];
-                        try {
-                            const parsed = JSON.parse(result.questions);
-                            questions = Array.isArray(parsed) ? parsed : [parsed];
-                        } catch (err) {
-                            questions = [];
-                        }
+                    const promises = ids.map(id => axios.delete(`/questions/history/${id}`));
+                    await Promise.all(promises);
 
-                        this.data = { questions, recordId: result.recordId };
-                        document.getElementById('paperEmpty').classList.add('d-none');
-                        document.getElementById('paperContent').classList.remove('d-none');
-                        this.renderPaper(this.data);
-                        if (window.innerWidth <= 768) ui.handleMainClick();
+                    ui.toast(`成功删除 ${ids.length} 条记录`, 'success');
+
+                    // 如果当前显示的记录被删除了，重置视图
+                    if (this.data && ids.includes(String(this.data.recordId))) {
+                        this.reset();
                     }
-                } catch (e) { ui.toast('加载失败', 'error'); }
-            },
 
-            // --- 新增：智能解析辅助函数 ---
-            parseListToMap(text) {
-                if (!text || typeof text !== 'string') return {};
-                const map = {};
-                // 核心正则：匹配 (\d+)[\.、] pattern
-                // 优化：不强求分隔符，只要有数字加点号即可，靠后续逻辑拆分
-                const regex = /(\d+)\s*[\.、]/g;
+                    this.loadHistory();
+                    this.toggleEditMode();
+                } catch (e) {
+                    ui.toast('批量删除过程中出现错误', 'error');
+                    this.loadHistory();
+                }
+            });
+        },
 
-                let match;
-                const indices = [];
-                while ((match = regex.exec(text)) !== null) {
-                    // 只有当数字在合理范围（比如1-50）时才认为是题号，避免误判
-                    const num = parseInt(match[1]);
-                    if (num > 0 && num < 100) {
-                        indices.push({
-                            num: num,
-                            start: regex.lastIndex, // 内容开始的位置
-                            matchStart: match.index // 匹配项开始的位置（用于计算上一项的结束）
+        // 单个删除
+        deleteRecord(id, e) {
+            e.stopPropagation();
+            ui.confirm('确认删除这条出题记录吗？', async () => {
+                try {
+                    await axios.delete(`/questions/history/${id}`);
+                    this.loadHistory();
+                    if (this.data && this.data.recordId === id) {
+                        this.reset();
+                    }
+                    ui.toast('删除成功', 'success');
+                } catch (e) {
+                    ui.toast('删除失败', 'error');
+                }
+            });
+        },
+
+        // 加载单条记录详情
+        async loadRecord(id) {
+            if (this.isEditMode) return;
+
+            try {
+                const res = await axios.get(`/questions/history/${id}`);
+                if (res.data.code === 200 || res.data.code === 1) {
+                    const result = res.data.data;
+                    let questions = [];
+                    try {
+                        const parsed = JSON.parse(result.questions);
+                        questions = Array.isArray(parsed) ? parsed : [parsed];
+                    } catch (err) {
+                        questions = [];
+                    }
+
+                    this.data = { questions, recordId: result.recordId };
+                    document.getElementById('paperEmpty').classList.add('d-none');
+                    document.getElementById('paperContent').classList.remove('d-none');
+                    this.renderPaper(this.data);
+                    if (window.innerWidth <= 768) ui.handleMainClick();
+                }
+            } catch (e) { ui.toast('加载失败', 'error'); }
+        },
+
+        // --- 新增：智能解析辅助函数 ---
+        parseListToMap(text) {
+            if (!text || typeof text !== 'string') return {};
+            const map = {};
+            // 核心正则：匹配 (\d+)[\.、] pattern
+            // 优化：不强求分隔符，只要有数字加点号即可，靠后续逻辑拆分
+            const regex = /(\d+)\s*[\.、]/g;
+
+            let match;
+            const indices = [];
+            while ((match = regex.exec(text)) !== null) {
+                // 只有当数字在合理范围（比如1-50）时才认为是题号，避免误判
+                const num = parseInt(match[1]);
+                if (num > 0 && num < 100) {
+                    indices.push({
+                        num: num,
+                        start: regex.lastIndex, // 内容开始的位置
+                        matchStart: match.index // 匹配项开始的位置（用于计算上一项的结束）
+                    });
+                }
+            }
+
+            if (indices.length === 0) return {};
+
+            for (let i = 0; i < indices.length; i++) {
+                const current = indices[i];
+                const next = indices[i + 1];
+                // 内容截取到下一项匹配开始之前，或者字符串末尾
+                const end = next ? next.matchStart : text.length;
+
+                let content = text.substring(current.start, end).trim();
+                // 清理可能残留的标点
+                content = content.replace(/^[;；\.,，]+/, '').replace(/[;；\.,，]+$/, '');
+
+                if (content) {
+                    map[current.num] = content;
+                }
+            }
+            return map;
+        },
+
+        // 渲染试卷
+        renderPaper(data) {
+            const questions = data.questions; // Array
+            const paperBody = document.getElementById('paperBody');
+            const answersBody = document.getElementById('answersBody');
+
+            paperBody.innerHTML = '';
+            answersBody.innerHTML = ''; // 重置答案容器内容
+
+            // 设置标题信息
+            if (questions && questions.length > 0) {
+                const meta = questions[0];
+                document.getElementById('paperTitleText').innerText = meta.title || `${meta.type || 'AI'} 专项练习`;
+                const subtitleEl = document.getElementById('paperSubtitleContainer');
+                if (meta.instructions) {
+                    subtitleEl.innerText = meta.instructions;
+                    subtitleEl.classList.remove('d-none');
+                } else {
+                    subtitleEl.classList.add('d-none');
+                }
+
+                const displayType = (meta.type === '语法填空' || meta.type === '语法填空') ? '语法填空' : (meta.type || '综合');
+                document.getElementById('tagType').innerText = `题型：${displayType}`;
+                document.getElementById('tagDiff').innerText = `难度：${meta.difficulty || '标准'}`;
+            }
+
+            let contentHtml = '';
+            let answersContainerHtml = '';
+
+            questions.forEach((q, index) => {
+                let items = [];
+
+                // --- 1. 处理试题内容 ---
+                if (q.article_content || (q.content && q.type === '语法填空')) { // Expand condition to handle the provided example which uses 'content' for the article but type '语法填空'
+                    // The user's JSON example puts the text in 'content', not 'article_content'.
+                    // And the type is "语法填空".
+
+                    let textContent = q.article_content || q.content || "";
+
+                    // 渲染文章内容 (Support simple text with newlines)
+                    const paras = textContent.split('\n').filter(t => t.trim());
+                    paras.forEach(p => {
+                        let formattedP = p.replace(/【(\d+)】|(\d+)\s*(\([a-zA-Z\s]+\)|_+)/g, (match, num1, num2, hint) => {
+                            // The user's text uses 【1】 format.
+                            const num = num1 || num2;
+                            const hintText = hint ? hint.replace(/[()_]/g, '').trim() : '';
+                            const displayHint = hintText ? `(${hintText})` : '';
+                            return `<span class="fw-bold mx-1 text-primary">[${num}]</span><span class="blank-space">__________</span> <span class="text-muted small">${displayHint}</span>`;
                         });
-                    }
-                }
+                        contentHtml += `<p class="question-content" style="text-indent: 2em;">${formattedP}</p>`;
+                    });
 
-                if (indices.length === 0) return {};
-
-                for (let i = 0; i < indices.length; i++) {
-                    const current = indices[i];
-                    const next = indices[i + 1];
-                    // 内容截取到下一项匹配开始之前，或者字符串末尾
-                    const end = next ? next.matchStart : text.length;
-
-                    let content = text.substring(current.start, end).trim();
-                    // 清理可能残留的标点
-                    content = content.replace(/^[;；\.,，]+/, '').replace(/[;；\.,，]+$/, '');
-
-                    if (content) {
-                        map[current.num] = content;
-                    }
-                }
-                return map;
-            },
-
-            // 渲染试卷
-            renderPaper(data) {
-                const questions = data.questions; // Array
-                const paperBody = document.getElementById('paperBody');
-                const answersBody = document.getElementById('answersBody');
-
-                paperBody.innerHTML = '';
-                answersBody.innerHTML = ''; // 重置答案容器内容
-
-                // 设置标题信息
-                if (questions && questions.length > 0) {
-                    const meta = questions[0];
-                    document.getElementById('paperTitleText').innerText = meta.title || `${meta.type || 'AI'} 专项练习`;
-                    const subtitleEl = document.getElementById('paperSubtitleContainer');
-                    if (meta.instructions) {
-                        subtitleEl.innerText = meta.instructions;
-                        subtitleEl.classList.remove('d-none');
-                    } else {
-                        subtitleEl.classList.add('d-none');
-                    }
-
-                    const displayType = (meta.type === '语法填空' || meta.type === '语法填空') ? '语法填空' : (meta.type || '综合');
-                    document.getElementById('tagType').innerText = `题型：${displayType}`;
-                    document.getElementById('tagDiff').innerText = `难度：${meta.difficulty || '标准'}`;
-                }
-
-                let contentHtml = '';
-                let answersContainerHtml = '';
-
-                questions.forEach((q, index) => {
-                    let items = [];
-
-                    // --- 1. 处理试题内容 ---
-                    if (q.article_content || (q.content && q.type === '语法填空')) { // Expand condition to handle the provided example which uses 'content' for the article but type '语法填空'
-                        // The user's JSON example puts the text in 'content', not 'article_content'.
-                        // And the type is "语法填空".
-
-                        let textContent = q.article_content || q.content || "";
-
-                        // 渲染文章内容 (Support simple text with newlines)
-                        const paras = textContent.split('\n').filter(t => t.trim());
-                        paras.forEach(p => {
-                            let formattedP = p.replace(/【(\d+)】|(\d+)\s*(\([a-zA-Z\s]+\)|_+)/g, (match, num1, num2, hint) => {
-                                // The user's text uses 【1】 format.
-                                const num = num1 || num2;
-                                const hintText = hint ? hint.replace(/[()_]/g, '').trim() : '';
-                                const displayHint = hintText ? `(${hintText})` : '';
-                                return `<span class="fw-bold mx-1 text-primary">[${num}]</span><span class="blank-space">__________</span> <span class="text-muted small">${displayHint}</span>`;
-                            });
-                            contentHtml += `<p class="question-content" style="text-indent: 2em;">${formattedP}</p>`;
-                        });
-
-                        // 尝试解析复合结构的答案对象
-                        let isCompositeObj = false;
-                        if (q.answer && typeof q.answer === 'object' && !Array.isArray(q.answer)) {
-                            // Check if values have 'answer' and 'analysis' keys
-                            const keys = Object.keys(q.answer);
-                            if (keys.length > 0 && q.answer[keys[0]] && typeof q.answer[keys[0]] === 'object' && 'answer' in q.answer[keys[0]]) {
-                                isCompositeObj = true;
-                                // Sort keys numerically
-                                keys.sort((a, b) => parseInt(a) - parseInt(b));
-                                keys.forEach(k => {
-                                    const item = q.answer[k];
-                                    items.push({
-                                        num: k,
-                                        ans: item.answer || '',
-                                        ana: item.analysis || ''
-                                    });
+                    // 尝试解析复合结构的答案对象
+                    let isCompositeObj = false;
+                    if (q.answer && typeof q.answer === 'object' && !Array.isArray(q.answer)) {
+                        // Check if values have 'answer' and 'analysis' keys
+                        const keys = Object.keys(q.answer);
+                        if (keys.length > 0 && q.answer[keys[0]] && typeof q.answer[keys[0]] === 'object' && 'answer' in q.answer[keys[0]]) {
+                            isCompositeObj = true;
+                            // Sort keys numerically
+                            keys.sort((a, b) => parseInt(a) - parseInt(b));
+                            keys.forEach(k => {
+                                const item = q.answer[k];
+                                items.push({
+                                    num: k,
+                                    ans: item.answer || '',
+                                    ana: item.analysis || ''
                                 });
-                            }
+                            });
+                        }
+                    }
+
+                    if (!isCompositeObj) {
+                        // 解析答案和解析
+                        let ansMap = {};
+                        if (Array.isArray(q.answer)) {
+                            q.answer.forEach((a, i) => ansMap[i + 1] = a);
+                        } else {
+                            ansMap = this.parseListToMap(q.answer);
                         }
 
-                        if (!isCompositeObj) {
-                            // 解析答案和解析
-                            let ansMap = {};
-                            if (Array.isArray(q.answer)) {
-                                q.answer.forEach((a, i) => ansMap[i + 1] = a);
-                            } else {
-                                ansMap = this.parseListToMap(q.answer);
-                            }
-
-                            let anaMap = {};
-                            if (Array.isArray(q.analysis)) {
-                                q.analysis.forEach((a, i) => anaMap[i + 1] = a);
-                            } else {
-                                anaMap = this.parseListToMap(q.analysis);
-                            }
-
-                            // 汇总该大题下的所有小题
-                            const maxKey = Math.max(...Object.keys(ansMap).map(Number), ...Object.keys(anaMap).map(Number), 0);
-                            for (let i = 1; i <= maxKey; i++) {
-                                items.push({ num: i, ans: ansMap[i] || '', ana: anaMap[i] || '' });
-                            }
+                        let anaMap = {};
+                        if (Array.isArray(q.analysis)) {
+                            q.analysis.forEach((a, i) => anaMap[i + 1] = a);
+                        } else {
+                            anaMap = this.parseListToMap(q.analysis);
                         }
 
-                    } else {
-                        // --- 单题型渲染 ---
-                        const idx = index + 1;
-                        let qText = (q.content || '').replace(/\n/g, '<br>');
-                        qText = qText.replace(/_+/g, '<span class="blank-space">__________</span>');
+                        // 汇总该大题下的所有小题
+                        const maxKey = Math.max(...Object.keys(ansMap).map(Number), ...Object.keys(anaMap).map(Number), 0);
+                        for (let i = 1; i <= maxKey; i++) {
+                            items.push({ num: i, ans: ansMap[i] || '', ana: anaMap[i] || '' });
+                        }
+                    }
 
-                        contentHtml += `
+                } else {
+                    // --- 单题型渲染 ---
+                    const idx = index + 1;
+                    let qText = (q.content || '').replace(/\n/g, '<br>');
+                    qText = qText.replace(/_+/g, '<span class="blank-space">__________</span>');
+
+                    contentHtml += `
                         <div class="mb-4">
                             <h5 class="fw-bold">第 ${idx} 题</h5>
                             <div class="question-content">${qText}</div>
                         </div>
                         `;
 
-                        items.push({ num: idx, ans: q.answer || '', ana: q.analysis || '' });
-                    }
+                    items.push({ num: idx, ans: q.answer || '', ana: q.analysis || '' });
+                }
 
-                    // --- 2. 构建表格风格的答案解析区域 (每10行一个表格) ---
-                    if (items.length > 0) {
-                        if (index > 0) answersContainerHtml += '<hr class="my-4">';
+                // --- 2. 构建表格风格的答案解析区域 (每10行一个表格) ---
+                if (items.length > 0) {
+                    if (index > 0) answersContainerHtml += '<hr class="my-4">';
 
-                        answersContainerHtml += `<div class="mb-3"><h6 class="fw-bold text-secondary">题目 ${index + 1} 参考答案</h6>`;
+                    answersContainerHtml += `<div class="mb-3"><h6 class="fw-bold text-secondary">题目 ${index + 1} 参考答案</h6>`;
 
-                        // 添加 mobile-optimized-table 类名
-                        answersContainerHtml += `
+                    // 添加 mobile-optimized-table 类名
+                    answersContainerHtml += `
                         <div class="table-responsive mb-4">
                             <table class="table table-bordered table-hover align-middle mb-0 table-striped mobile-optimized-table">
                                 <thead class="table-light">
@@ -2307,47 +2375,47 @@
                                 </thead>
                                 <tbody>`;
 
-                        items.forEach(item => {
-                            answersContainerHtml += `
+                    items.forEach(item => {
+                        answersContainerHtml += `
                                 <tr>
                                     <td class="text-center fw-bold text-secondary">${item.num}</td>
                                     <td class="text-center text-primary fw-bold text-break">${item.ans}</td>
                                     <td class="text-muted small text-break text-start ps-4" style="line-height: 1.6;">${item.ana || '暂无解析'}</td>
                                 </tr>`;
-                        });
+                    });
 
-                        answersContainerHtml += `
+                    answersContainerHtml += `
                                 </tbody>
                             </table>
                         </div>`;
 
-                        answersContainerHtml += `</div>`;
-                    }
-                });
+                    answersContainerHtml += `</div>`;
+                }
+            });
 
-                paperBody.innerHTML = contentHtml;
-                answersBody.innerHTML = answersContainerHtml;
+            paperBody.innerHTML = contentHtml;
+            answersBody.innerHTML = answersContainerHtml;
 
-                document.getElementById('showAnswersSwitch').checked = false;
-                document.getElementById('paperAnswers').classList.add('d-none');
-            },
+            document.getElementById('showAnswersSwitch').checked = false;
+            document.getElementById('paperAnswers').classList.add('d-none');
+        },
 
-            toggleAnswers() {
-                const show = document.getElementById('showAnswersSwitch').checked;
-                const el = document.getElementById('paperAnswers');
-                if (show) el.classList.remove('d-none'); else el.classList.add('d-none');
-            },
+        toggleAnswers() {
+            const show = document.getElementById('showAnswersSwitch').checked;
+            const el = document.getElementById('paperAnswers');
+            if (show) el.classList.remove('d-none'); else el.classList.add('d-none');
+        },
 
-            reset() {
-                document.getElementById('paperContent').classList.add('d-none');
-                document.getElementById('paperEmpty').classList.remove('d-none');
-                document.getElementById('examForm').reset();
-            },
+        reset() {
+            document.getElementById('paperContent').classList.add('d-none');
+            document.getElementById('paperEmpty').classList.remove('d-none');
+            document.getElementById('examForm').reset();
+        },
 
-            exportWord() {
-                const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
-                const footer = "</body></html>";
-                const styles = `
+        exportWord() {
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+            const footer = "</body></html>";
+            const styles = `
                 <style>
                     body { font-family: 'Times New Roman', serif; }
                     .paper-title { text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20px; }
@@ -2363,272 +2431,318 @@
                     .text-primary { color: #000; font-weight: bold; }
                 </style>
                 `;
-                const sourceHTML = document.getElementById("paperExportArea").innerHTML;
-                const source = header + styles + sourceHTML + footer;
-                const blob = new Blob(['\ufeff', source], { type: 'application/msword' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'AI智能试卷.doc';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                ui.toast('文档导出中...', 'success');
+            const sourceHTML = document.getElementById("paperExportArea").innerHTML;
+            const source = header + styles + sourceHTML + footer;
+            const blob = new Blob(['\ufeff', source], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'AI智能试卷.doc';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            ui.toast('文档导出中...', 'success');
+        }
+    };
+
+    /* ================= 核心 App 逻辑 ================= */
+    const app = {
+        config: { apiBase: 'http://localhost:8080/api/v1' },
+        state: { token: localStorage.getItem('novi_token'), user: {}, sessionId: null, isTyping: false, systemConfigs: { personalities: [], tones: [], models: [] } },
+        currentPreferences: {},
+        isChatEditMode: false, // 新增：聊天批量删除模式状态
+
+        init() {
+            ui.init();
+            exam.init();
+            this.setupAxios();
+            this.bindEvents();
+            const isDark = localStorage.getItem('novi_theme') === 'dark';
+            document.querySelectorAll('.theme-switcher').forEach(el => el.checked = isDark);
+            if (isDark) document.documentElement.setAttribute('data-bs-theme', 'dark');
+
+            // 移除：不在初始化时立即加载系统配置，防止未登录导致的 401 无限刷新循环
+            // this.loadSystemConfigs();
+
+            if (this.state.token) this.initLoggedInState();
+
+            document.getElementById('psCustomPersona').addEventListener('input', (e) => {
+                if (document.getElementById('card-custom').classList.contains('selected')) this.currentPreferences.personalityMode = e.target.value;
+            });
+
+            // 恢复聊天模型选择
+            const savedChatModel = localStorage.getItem('novi_chat_model');
+            const savedChatLabel = localStorage.getItem('novi_chat_model_label');
+            if (savedChatModel) {
+                // 更新隐藏的 input 值和按钮显示
+                const input = document.getElementById('chatModelSelect');
+                const label = document.getElementById('chatModelLabel');
+                const menuItems = document.querySelectorAll('.model-dropdown-menu .dropdown-item');
+
+                if (input) input.value = savedChatModel;
+                if (label && savedChatLabel) label.innerText = savedChatLabel;
+
+                // 更新选中状态
+                // 注意：这需要在 DOM 渲染完成后进行，如果模型列表还没加载完，这里可能找不到元素
+                // 所以最好在 renderModelList 里也处理一次
             }
-        };
+        },
 
-        /* ================= 核心 App 逻辑 ================= */
-        const app = {
-            config: { apiBase: 'http://localhost:8080/api/v1' },
-            state: { token: localStorage.getItem('novi_token'), user: {}, sessionId: null, isTyping: false },
-            currentPreferences: {},
-            isChatEditMode: false, // 新增：聊天批量删除模式状态
+        // 加载系统配置（模型、性格、语气）
+        async loadSystemConfigs() {
+            try {
+                // 修正 API 路径：Config 模块的接口没有 /v1 前缀
+                // apiBase 是 http://localhost:8080/api/v1，我们需要 http://localhost:8080/api
+                const configBase = this.config.apiBase.replace('/v1', '');
 
-            init() {
-                ui.init();
-                exam.init();
-                this.setupAxios();
-                this.bindEvents();
-                const isDark = localStorage.getItem('novi_theme') === 'dark';
-                document.querySelectorAll('.theme-switcher').forEach(el => el.checked = isDark);
-                if (isDark) document.documentElement.setAttribute('data-bs-theme', 'dark');
+                // 并行请求
+                const [modelsRes, personalitiesRes, tonesRes] = await Promise.all([
+                    axios.get(`${configBase}/model/config/list`).catch(() => ({ data: { data: [] } })),
+                    axios.get(`${configBase}/prompt/config/type/1`).catch(() => ({ data: { data: [] } })),
+                    axios.get(`${configBase}/prompt/config/type/2`).catch(() => ({ data: { data: [] } }))
+                ]);
 
-                if (this.state.token) this.initLoggedInState();
+                this.state.systemConfigs.models = modelsRes.data.data || [];
+                this.state.systemConfigs.personalities = personalitiesRes.data.data || [];
+                this.state.systemConfigs.tones = tonesRes.data.data || [];
 
-                document.getElementById('psCustomPersona').addEventListener('input', (e) => {
-                    if (document.getElementById('card-custom').classList.contains('selected')) this.currentPreferences.personalityMode = e.target.value;
+                // 渲染 UI
+                ui.renderModelList(this.state.systemConfigs.models);
+                ui.renderPersonalityGrid(this.state.systemConfigs.personalities);
+                ui.renderToneOptions(this.state.systemConfigs.tones);
+
+            } catch (e) {
+                console.error("加载系统配置失败", e);
+                // 不弹窗报错，以免干扰用户（因为这通常在后台静默加载）
+            }
+        },
+
+        // 新增：设置聊天模型
+        setChatModel(modelValue, modelLabel, element) {
+            // 更新隐藏域值，用于发送请求
+            document.getElementById('chatModelSelect').value = modelValue;
+            // 更新按钮文本显示
+            document.getElementById('chatModelLabel').innerText = modelLabel;
+
+            // 更新菜单选中样式
+            const menu = element.closest('.dropdown-menu');
+            menu.querySelectorAll('.dropdown-item').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            // 持久化存储
+            localStorage.setItem('novi_chat_model', modelValue);
+            localStorage.setItem('novi_chat_model_label', modelLabel);
+        },
+
+        switchMode(mode) {
+            if (mode === 'chat') {
+                ui.navigateTo('chat-view');
+                this.loadSessions(); // 切换回对话模式时刷新会话列表
+            } else if (mode === 'exam') {
+                ui.navigateTo('exam-view');
+                exam.loadHistory(); // 切换到出题模式时刷新历史
+            }
+            ui.updateSidebarState(mode);
+            if (window.innerWidth <= 768) ui.handleMainClick();
+        },
+
+        setupAxios() {
+            axios.defaults.baseURL = this.config.apiBase;
+            axios.interceptors.request.use(c => { if (this.state.token) c.headers.Authorization = `Bearer ${this.state.token}`; return c; });
+            axios.interceptors.response.use(r => r, e => { if (e.response?.status === 401) this.logout(); return Promise.reject(e); });
+        },
+
+        bindEvents() {
+            document.getElementById('loginForm').addEventListener('submit', e => {
+                e.preventDefault();
+                this.doAuth('/users/login', {
+                    username: document.getElementById('loginUser').value,
+                    password: document.getElementById('loginPass').value
                 });
+            });
+            document.getElementById('registerForm').addEventListener('submit', e => {
+                e.preventDefault();
+                this.doAuth('/users/register', {
+                    username: document.getElementById('regUser').value,
+                    nickname: document.getElementById('regNick').value,
+                    email: document.getElementById('regEmail').value,
+                    password: document.getElementById('regPass').value
+                }, true);
+            });
+            // 绑定主题切换事件已移至 ui.toggleTheme 统一处理
+            document.getElementById('messageInput').addEventListener('keydown', e => {
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.sendMessage(); }
+            });
+        },
 
-                // 恢复聊天模型选择
-                const savedChatModel = localStorage.getItem('novi_chat_model');
-                const savedChatLabel = localStorage.getItem('novi_chat_model_label');
-                if (savedChatModel) {
-                    // 更新隐藏的 input 值和按钮显示
-                    const input = document.getElementById('chatModelSelect');
-                    const label = document.getElementById('chatModelLabel');
-                    const menuItems = document.querySelectorAll('.model-dropdown-menu .dropdown-item');
-
-                    if (input) input.value = savedChatModel;
-                    if (label && savedChatLabel) label.innerText = savedChatLabel;
-
-                    // 更新选中状态
-                    menuItems.forEach(item => {
-                        item.classList.remove('active');
-                        // 这里简单的文本匹配，严谨点可以用 data-value
-                        if (item.innerText.trim() === savedChatLabel) item.classList.add('active');
-                    });
-                }
-            },
-
-            // 新增：设置聊天模型
-            setChatModel(modelValue, modelLabel, element) {
-                // 更新隐藏域值，用于发送请求
-                document.getElementById('chatModelSelect').value = modelValue;
-                // 更新按钮文本显示
-                document.getElementById('chatModelLabel').innerText = modelLabel;
-
-                // 更新菜单选中样式
-                const menu = element.closest('.dropdown-menu');
-                menu.querySelectorAll('.dropdown-item').forEach(btn => btn.classList.remove('active'));
-                element.classList.add('active');
-
-                // 持久化存储
-                localStorage.setItem('novi_chat_model', modelValue);
-                localStorage.setItem('novi_chat_model_label', modelLabel);
-            },
-
-            switchMode(mode) {
-                if (mode === 'chat') {
-                    ui.navigateTo('chat-view');
-                    this.loadSessions(); // 切换回对话模式时刷新会话列表
-                } else if (mode === 'exam') {
-                    ui.navigateTo('exam-view');
-                    exam.loadHistory(); // 切换到出题模式时刷新历史
-                }
-                ui.updateSidebarState(mode);
-                if (window.innerWidth <= 768) ui.handleMainClick();
-            },
-
-            setupAxios() {
-                axios.defaults.baseURL = this.config.apiBase;
-                axios.interceptors.request.use(c => { if (this.state.token) c.headers.Authorization = `Bearer ${this.state.token}`; return c; });
-                axios.interceptors.response.use(r => r, e => { if (e.response?.status === 401) this.logout(); return Promise.reject(e); });
-            },
-
-            bindEvents() {
-                document.getElementById('loginForm').addEventListener('submit', e => {
-                    e.preventDefault();
-                    this.doAuth('/users/login', {
-                        username: document.getElementById('loginUser').value,
-                        password: document.getElementById('loginPass').value
-                    });
-                });
-                document.getElementById('registerForm').addEventListener('submit', e => {
-                    e.preventDefault();
-                    this.doAuth('/users/register', {
-                        username: document.getElementById('regUser').value,
-                        nickname: document.getElementById('regNick').value,
-                        email: document.getElementById('regEmail').value,
-                        password: document.getElementById('regPass').value
-                    }, true);
-                });
-                // 绑定主题切换事件已移至 ui.toggleTheme 统一处理
-                document.getElementById('messageInput').addEventListener('keydown', e => {
-                    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.sendMessage(); }
-                });
-            },
-
-            async doAuth(url, data, isReg) {
-                try {
-                    const res = await axios.post(url, data);
-                    if (res.data.code === 200 || res.data.code === 1) {
-                        if (isReg) {
-                            ui.toast('注册成功，请登录', 'success');
-                            ui.switchAuthTab('login');
-                        } else {
-                            this.state.token = res.data.data.token;
-                            localStorage.setItem('novi_token', this.state.token);
-                            ui.toast('欢迎回来', 'success');
-                            setTimeout(() => this.initLoggedInState(true), 500);
-                        }
-                    } else ui.toast(res.data.msg || res.data.message, 'error');
-                } catch (e) { ui.toast('请求失败: ' + (e.response?.data?.msg || e.message), 'error'); }
-            },
-
-            async initLoggedInState(checkOnboarding = false) {
-                this.switchMode('chat'); // 默认进聊天
-                try {
-                    const me = await axios.get('/users/me');
-                    this.state.user = me.data.data;
-                    document.querySelectorAll('#userNickDisplay').forEach(el => el.textContent = this.state.user.nickname || this.state.user.username);
-                    this.loadSessions();
-                    if (checkOnboarding) this.checkFirstTimeLogin();
-                } catch (e) { }
-            },
-
-            async checkFirstTimeLogin() {
-                try {
-                    const res = await axios.get('/preferences');
-                    const prefs = res.data.data;
-                    if (!prefs || prefs.personalityMode === 'default') ui.onboardingModal.show();
-                } catch (e) { }
-            },
-
-            async submitOnboarding() {
-                const payload = {
-                    personalityMode: document.getElementById('obPersonality').value,
-                    userAddressName: this.state.user.nickname,
-                    toneStyle: 'normal', language: null
-                };
-                try {
-                    await axios.put('/preferences', payload);
-                    ui.onboardingModal.hide();
-                    this.addMessageBubble('assistant', `你好 ${payload.userAddressName}！设置已更新。`);
-                } catch (e) { ui.toast('保存失败', 'error'); }
-            },
-
-            async loadProfile() {
-                try {
-                    const res = await axios.get('/users/me');
-                    const u = res.data.data;
-                    document.getElementById('pfUsername').value = u.username;
-                    document.getElementById('pfEmail').value = u.email;
-                    document.getElementById('pfNickname').value = u.nickname;
-                    document.getElementById('pfNewPass').value = '';
-                    document.getElementById('pfCurrentPass').value = '';
-                } catch (e) { }
-            },
-
-            async saveProfile() {
-                const data = {
-                    nickname: document.getElementById('pfNickname').value,
-                    email: document.getElementById('pfEmail').value,
-                    newPassword: document.getElementById('pfNewPass').value || null,
-                    currentPassword: document.getElementById('pfCurrentPass').value || null
-                };
-                if (data.newPassword && !data.currentPassword) return ui.toast('修改密码需提供旧密码', 'error');
-                try {
-                    await axios.put('/users/me', data);
-                    ui.toast('资料已更新', 'success');
-                } catch (e) { ui.toast(e.response?.data?.msg || '更新失败', 'error'); }
-            },
-
-            // 修复后的加载偏好设置，不再依赖 selectPersona 来避免覆盖值
-            async loadPreferences() {
-                try {
-                    const res = await axios.get('/preferences');
-                    const p = res.data.data || {};
-                    this.currentPreferences = p;
-
-                    // 1. 清除所有选中状态
-                    document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected'));
-
-                    // 2. 查找是否匹配预设
-                    const foundOption = PERSONALITY_OPTIONS.find(opt => opt.id === p.personalityMode);
-                    const isPredefined = foundOption && p.personalityMode !== 'custom';
-
-                    const customInput = document.getElementById('customPersonaInputDiv');
-
-                    if (isPredefined) {
-                        // 如果是预设，选中对应卡片，隐藏输入框
-                        document.getElementById(`card-${p.personalityMode}`).classList.add('selected');
-                        customInput.classList.add('d-none');
-                        document.getElementById('psCustomPersona').value = '';
+        async doAuth(url, data, isReg) {
+            try {
+                const res = await axios.post(url, data);
+                if (res.data.code === 200 || res.data.code === 1) {
+                    if (isReg) {
+                        ui.toast('注册成功，请登录', 'success');
+                        ui.switchAuthTab('login');
                     } else {
-                        // 如果是自定义（包括 'custom' 字符串或具体 prompt），选中自定义卡片
-                        document.getElementById('card-custom').classList.add('selected');
-                        customInput.classList.remove('d-none');
-
-                        // 获取要显示的文本，如果是 'custom' 占位符则显示空
-                        const textToShow = (p.personalityMode === 'custom') ? '' : p.personalityMode;
-
-                        // 设置值
-                        const inputEl = document.getElementById('psCustomPersona');
-                        inputEl.value = textToShow || '';
-
-                        // 按照用户要求，同时修改 placeholder 属性（虽然 value 才是关键）
-                        if (textToShow) {
-                            inputEl.placeholder = textToShow;
-                        } else {
-                            inputEl.placeholder = "输入你想要的 Prompt...";
-                        }
+                        this.state.token = res.data.data.token;
+                        localStorage.setItem('novi_token', this.state.token);
+                        ui.toast('欢迎回来', 'success');
+                        setTimeout(() => this.initLoggedInState(true), 500);
                     }
+                } else ui.toast(res.data.msg || res.data.message, 'error');
+            } catch (e) { ui.toast('请求失败: ' + (e.response?.data?.msg || e.message), 'error'); }
+        },
 
-                    document.getElementById('psTone').value = p.toneStyle || 'normal';
-                    document.getElementById('psLanguage').value = p.language || '';
-                    document.getElementById('psAddressName').value = p.userAddressName || '';
-                } catch (e) {
-                    console.error("加载偏好失败", e);
-                }
-            },
+        async initLoggedInState(checkOnboarding = false) {
+            this.switchMode('chat'); // 默认进聊天
 
-            async savePreferences() {
-                let pMode = 'default';
-                if (document.getElementById('card-custom').classList.contains('selected')) {
-                    pMode = document.getElementById('psCustomPersona').value || 'custom';
+            // 登录成功后加载系统配置
+            this.loadSystemConfigs();
+
+            try {
+                const me = await axios.get('/users/me');
+                this.state.user = me.data.data;
+                document.querySelectorAll('#userNickDisplay').forEach(el => el.textContent = this.state.user.nickname || this.state.user.username);
+                this.loadSessions();
+                if (checkOnboarding) this.checkFirstTimeLogin();
+            } catch (e) { }
+        },
+
+        async checkFirstTimeLogin() {
+            try {
+                const res = await axios.get('/preferences');
+                const prefs = res.data.data;
+                if (!prefs || prefs.personalityMode === 'default') ui.onboardingModal.show();
+            } catch (e) { }
+        },
+
+        async submitOnboarding() {
+            const payload = {
+                personalityMode: document.getElementById('obPersonality').value,
+                userAddressName: this.state.user.nickname,
+                toneStyle: 'normal', language: null
+            };
+            try {
+                await axios.put('/preferences', payload);
+                ui.onboardingModal.hide();
+                this.addMessageBubble('assistant', `你好 ${payload.userAddressName}！设置已更新。`);
+            } catch (e) { ui.toast('保存失败', 'error'); }
+        },
+
+        async loadProfile() {
+            try {
+                const res = await axios.get('/users/me');
+                const u = res.data.data;
+                document.getElementById('pfUsername').value = u.username;
+                document.getElementById('pfEmail').value = u.email;
+                document.getElementById('pfNickname').value = u.nickname;
+                document.getElementById('pfNewPass').value = '';
+                document.getElementById('pfCurrentPass').value = '';
+            } catch (e) { }
+        },
+
+        async saveProfile() {
+            const data = {
+                nickname: document.getElementById('pfNickname').value,
+                email: document.getElementById('pfEmail').value,
+                newPassword: document.getElementById('pfNewPass').value || null,
+                currentPassword: document.getElementById('pfCurrentPass').value || null
+            };
+            if (data.newPassword && !data.currentPassword) return ui.toast('修改密码需提供旧密码', 'error');
+            try {
+                await axios.put('/users/me', data);
+                ui.toast('资料已更新', 'success');
+            } catch (e) { ui.toast(e.response?.data?.msg || '更新失败', 'error'); }
+        },
+
+        // 修复后的加载偏好设置，不再依赖 selectPersona 来避免覆盖值
+        async loadPreferences() {
+            try {
+                const res = await axios.get('/preferences');
+                const p = res.data.data || {};
+                this.currentPreferences = p;
+
+                // 1. 清除所有选中状态
+                document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected'));
+
+                // 2. 查找是否匹配预设
+                // 注意：这里的匹配逻辑需要基于后端返回的数据
+                // 后端返回的 p.personalityMode 通常是去除了前缀的 key (例如 'witty')
+                // 或者如果是自定义，就是自定义的内容
+
+                // 检查是否在系统预设列表中 (需要遍历加载的配置)
+                const personalities = this.state.systemConfigs.personalities;
+                const foundOption = personalities.find(opt => opt.configKey === 'personality_' + p.personalityMode);
+
+                const customInput = document.getElementById('customPersonaInputDiv');
+
+                if (foundOption) {
+                    // 如果是预设，选中对应卡片，隐藏输入框
+                    // 注意 ID 匹配
+                    const card = document.getElementById(`card-${p.personalityMode}`);
+                    if (card) card.classList.add('selected');
+
+                    customInput.classList.add('d-none');
+                    document.getElementById('psCustomPersona').value = '';
                 } else {
-                    const sel = document.querySelector('.persona-card.selected');
-                    pMode = sel ? sel.id.replace('card-', '') : 'default';
-                }
-                const data = {
-                    personalityMode: pMode,
-                    toneStyle: document.getElementById('psTone').value,
-                    language: document.getElementById('psLanguage').value || null,
-                    userAddressName: document.getElementById('psAddressName').value
-                };
-                try {
-                    await axios.put('/preferences', data);
-                    ui.toast('设置已保存', 'success');
-                } catch (e) { ui.toast('保存失败', 'error'); }
-            },
+                    // 如果是自定义（包括 'custom' 字符串或具体 prompt），选中自定义卡片
+                    // 或者是默认的 'default' 但没找到对应配置
+                    const customCard = document.getElementById('card-custom');
+                    if (customCard) customCard.classList.add('selected');
+                    customInput.classList.remove('d-none');
 
-            async loadSessions() {
-                try {
-                    const res = await axios.get('/sessions');
-                    const list = document.querySelectorAll('#sessionList');
-                    list.forEach(el => el.innerHTML = '');
-                    if (res.data.code === 200 || res.data.code === 1) {
-                        const html = res.data.data.map(s => `
+                    // 获取要显示的文本，如果是 'custom' 占位符则显示空
+                    const textToShow = (p.personalityMode === 'custom' || p.personalityMode === 'default') ? '' : p.personalityMode;
+
+                    // 设置值
+                    const inputEl = document.getElementById('psCustomPersona');
+                    inputEl.value = textToShow || '';
+
+                    if (textToShow) {
+                        inputEl.placeholder = textToShow;
+                    } else {
+                        inputEl.placeholder = "输入你想要的 Prompt...";
+                    }
+                }
+
+                // 语气设置
+                // p.toneStyle 存储的是去除了 'tone_' 前缀的值 (例如 'normal')
+                const toneSelect = document.getElementById('psTone');
+                if (toneSelect) toneSelect.value = p.toneStyle || 'normal';
+
+                document.getElementById('psLanguage').value = p.language || '';
+                document.getElementById('psAddressName').value = p.userAddressName || '';
+            } catch (e) {
+                console.error("加载偏好失败", e);
+            }
+        },
+
+        async savePreferences() {
+            let pMode = 'default';
+            if (document.getElementById('card-custom').classList.contains('selected')) {
+                pMode = document.getElementById('psCustomPersona').value || 'custom';
+            } else {
+                const sel = document.querySelector('.persona-card.selected');
+                pMode = sel ? sel.id.replace('card-', '') : 'default';
+            }
+            const data = {
+                personalityMode: pMode,
+                toneStyle: document.getElementById('psTone').value,
+                language: document.getElementById('psLanguage').value || null,
+                userAddressName: document.getElementById('psAddressName').value
+            };
+            try {
+                await axios.put('/preferences', data);
+                ui.toast('设置已保存', 'success');
+            } catch (e) { ui.toast('保存失败', 'error'); }
+        },
+
+        async loadSessions() {
+            try {
+                const res = await axios.get('/sessions');
+                const list = document.querySelectorAll('#sessionList');
+                list.forEach(el => el.innerHTML = '');
+                if (res.data.code === 200 || res.data.code === 1) {
+                    const html = res.data.data.map(s => `
                             <div class="session-item d-flex align-items-center ${s.id === this.state.sessionId ? 'active' : ''} ${this.isChatEditMode ? 'editing-mode' : ''}" 
                                  onclick="app.handleSessionItemClick('${s.id}', event)"
                                  data-id="${s.id}">
@@ -2645,282 +2759,282 @@
                                     <div class="small text-muted text-truncate" style="font-size: 0.8rem;">${new Date(s.createdAt || Date.now()).toLocaleDateString()}</div>
                                 </div>
                             </div>`).join('');
-                        list.forEach(el => el.innerHTML = html);
+                    list.forEach(el => el.innerHTML = html);
 
-                        // 如果处于编辑模式，恢复 UI 状态
-                        if (this.isChatEditMode) {
-                            this.applyChatEditModeStyles(true);
-                        }
+                    // 如果处于编辑模式，恢复 UI 状态
+                    if (this.isChatEditMode) {
+                        this.applyChatEditModeStyles(true);
                     }
-                } catch (e) { }
-            },
-
-            // --- 新增：聊天会话批量管理逻辑 (类似 Exam) ---
-            toggleChatEditMode() {
-                this.isChatEditMode = !this.isChatEditMode;
-                this.applyChatEditModeStyles(this.isChatEditMode);
-            },
-
-            applyChatEditModeStyles(isEdit) {
-                const toggle = (selector, show) => {
-                    document.querySelectorAll(selector).forEach(el => {
-                        if (show) {
-                            el.classList.remove('d-none');
-                            if (el.classList.contains('chat-edit-controls') || el.classList.contains('chat-select-all-bar')) {
-                                el.classList.add('d-flex');
-                            }
-                        } else {
-                            el.classList.add('d-none');
-                            el.classList.remove('d-flex');
-                        }
-                    });
-                };
-
-                toggle('.btn-manage-chat', !isEdit);
-                toggle('.chat-edit-controls', isEdit);
-                toggle('.chat-select-all-bar', isEdit);
-
-                // 列表项样式
-                document.querySelectorAll('#sessionList .session-item').forEach(item => {
-                    if (isEdit) {
-                        item.classList.add('editing-mode');
-                        // 移除 active 样式以免混淆，或者保留但变淡
-                        item.classList.remove('active');
-                    } else {
-                        item.classList.remove('editing-mode', 'item-selected');
-                        // 恢复 active
-                        if (item.dataset.id === this.state.sessionId) item.classList.add('active');
-                    }
-                });
-
-                // 复选框与单删按钮
-                document.querySelectorAll('.chat-checkbox-wrapper').forEach(el => {
-                    if (isEdit) el.classList.remove('d-none'); else el.classList.add('d-none');
-                });
-                document.querySelectorAll('.chat-delete-btn').forEach(el => {
-                    if (isEdit) el.classList.add('d-none'); else el.classList.remove('d-none');
-                });
-
-                // 重置
-                if (!isEdit) {
-                    document.querySelectorAll('.chat-checkbox').forEach(chk => chk.checked = false);
-                    document.querySelectorAll('.select-all-chat-top').forEach(chk => chk.checked = false);
-                    this.updateChatSelectionUI();
-                    // 刷新以恢复正确的 Active 状态
-                    this.loadSessions();
                 }
-            },
+            } catch (e) { }
+        },
 
-            handleSessionItemClick(sid, event) {
-                if (this.isChatEditMode) {
-                    if (event.target.type === 'checkbox') return;
-                    const checkbox = event.currentTarget.querySelector('.chat-checkbox');
-                    if (checkbox) {
-                        checkbox.checked = !checkbox.checked;
-                        this.updateChatSelectionUI();
+        // --- 新增：聊天会话批量管理逻辑 (类似 Exam) ---
+        toggleChatEditMode() {
+            this.isChatEditMode = !this.isChatEditMode;
+            this.applyChatEditModeStyles(this.isChatEditMode);
+        },
+
+        applyChatEditModeStyles(isEdit) {
+            const toggle = (selector, show) => {
+                document.querySelectorAll(selector).forEach(el => {
+                    if (show) {
+                        el.classList.remove('d-none');
+                        if (el.classList.contains('chat-edit-controls') || el.classList.contains('chat-select-all-bar')) {
+                            el.classList.add('d-flex');
+                        }
+                    } else {
+                        el.classList.add('d-none');
+                        el.classList.remove('d-flex');
                     }
+                });
+            };
+
+            toggle('.btn-manage-chat', !isEdit);
+            toggle('.chat-edit-controls', isEdit);
+            toggle('.chat-select-all-bar', isEdit);
+
+            // 列表项样式
+            document.querySelectorAll('#sessionList .session-item').forEach(item => {
+                if (isEdit) {
+                    item.classList.add('editing-mode');
+                    // 移除 active 样式以免混淆，或者保留但变淡
+                    item.classList.remove('active');
                 } else {
-                    this.loadSession(sid);
+                    item.classList.remove('editing-mode', 'item-selected');
+                    // 恢复 active
+                    if (item.dataset.id === this.state.sessionId) item.classList.add('active');
                 }
-            },
+            });
 
-            toggleSelectAllChat(source) {
-                document.querySelectorAll('.chat-checkbox').forEach(chk => chk.checked = source.checked);
-                document.querySelectorAll('.select-all-chat-top').forEach(chk => chk.checked = source.checked);
+            // 复选框与单删按钮
+            document.querySelectorAll('.chat-checkbox-wrapper').forEach(el => {
+                if (isEdit) el.classList.remove('d-none'); else el.classList.add('d-none');
+            });
+            document.querySelectorAll('.chat-delete-btn').forEach(el => {
+                if (isEdit) el.classList.add('d-none'); else el.classList.remove('d-none');
+            });
+
+            // 重置
+            if (!isEdit) {
+                document.querySelectorAll('.chat-checkbox').forEach(chk => chk.checked = false);
+                document.querySelectorAll('.select-all-chat-top').forEach(chk => chk.checked = false);
                 this.updateChatSelectionUI();
-            },
+                // 刷新以恢复正确的 Active 状态
+                this.loadSessions();
+            }
+        },
 
-            updateChatSelectionUI() {
-                const checkboxes = document.querySelectorAll('.chat-checkbox');
-                const checkedIds = new Set();
-                checkboxes.forEach(chk => {
-                    const item = chk.closest('.session-item');
-                    if (chk.checked) {
-                        checkedIds.add(chk.value);
-                        if (item) item.classList.add('item-selected');
+        handleSessionItemClick(sid, event) {
+            if (this.isChatEditMode) {
+                if (event.target.type === 'checkbox') return;
+                const checkbox = event.currentTarget.querySelector('.chat-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    this.updateChatSelectionUI();
+                }
+            } else {
+                this.loadSession(sid);
+            }
+        },
+
+        toggleSelectAllChat(source) {
+            document.querySelectorAll('.chat-checkbox').forEach(chk => chk.checked = source.checked);
+            document.querySelectorAll('.select-all-chat-top').forEach(chk => chk.checked = source.checked);
+            this.updateChatSelectionUI();
+        },
+
+        updateChatSelectionUI() {
+            const checkboxes = document.querySelectorAll('.chat-checkbox');
+            const checkedIds = new Set();
+            checkboxes.forEach(chk => {
+                const item = chk.closest('.session-item');
+                if (chk.checked) {
+                    checkedIds.add(chk.value);
+                    if (item) item.classList.add('item-selected');
+                } else {
+                    if (item) item.classList.remove('item-selected');
+                }
+            });
+            document.querySelectorAll('.btn-batch-delete-chat').forEach(btn => {
+                btn.textContent = `删除(${checkedIds.size})`;
+            });
+        },
+
+        async deleteSelectedSessions() {
+            const checked = document.querySelectorAll('.chat-checkbox:checked');
+            if (checked.length === 0) return ui.toast('请先选择会话', 'info');
+            const ids = [...new Set(Array.from(checked).map(cb => cb.value))];
+
+            ui.confirm(`确认删除这 ${ids.length} 个会话吗？`, async () => {
+                try {
+                    const promises = ids.map(id => axios.delete(`/sessions/${id}`));
+                    await Promise.all(promises);
+                    ui.toast(`成功删除 ${ids.length} 个会话`, 'success');
+
+                    if (ids.includes(this.state.sessionId)) {
+                        this.startNewChat();
                     } else {
-                        if (item) item.classList.remove('item-selected');
-                    }
-                });
-                document.querySelectorAll('.btn-batch-delete-chat').forEach(btn => {
-                    btn.textContent = `删除(${checkedIds.size})`;
-                });
-            },
-
-            async deleteSelectedSessions() {
-                const checked = document.querySelectorAll('.chat-checkbox:checked');
-                if (checked.length === 0) return ui.toast('请先选择会话', 'info');
-                const ids = [...new Set(Array.from(checked).map(cb => cb.value))];
-
-                ui.confirm(`确认删除这 ${ids.length} 个会话吗？`, async () => {
-                    try {
-                        const promises = ids.map(id => axios.delete(`/sessions/${id}`));
-                        await Promise.all(promises);
-                        ui.toast(`成功删除 ${ids.length} 个会话`, 'success');
-
-                        if (ids.includes(this.state.sessionId)) {
-                            this.startNewChat();
-                        } else {
-                            this.loadSessions();
-                        }
-                        this.toggleChatEditMode(); // 退出编辑模式
-                    } catch (e) {
-                        ui.toast('批量删除部分失败', 'error');
                         this.loadSessions();
                     }
-                });
-            },
-
-            async loadSession(sid) {
-                this.state.sessionId = sid;
-                this.loadSessions();
-                const container = document.getElementById('chatContainer');
-                container.innerHTML = '';
-                if (window.innerWidth <= 768) ui.handleMainClick();
-
-                const res = await axios.get(`/sessions/${sid}/messages`);
-                if (res.data.code === 200 || res.data.code === 1) res.data.data.forEach(m => this.addMessageBubble(m.role.toLowerCase(), m.content));
-
-                // Update Title Display
-                // 由于 loadSessions 是异步的，这里可能需要延时或者直接查找 DOM
-                setTimeout(() => {
-                    const active = document.querySelector(`.session-item[data-id="${sid}"]`);
-                    if (active) {
-                        const titleDiv = active.querySelector('.fw-medium');
-                        if (titleDiv) document.getElementById('currentTitle').innerText = titleDiv.innerText.trim();
-                    }
-                }, 100);
-
-                const win = document.getElementById('chatWindow');
-                setTimeout(() => win.scrollTop = win.scrollHeight, 100);
-            },
-
-            deleteSession(sid, e) {
-                e.stopPropagation();
-                ui.confirm('删除此会话？', async () => {
-                    try {
-                        await axios.delete(`/sessions/${sid}`);
-                        if (this.state.sessionId === sid) this.startNewChat();
-                        else this.loadSessions();
-                    } catch (e) { ui.toast('删除失败', 'error'); }
-                });
-            },
-
-            startNewChat() {
-                this.state.sessionId = null;
-                document.getElementById('currentTitle').innerText = 'Novi AI';
-                document.getElementById('chatContainer').innerHTML = `<div class="text-center mt-5 pt-5"><div class="avatar avatar-ai mx-auto mb-3" style="width: 64px; height: 64px; font-size: 2rem; border:none; background:transparent;"><i class="bi bi-stars text-primary"></i></div><h3 class="fw-bold">你好，我是 Novi</h3><p class="text-muted">我可以帮你写代码、做计划，或者仅仅聊聊天。</p></div>`;
-                if (window.innerWidth <= 768) ui.handleMainClick();
-                this.loadSessions();
-            },
-
-            async sendMessage() {
-                const input = document.getElementById('messageInput');
-                const msg = input.value.trim();
-                // 获取选中的 AI 模型
-                const model = document.getElementById('chatModelSelect').value;
-
-                if (!msg || this.state.isTyping) return;
-
-                this.addMessageBubble('user', msg);
-                input.value = '';
-                input.style.height = '52px'; // 重置高度
-                // 不需要再移除全屏按钮 class，因为布局变了
-
-                const win = document.getElementById('chatWindow');
-                win.scrollTop = win.scrollHeight;
-
-                const aiId = 'ai-' + Date.now();
-                this.addMessageBubble('assistant', '', aiId);
-                const bubble = document.getElementById(aiId);
-                this.state.isTyping = true;
-
-                try {
-                    const mode = document.querySelector('input[name="apiMode"]:checked').value;
-                    const payload = {
-                        message: msg,
-                        sessionId: this.state.sessionId,
-                        model: model // 传递模型参数
-                    };
-
-                    Typewriter.start(bubble);
-
-                    if (mode === 'stream') await this.handleStream(payload);
-                    else {
-                        const res = await axios.post('/chat/send/call', payload);
-                        if (res.data.code !== 200 && res.data.code !== 1) throw new Error(res.data.msg);
-                        Typewriter.push(res.data.data.response);
-                        if (res.data.data.title) this.updateSessionTitle(res.data.data.sessionId, res.data.data.title);
-                    }
-                } catch (err) {
-                    Typewriter.stop();
-                    bubble.innerHTML = `<span class="text-danger"><i class="bi bi-exclamation-circle me-2"></i>${err.message || '网络请求失败'}</span>`;
-                } finally {
-                    if (document.querySelector('input[name="apiMode"]:checked')?.value !== 'stream') {
-                        setTimeout(() => { Typewriter.stop(); this.state.isTyping = false; this.loadSessions(); }, 300);
-                    }
+                    this.toggleChatEditMode(); // 退出编辑模式
+                } catch (e) {
+                    ui.toast('批量删除部分失败', 'error');
+                    this.loadSessions();
                 }
-            },
+            });
+        },
 
-            async handleStream(payload) {
+        async loadSession(sid) {
+            this.state.sessionId = sid;
+            this.loadSessions();
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = '';
+            if (window.innerWidth <= 768) ui.handleMainClick();
+
+            const res = await axios.get(`/sessions/${sid}/messages`);
+            if (res.data.code === 200 || res.data.code === 1) res.data.data.forEach(m => this.addMessageBubble(m.role.toLowerCase(), m.content));
+
+            // Update Title Display
+            // 由于 loadSessions 是异步的，这里可能需要延时或者直接查找 DOM
+            setTimeout(() => {
+                const active = document.querySelector(`.session-item[data-id="${sid}"]`);
+                if (active) {
+                    const titleDiv = active.querySelector('.fw-medium');
+                    if (titleDiv) document.getElementById('currentTitle').innerText = titleDiv.innerText.trim();
+                }
+            }, 100);
+
+            const win = document.getElementById('chatWindow');
+            setTimeout(() => win.scrollTop = win.scrollHeight, 100);
+        },
+
+        deleteSession(sid, e) {
+            e.stopPropagation();
+            ui.confirm('删除此会话？', async () => {
                 try {
-                    const res = await fetch(`${this.config.apiBase}/chat/send/stream`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${this.state.token}`
-                        },
-                        body: JSON.stringify(payload)
-                    });
+                    await axios.delete(`/sessions/${sid}`);
+                    if (this.state.sessionId === sid) this.startNewChat();
+                    else this.loadSessions();
+                } catch (e) { ui.toast('删除失败', 'error'); }
+            });
+        },
 
-                    const reader = res.body.getReader();
-                    const decoder = new TextDecoder();
-                    let buffer = '';
+        startNewChat() {
+            this.state.sessionId = null;
+            document.getElementById('currentTitle').innerText = 'Novi AI';
+            document.getElementById('chatContainer').innerHTML = `<div class="text-center mt-5 pt-5"><div class="avatar avatar-ai mx-auto mb-3" style="width: 64px; height: 64px; font-size: 2rem; border:none; background:transparent;"><i class="bi bi-stars text-primary"></i></div><h3 class="fw-bold">你好，我是 Novi</h3><p class="text-muted">我可以帮你写代码、做计划，或者仅仅聊聊天。</p></div>`;
+            if (window.innerWidth <= 768) ui.handleMainClick();
+            this.loadSessions();
+        },
 
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-                        buffer += decoder.decode(value, { stream: true });
-                        const lines = buffer.split('\n');
-                        buffer = lines.pop();
+        async sendMessage() {
+            const input = document.getElementById('messageInput');
+            const msg = input.value.trim();
+            // 获取选中的 AI 模型
+            const model = document.getElementById('chatModelSelect').value;
 
-                        for (const line of lines) {
-                            if (!line.trim() || !line.startsWith('data:')) continue;
-                            try {
-                                const evt = JSON.parse(line.slice(5));
-                                if (evt.eventType === 'CONTENT') Typewriter.push(evt.content);
-                                else if (evt.eventType === 'METADATA') this.updateSessionTitle(evt.sessionId, evt.title);
-                            } catch (e) { }
-                        }
-                    }
-                } finally {
+            if (!msg || this.state.isTyping) return;
+
+            this.addMessageBubble('user', msg);
+            input.value = '';
+            input.style.height = '52px'; // 重置高度
+            // 不需要再移除全屏按钮 class，因为布局变了
+
+            const win = document.getElementById('chatWindow');
+            win.scrollTop = win.scrollHeight;
+
+            const aiId = 'ai-' + Date.now();
+            this.addMessageBubble('assistant', '', aiId);
+            const bubble = document.getElementById(aiId);
+            this.state.isTyping = true;
+
+            try {
+                const mode = document.querySelector('input[name="apiMode"]:checked').value;
+                const payload = {
+                    message: msg,
+                    sessionId: this.state.sessionId,
+                    model: model // 传递模型参数
+                };
+
+                Typewriter.start(bubble);
+
+                if (mode === 'stream') await this.handleStream(payload);
+                else {
+                    const res = await axios.post('/chat/send/call', payload);
+                    if (res.data.code !== 200 && res.data.code !== 1) throw new Error(res.data.msg);
+                    Typewriter.push(res.data.data.response);
+                    if (res.data.data.title) this.updateSessionTitle(res.data.data.sessionId, res.data.data.title);
+                }
+            } catch (err) {
+                Typewriter.stop();
+                bubble.innerHTML = `<span class="text-danger"><i class="bi bi-exclamation-circle me-2"></i>${err.message || '网络请求失败'}</span>`;
+            } finally {
+                if (document.querySelector('input[name="apiMode"]:checked')?.value !== 'stream') {
                     setTimeout(() => { Typewriter.stop(); this.state.isTyping = false; this.loadSessions(); }, 300);
                 }
-            },
+            }
+        },
 
-            addMessageBubble(role, content, id) {
-                const container = document.getElementById('chatContainer');
-                if (container.querySelector('.text-center')) container.innerHTML = '';
-                const div = document.createElement('div');
-                div.className = `message-row ${role}`;
-                const avatar = `<div class="avatar ${role === 'user' ? 'avatar-user' : 'avatar-ai'}"><i class="bi bi-${role === 'user' ? 'person-fill' : 'stars'}"></i></div>`;
-                const initialHtml = content ? marked.parse(content) : '';
-                const bub = `<div class="message-bubble ${role} markdown-body" ${id ? `id="${id}" data-raw=""` : ''}>${initialHtml}</div>`;
-                div.innerHTML = avatar + bub;
-                container.appendChild(div);
-                container.scrollTop = container.scrollHeight; // Fix scroll on add
-            },
+        async handleStream(payload) {
+            try {
+                const res = await fetch(`${this.config.apiBase}/chat/send/stream`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.state.token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-            updateSessionTitle(sid, title) {
-                this.state.sessionId = sid;
-                if (title) document.getElementById('currentTitle').innerText = title;
-            },
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
 
-            logout() { localStorage.removeItem('novi_token'); location.reload(); }
-        };
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
 
-        document.addEventListener('DOMContentLoaded', () => app.init());
-    </script>
+                    for (const line of lines) {
+                        if (!line.trim() || !line.startsWith('data:')) continue;
+                        try {
+                            const evt = JSON.parse(line.slice(5));
+                            if (evt.eventType === 'CONTENT') Typewriter.push(evt.content);
+                            else if (evt.eventType === 'METADATA') this.updateSessionTitle(evt.sessionId, evt.title);
+                        } catch (e) { }
+                    }
+                }
+            } finally {
+                setTimeout(() => { Typewriter.stop(); this.state.isTyping = false; this.loadSessions(); }, 300);
+            }
+        },
+
+        addMessageBubble(role, content, id) {
+            const container = document.getElementById('chatContainer');
+            if (container.querySelector('.text-center')) container.innerHTML = '';
+            const div = document.createElement('div');
+            div.className = `message-row ${role}`;
+            const avatar = `<div class="avatar ${role === 'user' ? 'avatar-user' : 'avatar-ai'}"><i class="bi bi-${role === 'user' ? 'person-fill' : 'stars'}"></i></div>`;
+            const initialHtml = content ? marked.parse(content) : '';
+            const bub = `<div class="message-bubble ${role} markdown-body" ${id ? `id="${id}" data-raw=""` : ''}>${initialHtml}</div>`;
+            div.innerHTML = avatar + bub;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight; // Fix scroll on add
+        },
+
+        updateSessionTitle(sid, title) {
+            this.state.sessionId = sid;
+            if (title) document.getElementById('currentTitle').innerText = title;
+        },
+
+        logout() { localStorage.removeItem('novi_token'); location.reload(); }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => app.init());
+</script>
 </body>
 
 </html>
