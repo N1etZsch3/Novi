@@ -11,7 +11,7 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 - **核心框架**: Spring Boot 3.5.7 (Java 21)
 - **AI 接入**: Spring AI (兼容 OpenAI 协议，当前适配讯飞星火/通义千问等)
 - **数据库**: MySQL 8.0
-- **ORM 框架**: MyBatis 3.0.5
+- **ORM 框架**: MyBatis-Plus 3.5.7
 - **鉴权安全**: Spring Security + JWT (Json Web Token)
 - **JSON 处理**: Jackson
 - **构建工具**: Maven
@@ -47,7 +47,7 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 ## 🚀 快速开始 (Quick Start)
 
 ### 1. 环境准备
-- JDK 21+ (推荐 JDK 25)
+- JDK 21+ (推荐 JDK 21)
 - MySQL 8.0+
 - Maven 3.8+
 
@@ -65,7 +65,7 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 SPRING_DATASOURCE_URL=""
 SPRING_DATASOURCE_USERNAME=""
 SPRING_DATASOURCE_PASSWORD=""
-AI_API_KEY=""
+JWT_SECRET_KEY=""
 ```
 
 ### 4. 启动项目

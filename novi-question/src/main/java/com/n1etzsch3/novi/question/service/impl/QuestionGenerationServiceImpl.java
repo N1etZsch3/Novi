@@ -49,7 +49,7 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
 
         // 0. 校验数量 (防止滥用，最多3道)
         if (request.getQuantity() > 3) {
-            throw new IllegalArgumentException("To ensure quality, you can generate at most 3 questions at a time.");
+            throw new IllegalArgumentException("为了保证质量，每次最多生成3道题目。");
         }
 
         // 1. 查询示例题目 (Few-Shot)
@@ -112,7 +112,7 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         }
 
         if (allQuestions.isEmpty()) {
-            throw new RuntimeException("Failed to generate any questions after attempts.");
+            throw new RuntimeException("多次尝试后未能生成任何题目。");
         }
 
         // 3. 序列化结果
@@ -120,7 +120,7 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         try {
             finalJson = objectMapper.writeValueAsString(allQuestions);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to serialize generated questions", e);
+            throw new RuntimeException("序列化生成的题目失败", e);
         }
 
         // 4. 保存记录
@@ -169,7 +169,7 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
                 lastException = e;
             }
         }
-        throw new RuntimeException("Failed to generate valid questions after retries", lastException);
+        throw new RuntimeException("重试后未能生成有效的题目", lastException);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
                         .eq(QuestionGenerationRecord::getUserId, userId));
 
         if (record == null) {
-            throw new IllegalArgumentException("Record not found or access denied");
+            throw new IllegalArgumentException("记录不存在或无权访问");
         }
 
         return new QuestionGenerationResponse(record.getId(), record.getGeneratedQuestions());
@@ -214,7 +214,7 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
                         .eq(QuestionGenerationRecord::getUserId, userId));
 
         if (record == null) {
-            throw new IllegalArgumentException("Record not found or access denied");
+            throw new IllegalArgumentException("记录不存在或无权访问");
         }
 
         // 2. Delete the record
@@ -292,7 +292,7 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
             objectMapper.readTree(json);
         } catch (JsonProcessingException e) {
             log.error("Invalid JSON from AI: {}", json, e);
-            throw new RuntimeException("AI generated invalid JSON format", e);
+            throw new RuntimeException("AI 生成了无效的数据", e);
         }
     }
 }

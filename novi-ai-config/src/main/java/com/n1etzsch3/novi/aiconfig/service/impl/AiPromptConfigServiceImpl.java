@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * AI 提示词配置服务实现类
  * <p>
@@ -106,7 +108,7 @@ public class AiPromptConfigServiceImpl implements AiPromptConfigService {
     }
 
     @Override
-    public java.util.List<AiPromptConfig> listConfigsByType(Integer type) {
+    public List<AiPromptConfig> listConfigsByType(Integer type) {
         return aiPromptConfigMapper.selectList(
                 new LambdaQueryWrapper<AiPromptConfig>()
                         .eq(AiPromptConfig::getConfigType, type));

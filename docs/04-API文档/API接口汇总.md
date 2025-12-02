@@ -332,17 +332,20 @@ Content-Type: application/json
   "toneStyleKey": "casual"
 }
 
+
+```
+
 ## 7️⃣ AI 出题 API
 
 **Base Path**: `/api/v1/questions`
 
-| 方法 | 路径 | 功能 |
-|------|------|------|
-| POST | `/generate` | 生成题目 |
-| GET | `/history` | 获取出题历史 |
-| GET | `/history/{recordId}` | 获取记录详情 |
-| DELETE | `/history/{recordId}` | 删除记录 |
-| DELETE | `/history` | 批量删除记录 |
+| 方法   | 路径                  | 功能         |
+| ------ | --------------------- | ------------ |
+| POST   | `/generate`           | 生成题目     |
+| GET    | `/history`            | 获取出题历史 |
+| GET    | `/history/{recordId}` | 获取记录详情 |
+| DELETE | `/history/{recordId}` | 删除记录     |
+| DELETE | `/history`            | 批量删除记录 |
 
 ### 7.1 生成题目
 
@@ -376,18 +379,16 @@ Response:
   ]
 }
 ```
-```
-
 ## 🔍 错误码说明
 
-| 错误码 | 说明 |
-|--------|------|
-| 200 | 成功 |
-| 400 | 请求参数错误 |
-| 401 | 未认证或Token无效 |
-| 403 | 无权限 |
-| 404 | 资源不存在 |
-| 500 | 服务器内部错误 |
+| 错误码 | 说明              |
+| ------ | ----------------- |
+| 200    | 成功              |
+| 400    | 请求参数错误      |
+| 401    | 未认证或Token无效 |
+| 403    | 无权限            |
+| 404    | 资源不存在        |
+| 500    | 服务器内部错误    |
 
 ## 📝 请求示例（JavaScript）
 

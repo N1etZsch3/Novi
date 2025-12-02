@@ -64,4 +64,28 @@ public class AiPromptConfigController {
         log.info("Listed prompt configs by type: {}", type);
         return Result.success(list);
     }
+
+    /**
+     * 获取所有性格配置
+     *
+     * @return 性格配置列表
+     */
+    @GetMapping("/personalities")
+    public Result getPersonalities() {
+        List<AiPromptConfig> personalities = aiPromptConfigService.listConfigsByType(1);
+        log.info("Fetched all personality options");
+        return Result.success(personalities);
+    }
+
+    /**
+     * 获取所有语气配置
+     *
+     * @return 语气配置列表
+     */
+    @GetMapping("/tones")
+    public Result getTones() {
+        List<AiPromptConfig> tones = aiPromptConfigService.listConfigsByType(2);
+        log.info("Fetched all tone options");
+        return Result.success(tones);
+    }
 }

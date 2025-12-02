@@ -43,7 +43,7 @@ public class ChatSessionServiceImpl implements ChatSessionService {
                         .eq(ChatSession::getUserId, userId));
         if (count == 0) {
             log.warn("Session access denied or not found. SessionId: {}, UserId: {}", sessionId, userId);
-            throw new BusinessException("Session not found or access denied");
+            throw new BusinessException("会话不存在或无权访问");
         }
     }
 
