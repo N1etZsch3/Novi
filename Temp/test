@@ -1,3 +1,16 @@
+[
+  {
+    "ui_type": "INPUT",    "stem": "11. ({question_type})",
+    "content": "her homework / She / has completed",  // 将原本的 words 放入 content
+    "answer": "She has completed her homework.",
+    "analysis": "考查现在完成时。主语 She + 助动词 has + 过去分词 completed...",
+    "meta": {
+        "difficulty": "{difficulty}",
+        "grammar_point": "Present Perfect"
+    }
+  }
+]
+基于这个返回数据，改造前端的代码，使其能够正确渲染所有题目
 <!DOCTYPE html>
 <html lang="zh-CN" data-bs-theme="light">
 
@@ -886,6 +899,21 @@
             line-height: 1.6;
         }
 
+        .question-content {
+            font-size: 1.15rem;
+            line-height: 2;
+            text-align: justify;
+            margin-bottom: 1rem;
+        }
+
+        .blank-space {
+            display: inline;
+            font-family: "Courier New", monospace;
+            color: var(--text-main);
+            margin: 0 2px;
+            font-weight: bold;
+        }
+
         .exam-meta-tag {
             font-size: 0.9rem;
             padding: 4px 10px;
@@ -897,94 +925,15 @@
             font-family: sans-serif;
         }
 
-        /* --- 新增：UI 标准协议样式 (优化版) --- */
-        .question-block {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-        }
-
-        .question-stem {
-            font-weight: bold;
-            margin-right: 10px;
-            font-size: 1.15rem;
+        /* 修复深色模式下表格头部的背景色 */
+        [data-bs-theme="dark"] .table-light th {
+            background-color: #2c2c2c;
             color: var(--text-main);
+            border-color: var(--border-color);
         }
 
-        .question-content-wrapper {
-            margin-bottom: 0.5rem;
-        }
-
-        /* 内容区域样式 (透明背景，融入试卷) */
-        .question-material {
-            font-size: 1.15rem;
-            line-height: 1.6;
-            color: var(--text-main);
-            display: inline-block; /* 允许与题号同行 */
-        }
-
-        /* 答题线 (仿试卷风格) */
-        .answer-line-wrapper {
-            position: relative;
-            margin-top: 5px;
-            width: 100%;
-        }
-
-        .answer-line-wrapper input {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #000000; /* 纯黑实线 */
-            color: var(--primary-color);
-            font-family: "Times New Roman", serif;
-            font-size: 1.1rem;
-            padding: 2px 0 2px 5px;
-            width: 100%;
-            border-radius: 0;
-        }
-
-        .answer-line-wrapper input:focus {
-            box-shadow: none;
-            border-bottom-width: 2px;
-            border-bottom-color: var(--primary-color);
-            outline: none;
-        }
-
-        [data-bs-theme="dark"] .answer-line-wrapper input {
-            border-bottom-color: #666;
-        }
-
-        .answer-section {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: rgba(78, 110, 242, 0.08);
-            border: 1px solid rgba(78, 110, 242, 0.2);
-        }
-
-        /* 组合题样式 */
-        .group-container {
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px dashed var(--border-color);
-        }
-
-        .group-container:last-child {
-            border-bottom: none;
-        }
-
-        .article-box {
-            line-height: 2;
-            font-size: 1.15rem;
-            text-align: justify;
-            padding: 25px;
-            background: var(--bg-body);
-            border-radius: 8px;
-            margin-bottom: 30px;
-            text-indent: 2em;
-        }
-
-        .sub-questions {
-            padding-left: 15px;
-            border-left: 3px solid var(--border-color);
+        [data-bs-theme="dark"] .table-bordered {
+            border-color: var(--border-color);
         }
 
         .loading-overlay {
@@ -1005,12 +954,102 @@
             background: rgba(0, 0, 0, 0.7);
         }
 
-        [data-bs-theme="dark"] .article-box {
-            background: rgba(255,255,255,0.05);
-        }
+        /* ================= 移动端表格优化 ================= */
+        @media (max-width: 768px) {
+            .mobile-optimized-table {
+                border: none !important;
+            }
 
-        [data-bs-theme="dark"] .answer-section {
-            background-color: rgba(78, 110, 242, 0.15);
+            .mobile-optimized-table thead {
+                display: none;
+            }
+
+            .mobile-optimized-table tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .mobile-optimized-table tbody tr {
+                display: flex;
+                flex-wrap: wrap;
+                background-color: var(--bg-input) !important;
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                padding: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            }
+
+            .mobile-optimized-table td {
+                border: none !important;
+                background: transparent !important;
+                padding: 4px 0 !important;
+            }
+
+            /* 题号 */
+            .mobile-optimized-table td:nth-child(1) {
+                width: 40%;
+                font-weight: bold;
+                color: var(--text-main);
+                display: flex;
+                align-items: center;
+            }
+
+            .mobile-optimized-table td:nth-child(1)::before {
+                content: "题号";
+                font-size: 0.8rem;
+                color: var(--text-sub);
+                background: rgba(0, 0, 0, 0.05);
+                padding: 2px 6px;
+                border-radius: 4px;
+                margin-right: 8px;
+                font-weight: normal;
+            }
+
+            [data-bs-theme="dark"] .mobile-optimized-table td:nth-child(1)::before {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            /* 答案 */
+            .mobile-optimized-table td:nth-child(2) {
+                width: 60%;
+                text-align: right !important;
+                font-weight: bold;
+                color: var(--primary-color) !important;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+            }
+
+            .mobile-optimized-table td:nth-child(2)::before {
+                content: "答案";
+                font-size: 0.8rem;
+                color: var(--text-sub);
+                margin-right: 8px;
+                font-weight: normal;
+            }
+
+            /* 解析 */
+            .mobile-optimized-table td:nth-child(3) {
+                width: 100%;
+                margin-top: 8px;
+                padding-top: 8px !important;
+                border-top: 1px dashed var(--border-color) !important;
+                padding-left: 0 !important;
+                /* override ps-4 */
+                text-align: justify !important;
+                font-size: 0.95rem;
+                color: var(--text-sub);
+                line-height: 1.6 !important;
+            }
+
+            .mobile-optimized-table td:nth-child(3)::before {
+                content: "解析：";
+                display: block;
+                font-weight: bold;
+                margin-bottom: 4px;
+                color: var(--text-main);
+            }
         }
 
         @media (max-width: 992px) {
@@ -1481,6 +1520,10 @@
 
                         <div id="paperBody">
                             <!-- JS 渲染内容 -->
+                        </div>
+
+                        <div id="paperAnswers" class="mt-5 pt-4 border-top d-none">
+                            <div id="answersBody"></div>
                         </div>
                     </div>
                 </div>
@@ -2267,132 +2310,206 @@
             } catch (e) { ui.toast('加载失败', 'error'); }
         },
 
+        // --- 新增：智能解析辅助函数 ---
+        parseListToMap(text) {
+            if (!text || typeof text !== 'string') return {};
+            const map = {};
+            // 核心正则：匹配 (\d+)[\.、] pattern
+            // 优化：不强求分隔符，只要有数字加点号即可，靠后续逻辑拆分
+            const regex = /(\d+)\s*[\.、]/g;
+
+            let match;
+            const indices = [];
+            while ((match = regex.exec(text)) !== null) {
+                // 只有当数字在合理范围（比如1-50）时才认为是题号，避免误判
+                const num = parseInt(match[1]);
+                if (num > 0 && num < 100) {
+                    indices.push({
+                        num: num,
+                        start: regex.lastIndex, // 内容开始的位置
+                        matchStart: match.index // 匹配项开始的位置（用于计算上一项的结束）
+                    });
+                }
+            }
+
+            if (indices.length === 0) return {};
+
+            for (let i = 0; i < indices.length; i++) {
+                const current = indices[i];
+                const next = indices[i + 1];
+                // 内容截取到下一项匹配开始之前，或者字符串末尾
+                const end = next ? next.matchStart : text.length;
+
+                let content = text.substring(current.start, end).trim();
+                // 清理可能残留的标点
+                content = content.replace(/^[;；\.,，]+/, '').replace(/[;；\.,，]+$/, '');
+
+                if (content) {
+                    map[current.num] = content;
+                }
+            }
+            return map;
+        },
+
         // 渲染试卷
         renderPaper(data) {
-            const questions = data.questions;
+            const questions = data.questions; // Array
             const paperBody = document.getElementById('paperBody');
-            // 清空容器
+            const answersBody = document.getElementById('answersBody');
+
             paperBody.innerHTML = '';
+            answersBody.innerHTML = ''; // 重置答案容器内容
 
-            // 隐藏无关区域
-            document.getElementById('paperSubtitleContainer').classList.add('d-none');
+            // 设置标题信息
+            if (questions && questions.length > 0) {
+                const meta = questions[0];
+                document.getElementById('paperTitleText').innerText = meta.title || `${meta.type || 'AI'} 专项练习`;
+                const subtitleEl = document.getElementById('paperSubtitleContainer');
+                if (meta.instructions) {
+                    subtitleEl.innerText = meta.instructions;
+                    subtitleEl.classList.remove('d-none');
+                } else {
+                    subtitleEl.classList.add('d-none');
+                }
 
-            // 安全检查
-            if (!questions || questions.length === 0) {
-                paperBody.innerHTML = '<div class="text-center text-muted my-5">暂无题目数据</div>';
-                return;
+                const displayType = (meta.type === '语法填空' || meta.type === '语法填空') ? '语法填空' : (meta.type || '综合');
+                document.getElementById('tagType').innerText = `题型：${displayType}`;
+                document.getElementById('tagDiff').innerText = `难度：${meta.difficulty || '标准'}`;
             }
 
-            // 更新头部元数据 (使用第一道题的信息)
-            const meta = questions[0].meta || questions[0] || {};
-            const selectedType = document.getElementById('examType') ? document.getElementById('examType').value : '综合';
-            document.getElementById('paperTitleText').innerText = meta.title || `${selectedType} 专项训练`;
-            document.getElementById('tagDiff').innerText = `难度：${meta.difficulty || '标准'}`;
+            let contentHtml = '';
+            let answersContainerHtml = '';
 
-            // 核心：分发器
-            let htmlContent = '';
             questions.forEach((q, index) => {
-                htmlContent += this.renderDispatcher(q, index);
+                let items = [];
+
+                // --- 1. 处理试题内容 ---
+                if (q.article_content || (q.content && q.type === '语法填空')) { // Expand condition to handle the provided example which uses 'content' for the article but type '语法填空'
+                    // The user's JSON example puts the text in 'content', not 'article_content'.
+                    // And the type is "语法填空".
+
+                    let textContent = q.article_content || q.content || "";
+
+                    // 渲染文章内容 (Support simple text with newlines)
+                    const paras = textContent.split('\n').filter(t => t.trim());
+                    paras.forEach(p => {
+                        let formattedP = p.replace(/【(\d+)】|(\d+)\s*(\([a-zA-Z\s]+\)|_+)/g, (match, num1, num2, hint) => {
+                            // The user's text uses 【1】 format.
+                            const num = num1 || num2;
+                            const hintText = hint ? hint.replace(/[()_]/g, '').trim() : '';
+                            const displayHint = hintText ? `(${hintText})` : '';
+                            return `<span class="fw-bold mx-1 text-primary">[${num}]</span><span class="blank-space">__________</span> <span class="text-muted small">${displayHint}</span>`;
+                        });
+                        contentHtml += `<p class="question-content" style="text-indent: 2em;">${formattedP}</p>`;
+                    });
+
+                    // 尝试解析复合结构的答案对象
+                    let isCompositeObj = false;
+                    if (q.answer && typeof q.answer === 'object' && !Array.isArray(q.answer)) {
+                        // Check if values have 'answer' and 'analysis' keys
+                        const keys = Object.keys(q.answer);
+                        if (keys.length > 0 && q.answer[keys[0]] && typeof q.answer[keys[0]] === 'object' && 'answer' in q.answer[keys[0]]) {
+                            isCompositeObj = true;
+                            // Sort keys numerically
+                            keys.sort((a, b) => parseInt(a) - parseInt(b));
+                            keys.forEach(k => {
+                                const item = q.answer[k];
+                                items.push({
+                                    num: k,
+                                    ans: item.answer || '',
+                                    ana: item.analysis || ''
+                                });
+                            });
+                        }
+                    }
+
+                    if (!isCompositeObj) {
+                        // 解析答案和解析
+                        let ansMap = {};
+                        if (Array.isArray(q.answer)) {
+                            q.answer.forEach((a, i) => ansMap[i + 1] = a);
+                        } else {
+                            ansMap = this.parseListToMap(q.answer);
+                        }
+
+                        let anaMap = {};
+                        if (Array.isArray(q.analysis)) {
+                            q.analysis.forEach((a, i) => anaMap[i + 1] = a);
+                        } else {
+                            anaMap = this.parseListToMap(q.analysis);
+                        }
+
+                        // 汇总该大题下的所有小题
+                        const maxKey = Math.max(...Object.keys(ansMap).map(Number), ...Object.keys(anaMap).map(Number), 0);
+                        for (let i = 1; i <= maxKey; i++) {
+                            items.push({ num: i, ans: ansMap[i] || '', ana: anaMap[i] || '' });
+                        }
+                    }
+
+                } else {
+                    // --- 单题型渲染 ---
+                    const idx = index + 1;
+                    let qText = (q.content || '').replace(/\n/g, '<br>');
+                    qText = qText.replace(/_+/g, '<span class="blank-space">__________</span>');
+
+                    contentHtml += `
+                        <div class="mb-4">
+                            <h5 class="fw-bold">第 ${idx} 题</h5>
+                            <div class="question-content">${qText}</div>
+                        </div>
+                        `;
+
+                    items.push({ num: idx, ans: q.answer || '', ana: q.analysis || '' });
+                }
+
+                // --- 2. 构建表格风格的答案解析区域 (每10行一个表格) ---
+                if (items.length > 0) {
+                    if (index > 0) answersContainerHtml += '<hr class="my-4">';
+
+                    answersContainerHtml += `<div class="mb-3"><h6 class="fw-bold text-secondary">题目 ${index + 1} 参考答案</h6>`;
+
+                    // 添加 mobile-optimized-table 类名
+                    answersContainerHtml += `
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover align-middle mb-0 table-striped mobile-optimized-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 80px;" class="text-center">题号</th>
+                                        <th style="width: 200px;" class="text-center">答案</th>
+                                        <th class="text-start ps-4">解析</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+
+                    items.forEach(item => {
+                        answersContainerHtml += `
+                                <tr>
+                                    <td class="text-center fw-bold text-secondary">${item.num}</td>
+                                    <td class="text-center text-primary fw-bold text-break">${item.ans}</td>
+                                    <td class="text-muted small text-break text-start ps-4" style="line-height: 1.6;">${item.ana || '暂无解析'}</td>
+                                </tr>`;
+                    });
+
+                    answersContainerHtml += `
+                                </tbody>
+                            </table>
+                        </div>`;
+
+                    answersContainerHtml += `</div>`;
+                }
             });
 
-            // 注入 HTML
-            paperBody.innerHTML = htmlContent;
+            paperBody.innerHTML = contentHtml;
+            answersBody.innerHTML = answersContainerHtml;
 
-            // 重置开关状态
             document.getElementById('showAnswersSwitch').checked = false;
-            this.toggleAnswers(); // Ensure answers are hidden
-        },
-
-        // UI 分发器
-        renderDispatcher(q, index) {
-            // 标准 UI 协议
-            if (q.ui_type === 'GROUP') return this.renderGroup(q, index);
-            if (q.ui_type === 'INPUT') return this.renderInput(q, index);
-            if (q.ui_type === 'CHOICE') return this.renderChoice(q, index);
-
-            // 兼容旧数据 (Duck Typing)
-            if (q.article_content) {
-                return this.renderGroup({
-                    stem: q.title || `Passage ${index + 1}`,
-                    content: q.article_content,
-                    children: q.questions.map((sq, i) => ({
-                        ui_type: 'INPUT',
-                        stem: sq.num || `${index + 1}.${i + 1}`,
-                        content: sq.clue || sq.question || '',
-                        answer: sq.answer,
-                        analysis: sq.analysis
-                    })),
-                    meta: { difficulty: q.difficulty }
-                }, index);
-            }
-            if (q.words) {
-                return this.renderInput({
-                    stem: `${q.question_number}.`,
-                    content: q.words,
-                    answer: q.answer,
-                    analysis: q.analysis,
-                    meta: { difficulty: q.difficulty }
-                }, index);
-            }
-
-            return `<div class="alert alert-warning">暂不支持的题目格式</div>`;
-        },
-
-        // 通用输入框渲染器 (INPUT)
-        renderInput(data, index) {
-            const stemText = data.stem || `Question ${index + 1}`;
-            const contentHtml = data.content ? marked.parse(data.content) : '';
-            const answer = data.answer || '无答案';
-            const analysis = data.analysis || '无解析';
-
-            return `
-                <div class="question-block">
-                    <div class="question-content-wrapper d-flex align-items-baseline mb-2">
-                         <div class="question-stem me-2 mb-0">${stemText}</div>
-                         <div class="question-material mb-0 p-0 bg-transparent border-0">${contentHtml}</div>
-                    </div>
-                    <div class="answer-line-wrapper">
-                        <input type="text" class="form-control" placeholder="">
-                    </div>
-                    <div class="answer-section d-none">
-                        <div class="fw-bold text-success mb-1">参考答案：${answer}</div>
-                        <div class="small text-muted">解析：${analysis}</div>
-                    </div>
-                </div>
-            `;
-        },
-
-        // 通用组合题渲染器 (GROUP)
-        renderGroup(data, index) {
-            const stemText = data.stem || `Group ${index + 1}`;
-            const contentHtml = data.content ? marked.parse(data.content) : '';
-            const childrenHtml = (data.children || []).map((child, i) => this.renderDispatcher(child, i)).join('');
-
-            return `
-                <div class="group-container">
-                    <h4 class="text-center mb-3 fw-bold">${stemText}</h4>
-                    <div class="article-box border shadow-sm">
-                        ${contentHtml}
-                    </div>
-                    <div class="sub-questions">
-                        ${childrenHtml}
-                    </div>
-                </div>
-            `;
-        },
-
-        // 选择题渲染器 (预留)
-        renderChoice(data, index) {
-            return this.renderInput(data, index);
+            document.getElementById('paperAnswers').classList.add('d-none');
         },
 
         toggleAnswers() {
             const show = document.getElementById('showAnswersSwitch').checked;
-            const els = document.querySelectorAll('.answer-section');
-            els.forEach(el => {
-                if (show) el.classList.remove('d-none');
-                else el.classList.add('d-none');
-            });
+            const el = document.getElementById('paperAnswers');
+            if (show) el.classList.remove('d-none'); else el.classList.add('d-none');
         },
 
         reset() {
@@ -2420,8 +2537,7 @@
                     .text-primary { color: #000; font-weight: bold; }
                 </style>
                 `;
-            // 导出时可能需要特殊处理 UI 结构
-            const sourceHTML = document.getElementById("paperBody").innerHTML;
+            const sourceHTML = document.getElementById("paperExportArea").innerHTML;
             const source = header + styles + sourceHTML + footer;
             const blob = new Blob(['\ufeff', source], { type: 'application/msword' });
             const url = URL.createObjectURL(blob);
@@ -3025,3 +3141,5 @@
 </body>
 
 </html>
+
+原则：只修改和增加相关部分代码，不修改和删除无关部分代码，这是必须遵守的规则。

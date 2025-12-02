@@ -27,16 +27,16 @@ VALUES (
        );
 
 -- --------------------------------------------------------
--- Part II: 连词成句 (无换行符，原样保留)
+-- Part II: prompt.txt (无换行符，原样保留)
 -- --------------------------------------------------------
 INSERT INTO question_example (subject, question_type, difficulty, content, description)
 VALUES
-    ('湖北专升本英语', '连词成句', 'medium', '{"question_number": 11, "words": "her homework / She / has completed"}', '连词成句 - 题11'),
-    ('湖北专升本英语', '连词成句', 'medium', '{"question_number": 12, "words": "your plan / tell me / Can you"}', '连词成句 - 题12'),
-    ('湖北专升本英语', '连词成句', 'medium', '{"question_number": 13, "words": "me / explain / Let / how this works"}', '连词成句 - 题13'),
-    ('湖北专升本英语', '连词成句', 'medium', '{"question_number": 14, "words": "went to / and I / My friends / the same lecture"}', '连词成句 - 题14'),
-    ('湖北专升本英语', '连词成句', 'medium', '{"question_number": 15, "words": "young people / DeepSeek / was established in 2023 / by a group of"}', '连词成句 - 题15'),
-    ('湖北专升本英语', '连词成句', 'medium', '{"question_number": 16, "words": "to improve / is a plan / China’s technology and industries / “Made in China 2025”"}', '连词成句 - 题16');
+    ('湖北专升本英语', 'prompt.txt', 'medium', '{"question_number": 11, "words": "her homework / She / has completed"}', 'prompt.txt - 题11'),
+    ('湖北专升本英语', 'prompt.txt', 'medium', '{"question_number": 12, "words": "your plan / tell me / Can you"}', 'prompt.txt - 题12'),
+    ('湖北专升本英语', 'prompt.txt', 'medium', '{"question_number": 13, "words": "me / explain / Let / how this works"}', 'prompt.txt - 题13'),
+    ('湖北专升本英语', 'prompt.txt', 'medium', '{"question_number": 14, "words": "went to / and I / My friends / the same lecture"}', 'prompt.txt - 题14'),
+    ('湖北专升本英语', 'prompt.txt', 'medium', '{"question_number": 15, "words": "young people / DeepSeek / was established in 2023 / by a group of"}', 'prompt.txt - 题15'),
+    ('湖北专升本英语', 'prompt.txt', 'medium', '{"question_number": 16, "words": "to improve / is a plan / China’s technology and industries / “Made in China 2025”"}', 'prompt.txt - 题16');
 
 -- --------------------------------------------------------
 -- Part III: 阅读理解 - 选词/摘要填空 (修复：使用 \\n 转义换行符)
