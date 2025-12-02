@@ -1482,6 +1482,10 @@
                         <div id="paperBody">
                             <!-- JS 渲染内容 -->
                         </div>
+
+                        <div id="paperAnswers" class="mt-5 pt-4 border-top d-none">
+                            <div id="answersBody"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2267,12 +2271,55 @@
             } catch (e) { ui.toast('加载失败', 'error'); }
         },
 
+        // --- 新增：智能解析辅助函数 ---
+        parseListToMap(text) {
+            if (!text || typeof text !== 'string') return {};
+            const map = {};
+            // 核心正则：匹配 (\d+)[\.、] pattern
+            // 优化：不强求分隔符，只要有数字加点号即可，靠后续逻辑拆分
+            const regex = /(\d+)\s*[\.、]/g;
+
+            let match;
+            const indices = [];
+            while ((match = regex.exec(text)) !== null) {
+                // 只有当数字在合理范围（比如1-50）时才认为是题号，避免误判
+                const num = parseInt(match[1]);
+                if (num > 0 && num < 100) {
+                    indices.push({
+                        num: num,
+                        start: regex.lastIndex, // 内容开始的位置
+                        matchStart: match.index // 匹配项开始的位置（用于计算上一项的结束）
+                    });
+                }
+            }
+
+            if (indices.length === 0) return {};
+
+            for (let i = 0; i < indices.length; i++) {
+                const current = indices[i];
+                const next = indices[i + 1];
+                // 内容截取到下一项匹配开始之前，或者字符串末尾
+                const end = next ? next.matchStart : text.length;
+
+                let content = text.substring(current.start, end).trim();
+                // 清理可能残留的标点
+                content = content.replace(/^[;；\.,，]+/, '').replace(/[;；\.,，]+$/, '');
+
+                if (content) {
+                    map[current.num] = content;
+                }
+            }
+            return map;
+        },
+
         // 渲染试卷
         renderPaper(data) {
             const questions = data.questions;
             const paperBody = document.getElementById('paperBody');
             // 清空容器
             paperBody.innerHTML = '';
+            const answersBody = document.getElementById('answersBody');
+            answersBody.innerHTML = ''; // 重置答案容器内容
 
             // 隐藏无关区域
             document.getElementById('paperSubtitleContainer').classList.add('d-none');
@@ -2291,12 +2338,65 @@
 
             // 核心：分发器
             let htmlContent = '';
+            // 收集所有答案
+            let allAnswers = [];
+
             questions.forEach((q, index) => {
                 htmlContent += this.renderDispatcher(q, index);
+
+                // 收集答案逻辑
+                if (q.ui_type === 'GROUP' && q.children) {
+                    q.children.forEach((child, ci) => {
+                        allAnswers.push({
+                            num: child.stem ? child.stem.replace(/[\.、\s]*$/, '') : `${index + 1}.${ci + 1}`,
+                            ans: child.answer,
+                            ana: child.analysis
+                        });
+                    });
+                } else if (q.ui_type === 'INPUT' || q.ui_type === 'CHOICE' || q.words) {
+                    // 单题或旧格式
+                    allAnswers.push({
+                        num: q.stem ? q.stem.replace(/[\.、\s]*$/, '') : `${index + 1}`,
+                        ans: q.answer,
+                        ana: q.analysis
+                    });
+                }
             });
 
             // 注入 HTML
             paperBody.innerHTML = htmlContent;
+
+            // 构建答案表格
+            if (allAnswers.length > 0) {
+                let answersContainerHtml = `<div class="mb-3"><h6 class="fw-bold text-secondary">参考答案与解析</h6>`;
+                answersContainerHtml += `
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered table-hover align-middle mb-0 table-striped mobile-optimized-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 80px;" class="text-center">题号</th>
+                                    <th style="width: 200px;" class="text-center">答案</th>
+                                    <th class="text-start ps-4">解析</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+
+                allAnswers.forEach(item => {
+                    answersContainerHtml += `
+                            <tr>
+                                <td class="text-center fw-bold text-secondary">${item.num}</td>
+                                <td class="text-center text-primary fw-bold text-break">${item.ans || '无'}</td>
+                                <td class="text-muted small text-break text-start ps-4" style="line-height: 1.6;">${item.ana || '暂无解析'}</td>
+                            </tr>`;
+                });
+
+                answersContainerHtml += `
+                            </tbody>
+                        </table>
+                    </div></div>`;
+
+                answersBody.innerHTML = answersContainerHtml;
+            }
 
             // 重置开关状态
             document.getElementById('showAnswersSwitch').checked = false;
@@ -2326,9 +2426,10 @@
                 }, index);
             }
             if (q.words) {
+                // 修复：将旧的连词成句格式转换为 INPUT
                 return this.renderInput({
                     stem: `${q.question_number}.`,
-                    content: q.words,
+                    content: q.words, // 直接使用 words 作为 content
                     answer: q.answer,
                     analysis: q.analysis,
                     meta: { difficulty: q.difficulty }
@@ -2341,22 +2442,20 @@
         // 通用输入框渲染器 (INPUT)
         renderInput(data, index) {
             const stemText = data.stem || `Question ${index + 1}`;
-            const contentHtml = data.content ? marked.parse(data.content) : '';
-            const answer = data.answer || '无答案';
-            const analysis = data.analysis || '无解析';
 
+            // 修复：不再移除下划线，直接保留原始内容渲染
+            let rawContent = data.content || '';
+            const contentHtml = rawContent ? marked.parse(rawContent) : '';
+
+            // 修复：移除内嵌的 answer-section
             return `
                 <div class="question-block">
                     <div class="question-content-wrapper d-flex align-items-baseline mb-2">
-                         <div class="question-stem me-2 mb-0">${stemText}</div>
-                         <div class="question-material mb-0 p-0 bg-transparent border-0">${contentHtml}</div>
+                         <div class="question-stem me-2 mb-0 text-nowrap">${stemText}</div>
+                         <div class="question-material mb-0 p-0 bg-transparent border-0 w-100">${contentHtml}</div>
                     </div>
                     <div class="answer-line-wrapper">
                         <input type="text" class="form-control" placeholder="">
-                    </div>
-                    <div class="answer-section d-none">
-                        <div class="fw-bold text-success mb-1">参考答案：${answer}</div>
-                        <div class="small text-muted">解析：${analysis}</div>
                     </div>
                 </div>
             `;
@@ -2388,11 +2487,8 @@
 
         toggleAnswers() {
             const show = document.getElementById('showAnswersSwitch').checked;
-            const els = document.querySelectorAll('.answer-section');
-            els.forEach(el => {
-                if (show) el.classList.remove('d-none');
-                else el.classList.add('d-none');
-            });
+            const el = document.getElementById('paperAnswers');
+            if (show) el.classList.remove('d-none'); else el.classList.add('d-none');
         },
 
         reset() {
@@ -2421,7 +2517,7 @@
                 </style>
                 `;
             // 导出时可能需要特殊处理 UI 结构
-            const sourceHTML = document.getElementById("paperBody").innerHTML;
+            const sourceHTML = document.getElementById("paperExportArea").innerHTML;
             const source = header + styles + sourceHTML + footer;
             const blob = new Blob(['\ufeff', source], { type: 'application/msword' });
             const url = URL.createObjectURL(blob);
@@ -2504,7 +2600,7 @@
         },
 
         // 新增：设置聊天模型
-        setChatModel(modelValue, modelLabel, element) {
+        async setChatModel(modelValue, modelLabel, element) {
             // 更新隐藏域值，用于发送请求
             document.getElementById('chatModelSelect').value = modelValue;
             // 更新按钮文本显示
@@ -2518,6 +2614,17 @@
             // 持久化存储
             localStorage.setItem('novi_chat_model', modelValue);
             localStorage.setItem('novi_chat_model_label', modelLabel);
+
+            // 调用后端切换模型 API
+            try {
+                const configBase = this.config.apiBase.replace('/v1', '');
+                // 修复：确保 modelValue 进行编码，防止特殊字符导致 URL 错误
+                await axios.post(`${configBase}/model/config/switch/${encodeURIComponent(modelValue)}`);
+                ui.toast(`已切换模型为: ${modelLabel}`, 'success');
+            } catch (e) {
+                console.error("切换模型失败", e);
+                ui.toast("模型切换请求失败", "error");
+            }
         },
 
         switchMode(mode) {

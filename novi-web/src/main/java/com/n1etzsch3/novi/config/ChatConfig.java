@@ -1,7 +1,7 @@
 package com.n1etzsch3.novi.config;
 
 import com.n1etzsch3.novi.chat.repository.NoviDatabaseChatMemory;
-import com.n1etzsch3.novi.aiconfig.factory.DynamicChatModelFactory;
+import com.n1etzsch3.novi.aiconfig.model.DynamicChatModel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -26,25 +26,24 @@ import org.springframework.context.annotation.Configuration;
 public class ChatConfig {
 
         private final NoviDatabaseChatMemory noviDatabaseChatMemory;
-        private final DynamicChatModelFactory dynamicChatModelFactory;
+        private final DynamicChatModel dynamicChatModel;
 
         /**
          * 创建 ChatClient bean，支持动态模型切换
          * <p>
-         * 通过 DynamicChatModelFactory 从数据库读取当前激活的模型配置。
-         * ChatClient会在每次调用时通过工厂获取最新的模型配置。
+         * 使用 DynamicChatModel 代理，确保每次调用都使用最新的模型配置。
          * </p>
          */
         @Bean
         public ChatClient chatClient() {
-                log.info("Initializing ChatClient with dynamic model configuration");
+                log.info("Initializing ChatClient with DynamicChatModel");
 
                 MessageChatMemoryAdvisor memoryAdvisor = MessageChatMemoryAdvisor.builder(noviDatabaseChatMemory)
                                 .conversationId(ChatMemory.CONVERSATION_ID)
                                 .build();
 
-                log.info("ChatClient initialized successfully with dynamic model");
-                return ChatClient.builder(dynamicChatModelFactory.createChatModel())
+                log.info("ChatClient initialized successfully with dynamic model proxy");
+                return ChatClient.builder(dynamicChatModel)
                                 .defaultAdvisors(
                                                 new SimpleLoggerAdvisor(),
                                                 memoryAdvisor)
