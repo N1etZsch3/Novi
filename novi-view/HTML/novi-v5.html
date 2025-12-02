@@ -1419,14 +1419,14 @@
 
                     <div class="form-floating mb-3">
                         <select class="form-select rounded-3" id="examSubject" aria-label="选择科目">
-                            <option value="湖北专升本英语" selected>湖北专升本英语</option>
+                            <option disabled selected>加载中...</option>
                         </select>
                         <label for="examSubject">选择科目</label>
                     </div>
 
                     <div class="form-floating mb-3">
                         <select class="form-select rounded-3" id="examType" aria-label="题型">
-                            <option value="语法填空">语法填空</option>
+                            <option disabled selected>请先选择科目</option>
                         </select>
                         <label for="examType">题型</label>
                     </div>
@@ -1681,6 +1681,7 @@
 
     // 辅助获取图标，如果未配置则返回默认星星
     function getIcon(key) {
+        // key 可能是 'personality_witty' 或 'witty'
         const shortKey = key.replace('personality_', '');
         return ICON_MAP[shortKey] || 'bi-stars';
     }
@@ -1719,7 +1720,7 @@
             this.fullScreenModal = new bootstrap.Modal(document.getElementById('fullScreenInputModal'));
 
             document.getElementById('confirmBtnAction').addEventListener('click', () => { if (this.confirmCallback) this.confirmCallback(); this.confirmModal.hide(); });
-            // renderPersonalityGrid 现在由 app.loadSystemOptions 调用
+            // renderPersonalityGrid 现在由 app.loadSystemConfigs 调用
             this.initMobileSettingsNav();
             this.renderSidebar();
 
@@ -1814,6 +1815,8 @@
         // 动态渲染性格卡片
         renderPersonalityGrid(list) {
             const container = document.getElementById('personalityGrid');
+            if (!container) return;
+
             // 先渲染从后端获取的性格
             let html = list.map(p => {
                 // 去除 'personality_' 前缀作为 ID
@@ -1834,17 +1837,20 @@
 
             // 同时更新 Onboarding 弹窗中的下拉框
             const obSelect = document.getElementById('obPersonality');
-            let optionsHtml = list.map(p => {
-                const id = p.configKey.replace('personality_', '');
-                const title = p.description || id;
-                return `<option value="${id}">${title}</option>`;
-            }).join('');
-            obSelect.innerHTML = optionsHtml;
+            if (obSelect) {
+                let optionsHtml = list.map(p => {
+                    const id = p.configKey.replace('personality_', '');
+                    const title = p.description || id;
+                    return `<option value="${id}">${title}</option>`;
+                }).join('');
+                obSelect.innerHTML = optionsHtml;
+            }
         },
 
         // 动态渲染语气选项
         renderToneOptions(list) {
             const select = document.getElementById('psTone');
+            if (!select) return;
             let html = '';
             list.forEach(t => {
                 // 去除 'tone_' 前缀作为 value
@@ -1860,37 +1866,54 @@
         renderModelList(models) {
             // 1. 聊天界面的 Dropdown
             const chatDropdown = document.getElementById('chatModelDropdownList');
-            let chatHtml = '';
-            models.forEach(m => {
-                // 默认选中激活的模型
-                const activeClass = m.isActive ? 'active' : '';
-                chatHtml += `<li><button class="dropdown-item rounded-3 ${activeClass}" type="button" onclick="app.setChatModel('${m.modelName}', '${m.description || m.modelName}', this)">${m.description || m.modelName}</button></li>`;
+            if (chatDropdown) {
+                let chatHtml = '';
+                models.forEach(m => {
+                    // 默认选中激活的模型
+                    const activeClass = m.isActive ? 'active' : '';
+                    chatHtml += `<li><button class="dropdown-item rounded-3 ${activeClass}" type="button" onclick="app.setChatModel('${m.modelName}', '${m.description || m.modelName}', this)">${m.description || m.modelName}</button></li>`;
 
-                // 如果当前是激活模型，初始化按钮显示
-                if (m.isActive && !localStorage.getItem('novi_chat_model')) {
-                    document.getElementById('chatModelLabel').innerText = m.description || m.modelName;
-                    document.getElementById('chatModelSelect').value = m.modelName;
-                }
-            });
-            chatDropdown.innerHTML = chatHtml;
+                    // 如果当前是激活模型，初始化按钮显示
+                    if (m.isActive && !localStorage.getItem('novi_chat_model')) {
+                        const label = document.getElementById('chatModelLabel');
+                        const input = document.getElementById('chatModelSelect');
+                        if(label) label.innerText = m.description || m.modelName;
+                        if(input) input.value = m.modelName;
+                    }
+                });
+                chatDropdown.innerHTML = chatHtml;
+            }
 
             // 2. 出题界面的 Select
             const examSelect = document.getElementById('examModel');
-            let examHtml = '';
-            models.forEach(m => {
-                examHtml += `<option value="${m.modelName}">${m.description || m.modelName}</option>`;
-            });
-            examSelect.innerHTML = examHtml;
+            if (examSelect) {
+                let examHtml = '';
+                models.forEach(m => {
+                    examHtml += `<option value="${m.modelName}">${m.description || m.modelName}</option>`;
+                });
+                examSelect.innerHTML = examHtml;
 
-            // 恢复之前的选择
-            const savedExamModel = localStorage.getItem('novi_exam_model');
-            if(savedExamModel) examSelect.value = savedExamModel;
+                // 恢复之前的选择
+                const savedExamModel = localStorage.getItem('novi_exam_model');
+                if(savedExamModel) examSelect.value = savedExamModel;
+            }
         },
 
         selectPersona(id) {
-            document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected')); document.getElementById(`card-${id}`).classList.add('selected');
+            document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected'));
+            const card = document.getElementById(`card-${id}`);
+            if(card) card.classList.add('selected');
+
             const customInput = document.getElementById('customPersonaInputDiv');
-            if (id === 'custom') { customInput.classList.remove('d-none'); app.currentPreferences.personalityMode = document.getElementById('psCustomPersona').value || 'custom'; } else { customInput.classList.add('d-none'); app.currentPreferences.personalityMode = id; }
+            if(customInput) {
+                if (id === 'custom') {
+                    customInput.classList.remove('d-none');
+                    app.currentPreferences.personalityMode = document.getElementById('psCustomPersona').value || 'custom';
+                } else {
+                    customInput.classList.add('d-none');
+                    app.currentPreferences.personalityMode = id;
+                }
+            }
         },
         toggleTheme(el) {
             const theme = el.checked ? 'dark' : 'light';
@@ -1905,34 +1928,104 @@
     const exam = {
         data: null,
         isEditMode: false,
+        // Cache subjects to get ID for type loading
+        subjectsMap: {},
 
         init() {
+            // 1. 绑定 UI 事件 (不发起网络请求)
+            this.bindEvents();
+
+            // 2. 初始化模型选择持久化逻辑
+            const savedModel = localStorage.getItem('novi_exam_model');
+            const modelSelect = document.getElementById('examModel');
+            if (savedModel && modelSelect) {
+                modelSelect.value = savedModel;
+            }
+            if (modelSelect) {
+                modelSelect.addEventListener('change', (e) => {
+                    localStorage.setItem('novi_exam_model', e.target.value);
+                });
+            }
+        },
+
+        bindEvents() {
             // 监听题型选择，控制主题输入框显示
             const typeSelect = document.getElementById('examType');
             const topicDiv = document.getElementById('customTopicDiv');
-            // 默认显示自定义主题（因为目前只有语法填空）
             if (topicDiv) {
                 topicDiv.classList.remove('d-none');
             }
             if (typeSelect && topicDiv) {
                 typeSelect.addEventListener('change', (e) => {
-                    // 根据题型判断是否显示主题，这里示例为选择题或阅读需要主题
-                    if (['阅读理解', '选择题', '语法填空'].includes(e.target.value)) topicDiv.classList.remove('d-none');
+                    if (['阅读理解', '选择题', '语法填空', '书面表达', '阅读理解-问答'].includes(e.target.value)) topicDiv.classList.remove('d-none');
                     else topicDiv.classList.add('d-none');
                 });
             }
 
-            // --- 修改：持久化 AI 模型选择 ---
-            const savedModel = localStorage.getItem('novi_exam_model');
-            if (savedModel) {
-                const select = document.getElementById('examModel');
-                if (select) select.value = savedModel;
-            }
-            const modelSelect = document.getElementById('examModel');
-            if (modelSelect) {
-                modelSelect.addEventListener('change', (e) => {
-                    localStorage.setItem('novi_exam_model', e.target.value);
+            // 监听科目选择
+            const subjectSelect = document.getElementById('examSubject');
+            if (subjectSelect) {
+                subjectSelect.addEventListener('change', (e) => {
+                    const name = e.target.value;
+                    const id = this.subjectsMap[name];
+                    if (id) this.loadTypes(id);
                 });
+            }
+        },
+
+        // --- 新增：加载科目 ---
+        async loadSubjects() {
+            try {
+                // Remove /v1 suffix
+                const apiRoot = app.config.apiBase.replace('/v1', '');
+                const res = await axios.get(`${apiRoot}/question/categories/subjects`);
+
+                if (res.data.code === 200 || res.data.code === 1) {
+                    const subjects = res.data.data;
+                    const select = document.getElementById('examSubject');
+                    if(!select) return;
+
+                    select.innerHTML = '';
+                    this.subjectsMap = {};
+
+                    subjects.forEach(sub => {
+                        this.subjectsMap[sub.name] = sub.id;
+                        select.add(new Option(sub.name, sub.name));
+                    });
+
+                    // Load types for the first subject
+                    if (subjects.length > 0) {
+                        select.value = subjects[0].name;
+                        this.loadTypes(subjects[0].id);
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load subjects", e);
+                // ui.toast("加载科目失败，请检查网络", "error"); // 静默失败，不打扰用户
+            }
+        },
+
+        // --- 新增：加载题型 ---
+        async loadTypes(subjectId) {
+            try {
+                const apiRoot = app.config.apiBase.replace('/v1', '');
+                const res = await axios.get(`${apiRoot}/question/categories/types?subjectId=${subjectId}`);
+
+                if (res.data.code === 200 || res.data.code === 1) {
+                    const types = res.data.data;
+                    const select = document.getElementById('examType');
+                    if(!select) return;
+
+                    select.innerHTML = '';
+                    types.forEach(type => {
+                        select.add(new Option(type.name, type.name));
+                    });
+
+                    // Trigger change to update UI (topic input visibility)
+                    select.dispatchEvent(new Event('change'));
+                }
+            } catch (e) {
+                console.error("Failed to load types", e);
             }
         },
 
@@ -2454,6 +2547,7 @@
 
         init() {
             ui.init();
+            // 关键修改：exam.init() 只绑定 UI 事件，不发请求
             exam.init();
             this.setupAxios();
             this.bindEvents();
@@ -2477,14 +2571,9 @@
                 // 更新隐藏的 input 值和按钮显示
                 const input = document.getElementById('chatModelSelect');
                 const label = document.getElementById('chatModelLabel');
-                const menuItems = document.querySelectorAll('.model-dropdown-menu .dropdown-item');
 
                 if (input) input.value = savedChatModel;
                 if (label && savedChatLabel) label.innerText = savedChatLabel;
-
-                // 更新选中状态
-                // 注意：这需要在 DOM 渲染完成后进行，如果模型列表还没加载完，这里可能找不到元素
-                // 所以最好在 renderModelList 里也处理一次
             }
         },
 
@@ -2595,8 +2684,9 @@
         async initLoggedInState(checkOnboarding = false) {
             this.switchMode('chat'); // 默认进聊天
 
-            // 登录成功后加载系统配置
+            // 关键修改：登录成功后才加载系统配置和出题数据
             this.loadSystemConfigs();
+            exam.loadSubjects();
 
             try {
                 const me = await axios.get('/users/me');
@@ -2743,7 +2833,7 @@
                 list.forEach(el => el.innerHTML = '');
                 if (res.data.code === 200 || res.data.code === 1) {
                     const html = res.data.data.map(s => `
-                            <div class="session-item d-flex align-items-center ${s.id === this.state.sessionId ? 'active' : ''} ${this.isChatEditMode ? 'editing-mode' : ''}" 
+                            <div class="session-item d-flex align-items-center ${s.id === this.state.sessionId ? 'active' : ''} ${this.isChatEditMode ? 'editing-mode' : ''}"
                                  onclick="app.handleSessionItemClick('${s.id}', event)"
                                  data-id="${s.id}">
                                 <!-- 复选框，默认隐藏 -->

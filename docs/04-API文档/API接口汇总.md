@@ -379,6 +379,86 @@ Response:
   ]
 }
 ```
+## 8️⃣ 题目分类 API
+
+**Base Path**: `/api/question/categories`
+
+| 方法 | 路径 | 功能 |
+|------|------|------|
+| GET | `/tree` | 获取分类树 |
+| GET | `/subjects` | 获取所有科目 |
+| GET | `/types` | 获取指定科目下的题型 |
+
+### 8.1 获取分类树
+
+```http
+GET /api/question/categories/tree
+Authorization: Bearer <token>
+
+Response:
+{
+  "code": 200,
+  "data": [
+    {
+      "id": 1,
+      "name": "湖北专升本英语",
+      "code": "english_hubei",
+      "parentId": 0,
+      "categoryType": 1,
+      "children": [
+        {
+          "id": 101,
+          "name": "语法填空",
+          "code": "grammar_fill_blank",
+          "parentId": 1,
+          "categoryType": 2
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 8.2 获取所有科目
+
+```http
+GET /api/question/categories/subjects
+Authorization: Bearer <token>
+
+Response:
+{
+  "code": 200,
+  "data": [
+    {
+      "id": 1,
+      "name": "湖北专升本英语",
+      "code": "english_hubei",
+      "categoryType": 1
+    }
+  ]
+}
+```
+
+### 8.3 获取指定科目下的题型
+
+```http
+GET /api/question/categories/types?subjectId=1
+Authorization: Bearer <token>
+
+Response:
+{
+  "code": 200,
+  "data": [
+    {
+      "id": 101,
+      "name": "语法填空",
+      "code": "grammar_fill_blank",
+      "categoryType": 2
+    }
+  ]
+}
+```
+
 ## 🔍 错误码说明
 
 | 错误码 | 说明              |
