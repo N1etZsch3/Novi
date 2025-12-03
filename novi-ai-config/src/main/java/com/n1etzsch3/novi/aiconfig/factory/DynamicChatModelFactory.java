@@ -57,11 +57,12 @@ public class DynamicChatModelFactory {
         log.debug("Base URL: {}", activeModel.getBaseUrl());
 
         // 创建 OpenAiApi
-        OpenAiApi openAiApi = OpenAiApi.builder()
+        OpenAiApi.Builder apiBuilder = OpenAiApi.builder()
                 .baseUrl(activeModel.getBaseUrl())
                 .apiKey(activeModel.getApiKey())
-                .completionsPath(activeModel.getCompletionsPath())
-                .build();
+                .completionsPath(activeModel.getCompletionsPath());
+
+        OpenAiApi openAiApi = apiBuilder.build();
 
         // 创建聊天选项
         OpenAiChatOptions chatOptions = OpenAiChatOptions.builder()
@@ -73,6 +74,13 @@ public class DynamicChatModelFactory {
                 .openAiApi(openAiApi)
                 .defaultOptions(chatOptions)
                 .build();
+
+        // 记录是否需要启用thinking模式（这个标识在数据库中配置）
+        // 注意：enable_thinking 需要在API请求时作为参数传递
+        // 实际启用需要在调用API时传递，此处仅记录配置以便后续使用
+        if (Boolean.TRUE.equals(activeModel.getEnableThinking())) {
+            log.info("Model {} is configured to support thinking mode", activeModel.getModelName());
+        }
 
         // 更新缓存
         cachedChatModel = chatModel;

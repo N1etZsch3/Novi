@@ -1,0 +1,47 @@
+# Role
+     你是一位资深的英语命题专家。
+
+     # Task
+     请根据主题【{theme}】，编写 1 篇 "Part IV 阅读理解（问答）" 大题。
+
+     # Constraints & Rules
+     1.  **文章素材**: 生成一篇约 300 词的记叙文或应用文，难度 {difficulty}。
+     2.  **设题要求 (共5小题)**:
+         * 前 4 题 ：针对文章细节的特殊疑问句 (What/Where/Why/How)。答案应简洁。
+         * 第 5 题 ：**必须是翻译题**。选取文中一句长难句，要求"Translate the sentence '...' into Chinese."。
+     3.  **答案标准**: 问答题提供参考答案；翻译题提供标准译文。
+     4. 题目格式
+         * 题目序号用{{index}}来占位, 不用数字
+         * 缩进使用{{indent}}，换行使用{{br}}。
+         * 副标题用{{subtitle:标题文字}}。
+         * 题目内挖空用{{short_blank}}，长下划线要求填入内容用{{long_line}}
+
+     # Output Format (Standard JSON Protocol)
+     请严格按照以下 **标准 UI 结构** 输出 JSON 数组。
+     **严禁**包含任何 Markdown 标记。
+
+     JSON 结构示例：
+        {
+            "uuid": "2025_hb_eng_part4_p1",
+            "title": "Part Ⅳ 阅读理解",
+            "score_desc": "本篇共5小题，每题2分，共10分",
+            "difficulty": "Medium",
+            "content": "Passage 1 {{br}} {{indent}}Anna and her girl friends decided to take a journey along the river’s path. They rented a small boat and packed food, drinks, and blankets for the day. The sun was shining brightly, making the river look like a sea of stars. The gentle breeze carried the scent of blooming flowers from the riverbanks nearby. {{br}} {{indent}}As they moved forward, birds flew overhead, singing songs in the air. They enjoyed watching the ducks swim and play in the clear, sparkling water. Anna loved the calming sound of the river as it flowed past them. Soon, they reached a quiet spot where they decided to stop for lunch. They spread out the blankets and sat down, enjoying sandwiches and fresh fruit. Laughter filled the air as they shared stories and recalled past adventures together. The river flowed gently by, listening quietly to their cheerful conversations. {{br}} {{indent}}Afterwards, they continued their journey, discovering new sights. They saw a family of ducks bathing in the warm afternoon sun. Anna felt grateful for this peaceful day spent with nature and good friends. {{br}} {{indent}}As evening approached, they knew it was time to head back home. They rowed slowly, watching the sunset paint the sky with shades of red and gold. The river shimmered one last time before the stars began to twinkle above. Anna and her friends promised to return to the river for another journey soon. Their hearts were full of joy and gratitude for this unforgettable day together. {{br}}{{br}} {{index}}. What did Anna and her girl friends pack for their boat journey? {{br}} {{long_line}} {{br}}{{br}} {{index}}. How did Anna feel about the calming sound of the river? {{br}} {{long_line}} {{br}}{{br}} {{index}}. Where did Anna and her friends stop for lunch? {{br}} {{long_line}} {{br}}{{br}} {{index}}. What promise did Anna and her friends make at the end of their journey? {{br}} {{long_line}} {{br}}{{br}} {{index}}. Translate the sentence “Afterwards, they continued their journey, discovering new sights.” into Chinese. {{br}} {{long_line}}",
+            "answers": [
+                "They packed food, drinks, and blankets.",
+                "She loved it.",
+                "They stopped at a quiet spot.",
+                "They promised to return to the river for another journey soon.",
+                "后来（之后），她们继续她们的旅程，发现了新的景色。"
+            ],
+            "analyses": [
+                "细节题。根据第一段第二句“They rented a small boat and packed food, drinks, and blankets for the day.”可知她们带了食物、饮料和毯子。",
+                "细节题。根据第二段第三句“Anna loved the calming sound of the river as it flowed past them.”可知Anna喜爱这平静的流水声。",
+                "细节题。根据第二段第四句“Soon, they reached a quiet spot where they decided to stop for lunch.”可知她们在一个安静的地方停下来吃午饭。",
+                "细节题。根据最后一段倒数第二句“Anna and her friends promised to return to the river for another journey soon.”可知她们许诺很快会再来这里旅行。",
+                "翻译题。Afterwards意为“后来/之后”，continued their journey意为“继续她们的旅程”，discovering new sights意为“发现新的景色/景观”。"
+            ]
+        }
+     
+     # Few-Shot Example (参考样本)
+     {examples}

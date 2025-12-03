@@ -59,6 +59,12 @@ public class AiModelConfig {
     private Boolean isActive;
 
     /**
+     * 是否启用深度思考功能（0:否，1:是）
+     * 仅部分模型支持，如 Gemini 2.0 Flash Thinking
+     */
+    private Boolean enableThinking;
+
+    /**
      * 模型描述
      */
     private String description;
