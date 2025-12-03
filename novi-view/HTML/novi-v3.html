@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN" data-bs-theme="light">
 
@@ -886,6 +887,21 @@
             line-height: 1.6;
         }
 
+        .question-content {
+            font-size: 1.15rem;
+            line-height: 2;
+            text-align: justify;
+            margin-bottom: 1rem;
+        }
+
+        .blank-space {
+            display: inline;
+            font-family: "Courier New", monospace;
+            color: var(--text-main);
+            margin: 0 2px;
+            font-weight: bold;
+        }
+
         .exam-meta-tag {
             font-size: 0.9rem;
             padding: 4px 10px;
@@ -897,94 +913,15 @@
             font-family: sans-serif;
         }
 
-        /* --- 新增：UI 标准协议样式 (优化版) --- */
-        .question-block {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-        }
-
-        .question-stem {
-            font-weight: bold;
-            margin-right: 10px;
-            font-size: 1.15rem;
+        /* 修复深色模式下表格头部的背景色 */
+        [data-bs-theme="dark"] .table-light th {
+            background-color: #2c2c2c;
             color: var(--text-main);
+            border-color: var(--border-color);
         }
 
-        .question-content-wrapper {
-            margin-bottom: 0.5rem;
-        }
-
-        /* 内容区域样式 (透明背景，融入试卷) */
-        .question-material {
-            font-size: 1.15rem;
-            line-height: 1.6;
-            color: var(--text-main);
-            display: inline-block; /* 允许与题号同行 */
-        }
-
-        /* 答题线 (仿试卷风格) */
-        .answer-line-wrapper {
-            position: relative;
-            margin-top: 5px;
-            width: 100%;
-        }
-
-        .answer-line-wrapper input {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #000000; /* 纯黑实线 */
-            color: var(--primary-color);
-            font-family: "Times New Roman", serif;
-            font-size: 1.1rem;
-            padding: 2px 0 2px 5px;
-            width: 100%;
-            border-radius: 0;
-        }
-
-        .answer-line-wrapper input:focus {
-            box-shadow: none;
-            border-bottom-width: 2px;
-            border-bottom-color: var(--primary-color);
-            outline: none;
-        }
-
-        [data-bs-theme="dark"] .answer-line-wrapper input {
-            border-bottom-color: #666;
-        }
-
-        .answer-section {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: rgba(78, 110, 242, 0.08);
-            border: 1px solid rgba(78, 110, 242, 0.2);
-        }
-
-        /* 组合题样式 */
-        .group-container {
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px dashed var(--border-color);
-        }
-
-        .group-container:last-child {
-            border-bottom: none;
-        }
-
-        .article-box {
-            line-height: 2;
-            font-size: 1.15rem;
-            text-align: justify;
-            padding: 25px;
-            background: var(--bg-body);
-            border-radius: 8px;
-            margin-bottom: 30px;
-            text-indent: 2em;
-        }
-
-        .sub-questions {
-            padding-left: 15px;
-            border-left: 3px solid var(--border-color);
+        [data-bs-theme="dark"] .table-bordered {
+            border-color: var(--border-color);
         }
 
         .loading-overlay {
@@ -1005,12 +942,102 @@
             background: rgba(0, 0, 0, 0.7);
         }
 
-        [data-bs-theme="dark"] .article-box {
-            background: rgba(255,255,255,0.05);
-        }
+        /* ================= 移动端表格优化 ================= */
+        @media (max-width: 768px) {
+            .mobile-optimized-table {
+                border: none !important;
+            }
 
-        [data-bs-theme="dark"] .answer-section {
-            background-color: rgba(78, 110, 242, 0.15);
+            .mobile-optimized-table thead {
+                display: none;
+            }
+
+            .mobile-optimized-table tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .mobile-optimized-table tbody tr {
+                display: flex;
+                flex-wrap: wrap;
+                background-color: var(--bg-input) !important;
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                padding: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            }
+
+            .mobile-optimized-table td {
+                border: none !important;
+                background: transparent !important;
+                padding: 4px 0 !important;
+            }
+
+            /* 题号 */
+            .mobile-optimized-table td:nth-child(1) {
+                width: 40%;
+                font-weight: bold;
+                color: var(--text-main);
+                display: flex;
+                align-items: center;
+            }
+
+            .mobile-optimized-table td:nth-child(1)::before {
+                content: "题号";
+                font-size: 0.8rem;
+                color: var(--text-sub);
+                background: rgba(0, 0, 0, 0.05);
+                padding: 2px 6px;
+                border-radius: 4px;
+                margin-right: 8px;
+                font-weight: normal;
+            }
+
+            [data-bs-theme="dark"] .mobile-optimized-table td:nth-child(1)::before {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            /* 答案 */
+            .mobile-optimized-table td:nth-child(2) {
+                width: 60%;
+                text-align: right !important;
+                font-weight: bold;
+                color: var(--primary-color) !important;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+            }
+
+            .mobile-optimized-table td:nth-child(2)::before {
+                content: "答案";
+                font-size: 0.8rem;
+                color: var(--text-sub);
+                margin-right: 8px;
+                font-weight: normal;
+            }
+
+            /* 解析 */
+            .mobile-optimized-table td:nth-child(3) {
+                width: 100%;
+                margin-top: 8px;
+                padding-top: 8px !important;
+                border-top: 1px dashed var(--border-color) !important;
+                padding-left: 0 !important;
+                /* override ps-4 */
+                text-align: justify !important;
+                font-size: 0.95rem;
+                color: var(--text-sub);
+                line-height: 1.6 !important;
+            }
+
+            .mobile-optimized-table td:nth-child(3)::before {
+                content: "解析：";
+                display: block;
+                font-weight: bold;
+                margin-bottom: 4px;
+                color: var(--text-main);
+            }
         }
 
         @media (max-width: 992px) {
@@ -1331,13 +1358,18 @@
                     <div class="model-selector dropdown">
                         <button class="btn rounded-pill model-selector-btn d-flex align-items-center gap-2"
                                 type="button" data-bs-toggle="dropdown" aria-expanded="false" id="chatModelBtn">
-                            <i class="bi bi-robot"></i> <span id="chatModelLabel">Loading...</span> <i
+                            <i class="bi bi-robot"></i> <span id="chatModelLabel">豆包 (Doubao)</span> <i
                                 class="bi bi-chevron-down small opacity-75"></i>
                         </button>
-                        <ul class="dropdown-menu model-dropdown-menu shadow-lg rounded-4 p-2" id="chatModelDropdownList">
-                            <!-- 动态插入模型选项 -->
+                        <ul class="dropdown-menu model-dropdown-menu shadow-lg rounded-4 p-2">
+                            <li><button class="dropdown-item rounded-3 active" type="button"
+                                        onclick="app.setChatModel('doubao-seed-1-6-flash-250828', '豆包 (Doubao)', this)">豆包
+                                (Doubao)</button></li>
+                            <li><button class="dropdown-item rounded-3" type="button"
+                                        onclick="app.setChatModel('deepseek-r1-0528', 'DeepSeek-R1', this)">DeepSeek-R1</button>
+                            </li>
                         </ul>
-                        <input type="hidden" id="chatModelSelect" value="">
+                        <input type="hidden" id="chatModelSelect" value="doubao-seed-1-6-flash-250828">
                     </div>
 
                     <div class="input-actions">
@@ -1386,21 +1418,22 @@
                     <!-- 新增：模型选择 -->
                     <div class="form-floating mb-3">
                         <select class="form-select rounded-3" id="examModel" aria-label="选择模型">
-                            <!-- 动态插入 -->
+                            <option value="doubao-seed-1-6-flash-250828" selected>豆包 (Doubao)</option>
+                            <option value="deepseek-r1-0528">DeepSeek-R1</option>
                         </select>
                         <label for="examModel">AI 模型</label>
                     </div>
 
                     <div class="form-floating mb-3">
                         <select class="form-select rounded-3" id="examSubject" aria-label="选择科目">
-                            <option disabled selected>加载中...</option>
+                            <option value="湖北专升本英语" selected>湖北专升本英语</option>
                         </select>
                         <label for="examSubject">选择科目</label>
                     </div>
 
                     <div class="form-floating mb-3">
                         <select class="form-select rounded-3" id="examType" aria-label="题型">
-                            <option disabled selected>请先选择科目</option>
+                            <option value="语法填空">语法填空</option>
                         </select>
                         <label for="examType">题型</label>
                     </div>
@@ -1586,7 +1619,10 @@
                                 <div class="col-md-6">
                                     <label class="form-label small fw-bold text-muted">回复风格</label>
                                     <select class="form-select rounded-3" id="psTone">
-                                        <!-- 动态渲染 -->
+                                        <option value="normal">默认</option>
+                                        <option value="emoji_heavy">✨ 活泼</option>
+                                        <option value="concise">简洁</option>
+                                        <option value="verbose">详细</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
@@ -1628,7 +1664,10 @@
                 <label class="form-label fw-bold small text-muted">性格偏好</label>
                 <select class="form-select form-select-lg rounded-3" id="obPersonality">
                     <option value="default">标准 (平衡理智)</option>
-                    <!-- 动态渲染更多选项 -->
+                    <option value="witty">幽默 (风趣好玩)</option>
+                    <option value="gentle">温柔 (治愈系)</option>
+                    <option value="professional">专业 (严谨学术)</option>
+                    <option value="tsundere">傲娇 (哼，勉为其难)</option>
                 </select>
             </div>
             <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold fs-5"
@@ -1643,22 +1682,14 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
-    // 图标映射配置
-    const ICON_MAP = {
-        'default': 'bi-emoji-smile',
-        'witty': 'bi-emoji-laughing',
-        'gentle': 'bi-flower1',
-        'professional': 'bi-briefcase',
-        'tsundere': 'bi-lightning',
-        'custom': 'bi-pencil-square'
-    };
-
-    // 辅助获取图标，如果未配置则返回默认星星
-    function getIcon(key) {
-        // key 可能是 'personality_witty' 或 'witty'
-        const shortKey = key.replace('personality_', '');
-        return ICON_MAP[shortKey] || 'bi-stars';
-    }
+    const PERSONALITY_OPTIONS = [
+        { id: 'default', icon: 'bi-emoji-smile', title: '标准', desc: '平衡、理智' },
+        { id: 'witty', icon: 'bi-emoji-laughing', title: '幽默', desc: '风趣好玩' },
+        { id: 'gentle', icon: 'bi-flower1', title: '温柔', desc: '知心、治愈' },
+        { id: 'professional', icon: 'bi-briefcase', title: '专家', desc: '严谨、学术' },
+        { id: 'tsundere', icon: 'bi-lightning', title: '傲娇', desc: '口是心非' },
+        { id: 'custom', icon: 'bi-pencil-square', title: '自定义', desc: '完全由你决定' }
+    ];
 
     marked.use({ breaks: true, gfm: true });
 
@@ -1694,7 +1725,7 @@
             this.fullScreenModal = new bootstrap.Modal(document.getElementById('fullScreenInputModal'));
 
             document.getElementById('confirmBtnAction').addEventListener('click', () => { if (this.confirmCallback) this.confirmCallback(); this.confirmModal.hide(); });
-            // renderPersonalityGrid 现在由 app.loadSystemConfigs 调用
+            this.renderPersonalityGrid();
             this.initMobileSettingsNav();
             this.renderSidebar();
 
@@ -1785,109 +1816,14 @@
         },
         closeToast(id) { const el = document.getElementById(id); if (!el) return; el.classList.add('hiding'); el.addEventListener('animationend', () => el.remove()); },
         confirm(msg, callback) { document.getElementById('confirmMessage').innerText = msg; this.confirmCallback = callback; this.confirmModal.show(); },
-
-        // 动态渲染性格卡片
-        renderPersonalityGrid(list) {
+        renderPersonalityGrid() {
             const container = document.getElementById('personalityGrid');
-            if (!container) return;
-
-            // 先渲染从后端获取的性格
-            let html = list.map(p => {
-                // 去除 'personality_' 前缀作为 ID
-                const id = p.configKey.replace('personality_', '');
-                const icon = getIcon(p.configKey);
-                // description 字段通常是性格描述，configValue 是详细prompt
-                // 这里我们假设 description 是短标题或描述
-                const title = p.description ? p.description.split('性格')[0] : id; // 简单处理标题
-                const desc = p.configValue.length > 20 ? p.configValue.substring(0, 20) + '...' : p.configValue;
-
-                return `<div class="col"><div class="persona-card" onclick="ui.selectPersona('${id}')" id="card-${id}"><i class="bi ${icon} fs-2 mb-2 d-block text-primary"></i><div class="fw-bold">${title}</div><div class="small text-muted mt-1 text-truncate">${desc}</div></div></div>`;
-            }).join('');
-
-            // 追加自定义卡片
-            html += `<div class="col"><div class="persona-card" onclick="ui.selectPersona('custom')" id="card-custom"><i class="bi bi-pencil-square fs-2 mb-2 d-block text-primary"></i><div class="fw-bold">自定义</div><div class="small text-muted mt-1">完全由你决定</div></div></div>`;
-
-            container.innerHTML = html;
-
-            // 同时更新 Onboarding 弹窗中的下拉框
-            const obSelect = document.getElementById('obPersonality');
-            if (obSelect) {
-                let optionsHtml = list.map(p => {
-                    const id = p.configKey.replace('personality_', '');
-                    const title = p.description || id;
-                    return `<option value="${id}">${title}</option>`;
-                }).join('');
-                obSelect.innerHTML = optionsHtml;
-            }
+            container.innerHTML = PERSONALITY_OPTIONS.map(p => `<div class="col"><div class="persona-card" onclick="ui.selectPersona('${p.id}')" id="card-${p.id}"><i class="bi ${p.icon} fs-2 mb-2 d-block text-primary"></i><div class="fw-bold">${p.title}</div><div class="small text-muted mt-1">${p.desc}</div></div></div>`).join('');
         },
-
-        // 动态渲染语气选项
-        renderToneOptions(list) {
-            const select = document.getElementById('psTone');
-            if (!select) return;
-            let html = '';
-            list.forEach(t => {
-                // 去除 'tone_' 前缀作为 value
-                const value = t.configKey.replace('tone_', '');
-                // 简单的描述处理
-                let label = t.description || value;
-                html += `<option value="${value}">${label}</option>`;
-            });
-            select.innerHTML = html;
-        },
-
-        // 动态渲染模型列表 (同时更新聊天和出题界面)
-        renderModelList(models) {
-            // 1. 聊天界面的 Dropdown
-            const chatDropdown = document.getElementById('chatModelDropdownList');
-            if (chatDropdown) {
-                let chatHtml = '';
-                models.forEach(m => {
-                    // 默认选中激活的模型
-                    const activeClass = m.isActive ? 'active' : '';
-                    chatHtml += `<li><button class="dropdown-item rounded-3 ${activeClass}" type="button" onclick="app.setChatModel('${m.modelName}', '${m.description || m.modelName}', this)">${m.description || m.modelName}</button></li>`;
-
-                    // 如果当前是激活模型，初始化按钮显示
-                    if (m.isActive && !localStorage.getItem('novi_chat_model')) {
-                        const label = document.getElementById('chatModelLabel');
-                        const input = document.getElementById('chatModelSelect');
-                        if(label) label.innerText = m.description || m.modelName;
-                        if(input) input.value = m.modelName;
-                    }
-                });
-                chatDropdown.innerHTML = chatHtml;
-            }
-
-            // 2. 出题界面的 Select
-            const examSelect = document.getElementById('examModel');
-            if (examSelect) {
-                let examHtml = '';
-                models.forEach(m => {
-                    examHtml += `<option value="${m.modelName}">${m.description || m.modelName}</option>`;
-                });
-                examSelect.innerHTML = examHtml;
-
-                // 恢复之前的选择
-                const savedExamModel = localStorage.getItem('novi_exam_model');
-                if(savedExamModel) examSelect.value = savedExamModel;
-            }
-        },
-
         selectPersona(id) {
-            document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected'));
-            const card = document.getElementById(`card-${id}`);
-            if(card) card.classList.add('selected');
-
+            document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected')); document.getElementById(`card-${id}`).classList.add('selected');
             const customInput = document.getElementById('customPersonaInputDiv');
-            if(customInput) {
-                if (id === 'custom') {
-                    customInput.classList.remove('d-none');
-                    app.currentPreferences.personalityMode = document.getElementById('psCustomPersona').value || 'custom';
-                } else {
-                    customInput.classList.add('d-none');
-                    app.currentPreferences.personalityMode = id;
-                }
-            }
+            if (id === 'custom') { customInput.classList.remove('d-none'); app.currentPreferences.personalityMode = document.getElementById('psCustomPersona').value || 'custom'; } else { customInput.classList.add('d-none'); app.currentPreferences.personalityMode = id; }
         },
         toggleTheme(el) {
             const theme = el.checked ? 'dark' : 'light';
@@ -1899,30 +1835,12 @@
     };
 
     /* ================= AI 出题模块逻辑 ================= */
+    /* ================= AI 出题模块逻辑 (优化版) ================= */
     const exam = {
         data: null,
         isEditMode: false,
-        // Cache subjects to get ID for type loading
-        subjectsMap: {},
 
         init() {
-            // 1. 绑定 UI 事件 (不发起网络请求)
-            this.bindEvents();
-
-            // 2. 初始化模型选择持久化逻辑
-            const savedModel = localStorage.getItem('novi_exam_model');
-            const modelSelect = document.getElementById('examModel');
-            if (savedModel && modelSelect) {
-                modelSelect.value = savedModel;
-            }
-            if (modelSelect) {
-                modelSelect.addEventListener('change', (e) => {
-                    localStorage.setItem('novi_exam_model', e.target.value);
-                });
-            }
-        },
-
-        bindEvents() {
             // 监听题型选择，控制主题输入框显示
             const typeSelect = document.getElementById('examType');
             const topicDiv = document.getElementById('customTopicDiv');
@@ -1931,75 +1849,22 @@
             }
             if (typeSelect && topicDiv) {
                 typeSelect.addEventListener('change', (e) => {
-                    if (['阅读理解', '选择题', '语法填空', '书面表达', '阅读理解-问答'].includes(e.target.value)) topicDiv.classList.remove('d-none');
+                    if (['阅读理解', '选择题', '语法填空'].includes(e.target.value)) topicDiv.classList.remove('d-none');
                     else topicDiv.classList.add('d-none');
                 });
             }
 
-            // 监听科目选择
-            const subjectSelect = document.getElementById('examSubject');
-            if (subjectSelect) {
-                subjectSelect.addEventListener('change', (e) => {
-                    const name = e.target.value;
-                    const id = this.subjectsMap[name];
-                    if (id) this.loadTypes(id);
+            // 持久化 AI 模型选择
+            const savedModel = localStorage.getItem('novi_exam_model');
+            if (savedModel) {
+                const select = document.getElementById('examModel');
+                if (select) select.value = savedModel;
+            }
+            const modelSelect = document.getElementById('examModel');
+            if (modelSelect) {
+                modelSelect.addEventListener('change', (e) => {
+                    localStorage.setItem('novi_exam_model', e.target.value);
                 });
-            }
-        },
-
-        // --- 新增：加载科目 ---
-        async loadSubjects() {
-            try {
-                // Remove /v1 suffix
-                const apiRoot = app.config.apiBase.replace('/v1', '');
-                const res = await axios.get(`${apiRoot}/question/categories/subjects`);
-
-                if (res.data.code === 200 || res.data.code === 1) {
-                    const subjects = res.data.data;
-                    const select = document.getElementById('examSubject');
-                    if(!select) return;
-
-                    select.innerHTML = '';
-                    this.subjectsMap = {};
-
-                    subjects.forEach(sub => {
-                        this.subjectsMap[sub.name] = sub.id;
-                        select.add(new Option(sub.name, sub.name));
-                    });
-
-                    // Load types for the first subject
-                    if (subjects.length > 0) {
-                        select.value = subjects[0].name;
-                        this.loadTypes(subjects[0].id);
-                    }
-                }
-            } catch (e) {
-                console.error("Failed to load subjects", e);
-                // ui.toast("加载科目失败，请检查网络", "error"); // 静默失败，不打扰用户
-            }
-        },
-
-        // --- 新增：加载题型 ---
-        async loadTypes(subjectId) {
-            try {
-                const apiRoot = app.config.apiBase.replace('/v1', '');
-                const res = await axios.get(`${apiRoot}/question/categories/types?subjectId=${subjectId}`);
-
-                if (res.data.code === 200 || res.data.code === 1) {
-                    const types = res.data.data;
-                    const select = document.getElementById('examType');
-                    if(!select) return;
-
-                    select.innerHTML = '';
-                    types.forEach(type => {
-                        select.add(new Option(type.name, type.name));
-                    });
-
-                    // Trigger change to update UI (topic input visibility)
-                    select.dispatchEvent(new Event('change'));
-                }
-            } catch (e) {
-                console.error("Failed to load types", e);
             }
         },
 
@@ -2011,7 +1876,7 @@
             const theme = document.getElementById('examTopic').value;
             const difficulty = document.querySelector('input[name="examDifficulty"]:checked').value;
             const quantity = document.getElementById('examQuantity').value;
-            const model = document.getElementById('examModel').value; // 新增：获取模型
+            const model = document.getElementById('examModel').value;
 
             document.getElementById('paperLoading').classList.remove('d-none');
             document.getElementById('paperEmpty').classList.add('d-none');
@@ -2026,13 +1891,12 @@
                     const result = res.data.data;
                     let questions = [];
 
-                    // 【修复】处理返回单个对象的情况（后端返回的是字符串，parse后可能是一个对象或数组）
+                    // 解析后端数据
                     try {
-                        const parsed = JSON.parse(result.questions);
+                        const parsed = (typeof result.questions === 'string') ? JSON.parse(result.questions) : result.questions;
                         if (Array.isArray(parsed)) {
                             questions = parsed;
                         } else {
-                            // 如果是单个对象，包装成数组
                             questions = [parsed];
                         }
                     } catch (err) {
@@ -2043,7 +1907,7 @@
                     this.data = { questions, recordId: result.recordId };
 
                     this.renderPaper(this.data);
-                    this.loadHistory(); // 刷新历史
+                    this.loadHistory();
                     ui.toast('试卷生成成功！', 'success');
                 } else {
                     throw new Error(res.data.msg || '生成失败');
@@ -2057,11 +1921,10 @@
             }
         },
 
-        // 加载出题历史
+        // 加载出题历史 (保持不变)
         async loadHistory() {
             try {
                 const res = await axios.get('/questions/history');
-                // 注意：因为有两个侧边栏，所以会有多个 ID 相同的元素，querySelectorAll 获取所有
                 const lists = document.querySelectorAll('#examHistoryList');
                 if (res.data.code === 200 || res.data.code === 1) {
                     const html = res.data.data.map(item => {
@@ -2069,12 +1932,10 @@
                         const themeDisplay = item.theme ? ` | ${item.theme}` : '';
                         const typeDisplay = item.questionType === '语法填空' ? '语法填空' : item.questionType;
 
-                        // 使用 data-id 而不是 id 避免冲突
                         return `
                             <div class="session-item d-flex align-items-center ${this.isEditMode ? 'editing-mode' : ''}"
                                  onclick="exam.handleItemClick(${item.id}, event)"
                                  data-id="${item.id}">
-                                <!-- 复选框，默认隐藏 -->
                                 <div class="form-check me-2 d-none history-checkbox-wrapper">
                                     <input class="form-check-input history-checkbox" type="checkbox" value="${item.id}" onclick="event.stopPropagation(); exam.updateSelectionUI()">
                                 </div>
@@ -2083,7 +1944,6 @@
                                         <span class="fw-bold text-truncate" style="max-width: 140px;">${typeDisplay}${themeDisplay}</span>
                                         <div class="d-flex align-items-center">
                                              <span class="small text-muted me-2">${timeStr}</span>
-                                             <!-- 只有非编辑模式下才显示单独删除按钮 -->
                                              <i class="bi bi-x btn text-muted p-0 history-delete-btn" style="font-size: 1.1rem; pointer-events: auto;" onclick="exam.deleteRecord(${item.id}, event)"></i>
                                         </div>
                                     </div>
@@ -2093,7 +1953,6 @@
                     }).join('');
                     lists.forEach(el => el.innerHTML = html || '<div class="text-center text-muted small mt-4 p-3">暂无生成记录</div>');
 
-                    // 恢复编辑状态（如果处于编辑模式）
                     if (this.isEditMode) {
                         this.applyEditModeStyles(true);
                     }
@@ -2101,14 +1960,12 @@
             } catch (e) { console.error('History Load Failed', e); }
         },
 
-        // --- 新增：批量删除相关逻辑 ---
         toggleEditMode() {
             this.isEditMode = !this.isEditMode;
             this.applyEditModeStyles(this.isEditMode);
         },
 
         applyEditModeStyles(isEdit) {
-            // 使用类选择器来同时控制两个侧边栏中的元素
             const toggle = (selector, show) => {
                 document.querySelectorAll(selector).forEach(el => {
                     if (show) {
@@ -2127,7 +1984,6 @@
             toggle('.history-edit-controls', isEdit);
             toggle('.history-select-all-bar', isEdit);
 
-            // 切换列表项样式和复选框显示
             document.querySelectorAll('#examHistoryList .session-item').forEach(item => {
                 if (isEdit) item.classList.add('editing-mode');
                 else item.classList.remove('editing-mode', 'item-selected');
@@ -2137,12 +1993,10 @@
                 if (isEdit) el.classList.remove('d-none'); else el.classList.add('d-none');
             });
 
-            // 切换单个删除按钮显示状态
             document.querySelectorAll('.history-delete-btn').forEach(el => {
                 if (isEdit) el.classList.add('d-none'); else el.classList.remove('d-none');
             });
 
-            // 重置选择状态
             if (!isEdit) {
                 document.querySelectorAll('.history-checkbox').forEach(chk => chk.checked = false);
                 document.querySelectorAll('.select-all-history-top').forEach(chk => chk.checked = false);
@@ -2150,13 +2004,9 @@
             }
         },
 
-        // 处理列表项点击：编辑模式下选中，普通模式下加载
         handleItemClick(id, event) {
             if (this.isEditMode) {
-                // 如果点击的是复选框本身，不需要额外处理
                 if (event.target.type === 'checkbox') return;
-
-                // 在当前点击的行内查找复选框
                 const checkbox = event.currentTarget.querySelector('.history-checkbox');
                 if (checkbox) {
                     checkbox.checked = !checkbox.checked;
@@ -2168,10 +2018,7 @@
         },
 
         toggleSelectAll(source) {
-            // 仅在当前可见的侧边栏范围内操作，或者操作所有复选框
-            // 为了简单一致，操作所有复选框
             document.querySelectorAll('.history-checkbox').forEach(chk => chk.checked = source.checked);
-            // 同步顶部的全选按钮状态（处理另一个侧边栏的同步）
             document.querySelectorAll('.select-all-history-top').forEach(chk => chk.checked = source.checked);
             this.updateSelectionUI();
         },
@@ -2179,8 +2026,6 @@
         updateSelectionUI() {
             const checkboxes = document.querySelectorAll('.history-checkbox');
             let count = 0;
-
-            // 统计选中的数量（去重后的 ID 数量，因为有两个侧边栏）
             const checkedIds = new Set();
 
             checkboxes.forEach(chk => {
@@ -2194,7 +2039,6 @@
             });
 
             count = checkedIds.size;
-
             document.querySelectorAll('.btn-batch-delete').forEach(btn => {
                 btn.textContent = `删除(${count})`;
             });
@@ -2203,8 +2047,6 @@
         async deleteSelected() {
             const checked = document.querySelectorAll('.history-checkbox:checked');
             if (checked.length === 0) return ui.toast('请先选择记录', 'info');
-
-            // 去重 ID
             const ids = [...new Set(Array.from(checked).map(cb => cb.value))];
             const confirmMsg = `确认删除这 ${ids.length} 条记录吗？`;
 
@@ -2212,14 +2054,10 @@
                 try {
                     const promises = ids.map(id => axios.delete(`/questions/history/${id}`));
                     await Promise.all(promises);
-
                     ui.toast(`成功删除 ${ids.length} 条记录`, 'success');
-
-                    // 如果当前显示的记录被删除了，重置视图
                     if (this.data && ids.includes(String(this.data.recordId))) {
                         this.reset();
                     }
-
                     this.loadHistory();
                     this.toggleEditMode();
                 } catch (e) {
@@ -2229,7 +2067,6 @@
             });
         },
 
-        // 单个删除
         deleteRecord(id, e) {
             e.stopPropagation();
             ui.confirm('确认删除这条出题记录吗？', async () => {
@@ -2246,17 +2083,15 @@
             });
         },
 
-        // 加载单条记录详情
         async loadRecord(id) {
             if (this.isEditMode) return;
-
             try {
                 const res = await axios.get(`/questions/history/${id}`);
                 if (res.data.code === 200 || res.data.code === 1) {
                     const result = res.data.data;
                     let questions = [];
                     try {
-                        const parsed = JSON.parse(result.questions);
+                        const parsed = (typeof result.questions === 'string') ? JSON.parse(result.questions) : result.questions;
                         questions = Array.isArray(parsed) ? parsed : [parsed];
                     } catch (err) {
                         questions = [];
@@ -2271,40 +2106,29 @@
             } catch (e) { ui.toast('加载失败', 'error'); }
         },
 
-        // --- 新增：智能解析辅助函数 ---
         parseListToMap(text) {
             if (!text || typeof text !== 'string') return {};
             const map = {};
-            // 核心正则：匹配 (\d+)[\.、] pattern
-            // 优化：不强求分隔符，只要有数字加点号即可，靠后续逻辑拆分
             const regex = /(\d+)\s*[\.、]/g;
-
             let match;
             const indices = [];
             while ((match = regex.exec(text)) !== null) {
-                // 只有当数字在合理范围（比如1-50）时才认为是题号，避免误判
                 const num = parseInt(match[1]);
                 if (num > 0 && num < 100) {
                     indices.push({
                         num: num,
-                        start: regex.lastIndex, // 内容开始的位置
-                        matchStart: match.index // 匹配项开始的位置（用于计算上一项的结束）
+                        start: regex.lastIndex,
+                        matchStart: match.index
                     });
                 }
             }
-
             if (indices.length === 0) return {};
-
             for (let i = 0; i < indices.length; i++) {
                 const current = indices[i];
                 const next = indices[i + 1];
-                // 内容截取到下一项匹配开始之前，或者字符串末尾
                 const end = next ? next.matchStart : text.length;
-
                 let content = text.substring(current.start, end).trim();
-                // 清理可能残留的标点
                 content = content.replace(/^[;；\.,，]+/, '').replace(/[;；\.,，]+$/, '');
-
                 if (content) {
                     map[current.num] = content;
                 }
@@ -2312,177 +2136,148 @@
             return map;
         },
 
-        // 渲染试卷
+        // ================= 核心修改：渲染试卷 (支持新格式) =================
         renderPaper(data) {
             const questions = data.questions;
             const paperBody = document.getElementById('paperBody');
-            // 清空容器
-            paperBody.innerHTML = '';
             const answersBody = document.getElementById('answersBody');
-            answersBody.innerHTML = ''; // 重置答案容器内容
 
-            // 隐藏无关区域
-            document.getElementById('paperSubtitleContainer').classList.add('d-none');
+            paperBody.innerHTML = '';
+            answersBody.innerHTML = '';
 
-            // 安全检查
-            if (!questions || questions.length === 0) {
-                paperBody.innerHTML = '<div class="text-center text-muted my-5">暂无题目数据</div>';
-                return;
+            // 初始化试卷基础信息
+            if (questions && questions.length > 0) {
+                const meta = questions[0];
+                document.getElementById('paperTitleText').innerText = meta.title || 'AI 智能生成试卷';
+                document.getElementById('tagType').innerText = `包含题型：${questions.length} 种`;
+                // 默认显示难度，取第一个题目的instruction作为副标题（如果有）
+                const subtitleEl = document.getElementById('paperSubtitleContainer');
+                if (meta.instruction) {
+                    // 不在这里显示instruction，因为每个Part都有自己的instruction，放在Part内部渲染
+                    subtitleEl.classList.add('d-none');
+                } else {
+                    subtitleEl.classList.add('d-none');
+                }
+                document.getElementById('tagDiff').innerText = `难度：标准`;
             }
 
-            // 更新头部元数据 (使用第一道题的信息)
-            const meta = questions[0].meta || questions[0] || {};
-            const selectedType = document.getElementById('examType') ? document.getElementById('examType').value : '综合';
-            document.getElementById('paperTitleText').innerText = meta.title || `${selectedType} 专项训练`;
-            document.getElementById('tagDiff').innerText = `难度：${meta.difficulty || '标准'}`;
-
-            // 核心：分发器
-            let htmlContent = '';
-            // 收集所有答案
-            let allAnswers = [];
+            let contentHtml = '';
+            let answersContainerHtml = '';
 
             questions.forEach((q, index) => {
-                htmlContent += this.renderDispatcher(q, index);
+                let partItems = []; // 当前大题的所有小题答案
 
-                // 收集答案逻辑
-                if (q.ui_type === 'GROUP' && q.children) {
-                    q.children.forEach((child, ci) => {
-                        allAnswers.push({
-                            num: child.stem ? child.stem.replace(/[\.、\s]*$/, '') : `${index + 1}.${ci + 1}`,
-                            ans: child.answer,
-                            ana: child.analysis
+                // --- 渲染标题和指导语 ---
+                const partTitle = q.title || `Part ${index + 1}`;
+                const instruction = q.instruction ? `<div class="text-muted small mb-3 border-start border-4 border-primary ps-2">${q.instruction}</div>` : '';
+
+                contentHtml += `<div class="mb-5"><h4 class="fw-bold mb-3">${partTitle}</h4>${instruction}`;
+
+                // --- 根据 ui_type 渲染不同题型 ---
+                switch (q.ui_type) {
+                    case 'cloze_passage':
+                    case 'reading_cloze':
+                        // 1. 填空类题型：文章即题干，需替换 [[__id__]]
+                        let stemHtml = q.stem || '';
+
+                        // 正则替换 [[__123__]] 为可视化下划线
+                        stemHtml = stemHtml.replace(/\[\[__(\d+)__\]\]/g, (match, id) => {
+                            return `<span class="fw-bold mx-1 text-primary">[${id}]</span><span class="blank-space border-bottom border-dark d-inline-block text-center" style="min-width: 60px; height: 1.5em; vertical-align: bottom;"></span>`;
                         });
+
+                        contentHtml += `<div class="question-content lh-lg">${stemHtml}</div>`;
+
+                        // 收集答案 (q.answers 数组结构)
+                        if (Array.isArray(q.answers)) {
+                            q.answers.forEach(a => {
+                                partItems.push({
+                                    num: a.index,
+                                    ans: a.correct,
+                                    ana: a.analysis
+                                });
+                            });
+                        }
+                        break;
+
+                    case 'sort_sentence':
+                        // 2. 连词成句：题干是打乱的词，需要提供书写横线
+                        const words = q.stem.split('/').map(w => `<span class="badge bg-light text-dark border me-1 mb-1 fw-normal fs-6">${w.trim()}</span>`).join(' ');
+
+                        contentHtml += `
+                                <div class="card bg-light border-0 mb-3">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3 d-flex flex-wrap justify-content-center">${words}</div>
+                                    </div>
+                                </div>
+                                <div class="mb-2"><strong>Your Answer:</strong></div>
+                                <div class="border-bottom border-secondary mb-4" style="height: 30px;"></div>
+                            `;
+
+                        // 收集答案 (q.answer 对象结构)
+                        if (q.answer) {
+                            partItems.push({
+                                num: index + 1, // 排序题通常作为单题，直接用大题索引或自定义逻辑
+                                ans: q.answer.correct,
+                                ana: q.answer.analysis
+                            });
+                        }
+                        break;
+
+                    default:
+                        // 3. 兼容旧格式或未知格式
+                        let oldText = (q.article_content || q.content || '').replace(/\n/g, '<br>');
+                        // 简单的下划线替换兼容
+                        oldText = oldText.replace(/_+/g, '<span class="blank-space">__________</span>');
+                        contentHtml += `<div class="question-content">${oldText}</div>`;
+
+                        // 尝试解析旧格式答案
+                        if (q.answer) {
+                            if (Array.isArray(q.answer)) {
+                                q.answer.forEach((a, i) => partItems.push({num: i+1, ans: a, ana: q.analysis?.[i]}));
+                            } else if (typeof q.answer === 'string') {
+                                partItems.push({num: index+1, ans: q.answer, ana: q.analysis});
+                            }
+                        }
+                        break;
+                }
+
+                contentHtml += `</div>`; // Close Part Div
+
+                // --- 构建该部分的答案表格 ---
+                if (partItems.length > 0) {
+                    if (index > 0) answersContainerHtml += '<hr class="my-5">';
+
+                    answersContainerHtml += `<div class="mb-4"><h6 class="fw-bold text-secondary mb-3">${partTitle} 参考答案</h6>`;
+                    answersContainerHtml += `
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover align-middle mb-0 mobile-optimized-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 60px;" class="text-center">#</th>
+                                        <th style="width: 25%;" class="text-center">答案</th>
+                                        <th class="text-start ps-4">解析</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+
+                    partItems.forEach(item => {
+                        answersContainerHtml += `
+                                <tr>
+                                    <td class="text-center fw-bold text-secondary">${item.num}</td>
+                                    <td class="text-center text-primary fw-bold text-break">${item.ans}</td>
+                                    <td class="text-muted small text-break text-start ps-4" style="line-height: 1.6;">${item.ana || '暂无解析'}</td>
+                                </tr>`;
                     });
-                } else if (q.ui_type === 'INPUT' || q.ui_type === 'CHOICE' || q.words) {
-                    // 单题或旧格式
-                    allAnswers.push({
-                        num: q.stem ? q.stem.replace(/[\.、\s]*$/, '') : `${index + 1}`,
-                        ans: q.answer,
-                        ana: q.analysis
-                    });
+
+                    answersContainerHtml += `</tbody></table></div></div>`;
                 }
             });
 
-            // 注入 HTML
-            paperBody.innerHTML = htmlContent;
+            paperBody.innerHTML = contentHtml;
+            answersBody.innerHTML = answersContainerHtml;
 
-            // 构建答案表格
-            if (allAnswers.length > 0) {
-                let answersContainerHtml = `<div class="mb-3"><h6 class="fw-bold text-secondary">参考答案与解析</h6>`;
-                answersContainerHtml += `
-                    <div class="table-responsive mb-4">
-                        <table class="table table-bordered table-hover align-middle mb-0 table-striped mobile-optimized-table">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width: 80px;" class="text-center">题号</th>
-                                    <th style="width: 200px;" class="text-center">答案</th>
-                                    <th class="text-start ps-4">解析</th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
-
-                allAnswers.forEach(item => {
-                    answersContainerHtml += `
-                            <tr>
-                                <td class="text-center fw-bold text-secondary">${item.num}</td>
-                                <td class="text-center text-primary fw-bold text-break">${item.ans || '无'}</td>
-                                <td class="text-muted small text-break text-start ps-4" style="line-height: 1.6;">${item.ana || '暂无解析'}</td>
-                            </tr>`;
-                });
-
-                answersContainerHtml += `
-                            </tbody>
-                        </table>
-                    </div></div>`;
-
-                answersBody.innerHTML = answersContainerHtml;
-            }
-
-            // 重置开关状态
             document.getElementById('showAnswersSwitch').checked = false;
-            this.toggleAnswers(); // Ensure answers are hidden
-        },
-
-        // UI 分发器
-        renderDispatcher(q, index) {
-            // 标准 UI 协议
-            if (q.ui_type === 'GROUP') return this.renderGroup(q, index);
-            if (q.ui_type === 'INPUT') return this.renderInput(q, index);
-            if (q.ui_type === 'CHOICE') return this.renderChoice(q, index);
-
-            // 兼容旧数据 (Duck Typing)
-            if (q.article_content) {
-                return this.renderGroup({
-                    stem: q.title || `Passage ${index + 1}`,
-                    content: q.article_content,
-                    children: q.questions.map((sq, i) => ({
-                        ui_type: 'INPUT',
-                        stem: sq.num || `${index + 1}.${i + 1}`,
-                        content: sq.clue || sq.question || '',
-                        answer: sq.answer,
-                        analysis: sq.analysis
-                    })),
-                    meta: { difficulty: q.difficulty }
-                }, index);
-            }
-            if (q.words) {
-                // 修复：将旧的连词成句格式转换为 INPUT
-                return this.renderInput({
-                    stem: `${q.question_number}.`,
-                    content: q.words, // 直接使用 words 作为 content
-                    answer: q.answer,
-                    analysis: q.analysis,
-                    meta: { difficulty: q.difficulty }
-                }, index);
-            }
-
-            return `<div class="alert alert-warning">暂不支持的题目格式</div>`;
-        },
-
-        // 通用输入框渲染器 (INPUT)
-        renderInput(data, index) {
-            const stemText = data.stem || `Question ${index + 1}`;
-
-            // 修复：不再移除下划线，直接保留原始内容渲染
-            let rawContent = data.content || '';
-            const contentHtml = rawContent ? marked.parse(rawContent) : '';
-
-            // 修复：移除内嵌的 answer-section
-            return `
-                <div class="question-block">
-                    <div class="question-content-wrapper d-flex align-items-baseline mb-2">
-                         <div class="question-stem me-2 mb-0 text-nowrap">${stemText}</div>
-                         <div class="question-material mb-0 p-0 bg-transparent border-0 w-100">${contentHtml}</div>
-                    </div>
-                    <div class="answer-line-wrapper">
-                        <input type="text" class="form-control" placeholder="">
-                    </div>
-                </div>
-            `;
-        },
-
-        // 通用组合题渲染器 (GROUP)
-        renderGroup(data, index) {
-            const stemText = data.stem || `Group ${index + 1}`;
-            const contentHtml = data.content ? marked.parse(data.content) : '';
-            const childrenHtml = (data.children || []).map((child, i) => this.renderDispatcher(child, i)).join('');
-
-            return `
-                <div class="group-container">
-                    <h4 class="text-center mb-3 fw-bold">${stemText}</h4>
-                    <div class="article-box border shadow-sm">
-                        ${contentHtml}
-                    </div>
-                    <div class="sub-questions">
-                        ${childrenHtml}
-                    </div>
-                </div>
-            `;
-        },
-
-        // 选择题渲染器 (预留)
-        renderChoice(data, index) {
-            return this.renderInput(data, index);
+            document.getElementById('paperAnswers').classList.add('d-none');
         },
 
         toggleAnswers() {
@@ -2498,25 +2293,22 @@
         },
 
         exportWord() {
+            // 导出逻辑基本保持不变，因为是基于 innerHTML 导出的
             const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
             const footer = "</body></html>";
             const styles = `
                 <style>
                     body { font-family: 'Times New Roman', serif; }
                     .paper-title { text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20px; }
-                    .paper-subtitle { text-align: center; font-size: 14pt; margin-bottom: 20px; color: #555; }
-                    .exam-meta-tag { display: none; }
-                    .question-content { text-indent: 2em; line-height: 1.5; text-align: justify; margin-bottom: 10px; }
+                    .question-content { text-indent: 0; line-height: 1.5; text-align: justify; margin-bottom: 10px; }
                     table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
                     th, td { border: 1px solid #000; padding: 8px; }
                     th { background-color: #f2f2f2; text-align: center; font-weight: bold; }
                     td { text-align: left; vertical-align: middle; }
-                    td:first-child, td:nth-child(2) { text-align: center; } /* 序号和答案居中 */
-                    .blank-space { text-decoration: none; display: inline-block; min-width: 80px; text-align: center; }
                     .text-primary { color: #000; font-weight: bold; }
+                    .blank-space { display: inline-block; border-bottom: 1px solid #000; min-width: 50px; }
                 </style>
                 `;
-            // 导出时可能需要特殊处理 UI 结构
             const sourceHTML = document.getElementById("paperExportArea").innerHTML;
             const source = header + styles + sourceHTML + footer;
             const blob = new Blob(['\ufeff', source], { type: 'application/msword' });
@@ -2534,22 +2326,18 @@
     /* ================= 核心 App 逻辑 ================= */
     const app = {
         config: { apiBase: 'http://localhost:8080/api/v1' },
-        state: { token: localStorage.getItem('novi_token'), user: {}, sessionId: null, isTyping: false, systemConfigs: { personalities: [], tones: [], models: [] } },
+        state: { token: localStorage.getItem('novi_token'), user: {}, sessionId: null, isTyping: false },
         currentPreferences: {},
         isChatEditMode: false, // 新增：聊天批量删除模式状态
 
         init() {
             ui.init();
-            // 关键修改：exam.init() 只绑定 UI 事件，不发请求
             exam.init();
             this.setupAxios();
             this.bindEvents();
             const isDark = localStorage.getItem('novi_theme') === 'dark';
             document.querySelectorAll('.theme-switcher').forEach(el => el.checked = isDark);
             if (isDark) document.documentElement.setAttribute('data-bs-theme', 'dark');
-
-            // 移除：不在初始化时立即加载系统配置，防止未登录导致的 401 无限刷新循环
-            // this.loadSystemConfigs();
 
             if (this.state.token) this.initLoggedInState();
 
@@ -2564,43 +2352,22 @@
                 // 更新隐藏的 input 值和按钮显示
                 const input = document.getElementById('chatModelSelect');
                 const label = document.getElementById('chatModelLabel');
+                const menuItems = document.querySelectorAll('.model-dropdown-menu .dropdown-item');
 
                 if (input) input.value = savedChatModel;
                 if (label && savedChatLabel) label.innerText = savedChatLabel;
-            }
-        },
 
-        // 加载系统配置（模型、性格、语气）
-        async loadSystemConfigs() {
-            try {
-                // 修正 API 路径：Config 模块的接口没有 /v1 前缀
-                // apiBase 是 http://localhost:8080/api/v1，我们需要 http://localhost:8080/api
-                const configBase = this.config.apiBase.replace('/v1', '');
-
-                // 并行请求
-                const [modelsRes, personalitiesRes, tonesRes] = await Promise.all([
-                    axios.get(`${configBase}/model/config/list`).catch(() => ({ data: { data: [] } })),
-                    axios.get(`${configBase}/prompt/config/type/1`).catch(() => ({ data: { data: [] } })),
-                    axios.get(`${configBase}/prompt/config/type/2`).catch(() => ({ data: { data: [] } }))
-                ]);
-
-                this.state.systemConfigs.models = modelsRes.data.data || [];
-                this.state.systemConfigs.personalities = personalitiesRes.data.data || [];
-                this.state.systemConfigs.tones = tonesRes.data.data || [];
-
-                // 渲染 UI
-                ui.renderModelList(this.state.systemConfigs.models);
-                ui.renderPersonalityGrid(this.state.systemConfigs.personalities);
-                ui.renderToneOptions(this.state.systemConfigs.tones);
-
-            } catch (e) {
-                console.error("加载系统配置失败", e);
-                // 不弹窗报错，以免干扰用户（因为这通常在后台静默加载）
+                // 更新选中状态
+                menuItems.forEach(item => {
+                    item.classList.remove('active');
+                    // 这里简单的文本匹配，严谨点可以用 data-value
+                    if (item.innerText.trim() === savedChatLabel) item.classList.add('active');
+                });
             }
         },
 
         // 新增：设置聊天模型
-        async setChatModel(modelValue, modelLabel, element) {
+        setChatModel(modelValue, modelLabel, element) {
             // 更新隐藏域值，用于发送请求
             document.getElementById('chatModelSelect').value = modelValue;
             // 更新按钮文本显示
@@ -2614,17 +2381,6 @@
             // 持久化存储
             localStorage.setItem('novi_chat_model', modelValue);
             localStorage.setItem('novi_chat_model_label', modelLabel);
-
-            // 调用后端切换模型 API
-            try {
-                const configBase = this.config.apiBase.replace('/v1', '');
-                // 修复：确保 modelValue 进行编码，防止特殊字符导致 URL 错误
-                await axios.post(`${configBase}/model/config/switch/${encodeURIComponent(modelValue)}`);
-                ui.toast(`已切换模型为: ${modelLabel}`, 'success');
-            } catch (e) {
-                console.error("切换模型失败", e);
-                ui.toast("模型切换请求失败", "error");
-            }
         },
 
         switchMode(mode) {
@@ -2687,11 +2443,6 @@
 
         async initLoggedInState(checkOnboarding = false) {
             this.switchMode('chat'); // 默认进聊天
-
-            // 关键修改：登录成功后才加载系统配置和出题数据
-            this.loadSystemConfigs();
-            exam.loadSubjects();
-
             try {
                 const me = await axios.get('/users/me');
                 this.state.user = me.data.data;
@@ -2759,38 +2510,29 @@
                 document.querySelectorAll('.persona-card').forEach(el => el.classList.remove('selected'));
 
                 // 2. 查找是否匹配预设
-                // 注意：这里的匹配逻辑需要基于后端返回的数据
-                // 后端返回的 p.personalityMode 通常是去除了前缀的 key (例如 'witty')
-                // 或者如果是自定义，就是自定义的内容
-
-                // 检查是否在系统预设列表中 (需要遍历加载的配置)
-                const personalities = this.state.systemConfigs.personalities;
-                const foundOption = personalities.find(opt => opt.configKey === 'personality_' + p.personalityMode);
+                const foundOption = PERSONALITY_OPTIONS.find(opt => opt.id === p.personalityMode);
+                const isPredefined = foundOption && p.personalityMode !== 'custom';
 
                 const customInput = document.getElementById('customPersonaInputDiv');
 
-                if (foundOption) {
+                if (isPredefined) {
                     // 如果是预设，选中对应卡片，隐藏输入框
-                    // 注意 ID 匹配
-                    const card = document.getElementById(`card-${p.personalityMode}`);
-                    if (card) card.classList.add('selected');
-
+                    document.getElementById(`card-${p.personalityMode}`).classList.add('selected');
                     customInput.classList.add('d-none');
                     document.getElementById('psCustomPersona').value = '';
                 } else {
                     // 如果是自定义（包括 'custom' 字符串或具体 prompt），选中自定义卡片
-                    // 或者是默认的 'default' 但没找到对应配置
-                    const customCard = document.getElementById('card-custom');
-                    if (customCard) customCard.classList.add('selected');
+                    document.getElementById('card-custom').classList.add('selected');
                     customInput.classList.remove('d-none');
 
                     // 获取要显示的文本，如果是 'custom' 占位符则显示空
-                    const textToShow = (p.personalityMode === 'custom' || p.personalityMode === 'default') ? '' : p.personalityMode;
+                    const textToShow = (p.personalityMode === 'custom') ? '' : p.personalityMode;
 
                     // 设置值
                     const inputEl = document.getElementById('psCustomPersona');
                     inputEl.value = textToShow || '';
 
+                    // 按照用户要求，同时修改 placeholder 属性（虽然 value 才是关键）
                     if (textToShow) {
                         inputEl.placeholder = textToShow;
                     } else {
@@ -2798,11 +2540,7 @@
                     }
                 }
 
-                // 语气设置
-                // p.toneStyle 存储的是去除了 'tone_' 前缀的值 (例如 'normal')
-                const toneSelect = document.getElementById('psTone');
-                if (toneSelect) toneSelect.value = p.toneStyle || 'normal';
-
+                document.getElementById('psTone').value = p.toneStyle || 'normal';
                 document.getElementById('psLanguage').value = p.language || '';
                 document.getElementById('psAddressName').value = p.userAddressName || '';
             } catch (e) {
