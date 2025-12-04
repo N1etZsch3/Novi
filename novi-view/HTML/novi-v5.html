@@ -1418,6 +1418,27 @@
                             <label for="examModel">AI 模型</label>
                         </div>
 
+                        <!-- 深度思考开关 (Redesigned V2) -->
+                        <div id="deepThinkingContainer"
+                            class="d-none align-items-center justify-content-between p-3 mb-3 rounded-3 border border-warning border-opacity-25 bg-warning bg-opacity-10">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-warning bg-opacity-25 text-warning d-flex align-items-center justify-content-center me-3"
+                                    style="width: 36px; height: 36px; flex-shrink: 0;">
+                                    <i class="bi bi-stars"></i>
+                                </div>
+                                <div style="line-height: 1.2;">
+                                    <div class="fw-bold text-dark" style="font-size: 0.9rem;">深度思考</div>
+                                    <div class="text-muted"
+                                        style="font-size: 0.75rem; transform: scale(0.95); transform-origin: left;">
+                                        启用强推理模式，耗时较长</div>
+                                </div>
+                            </div>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="enableThinking"
+                                    checked style="width: 3em; height: 1.5em;">
+                            </div>
+                        </div>
+
                         <div class="form-floating mb-3">
                             <select class="form-select rounded-3" id="examSubject" aria-label="选择科目">
                                 <option disabled selected>加载中...</option>
@@ -1892,7 +1913,18 @@
                     let defaultModel = null;
 
                     models.forEach(m => {
-                        examHtml += `<option value="${m.modelName}">${m.description || m.modelName}</option>`;
+                        // Store enableThinking in data attribute
+                        // Robust check: convert to string and check for "true" or "1"
+                        const rawVal = m.enableThinking;
+                        const enableThinking = (String(rawVal) === 'true' || String(rawVal) === '1');
+
+                        if (enableThinking) {
+                            console.log(`[DeepThinking] Model ${m.modelName} supports it. Raw: ${rawVal} (${typeof rawVal})`);
+                        } else {
+                            console.log(`[DeepThinking] Model ${m.modelName} does NOT support it. Raw: ${rawVal} (${typeof rawVal})`);
+                        }
+
+                        examHtml += `<option value="${m.modelName}" data-enable-thinking="${enableThinking}">${m.description || m.modelName}</option>`;
                         // 记录激活的模型作为默认值
                         if (m.isActive) {
                             defaultModel = m.modelName;
@@ -1908,6 +1940,10 @@
                         examSelect.value = defaultModel;
                         localStorage.setItem('novi_exam_model', defaultModel);
                     }
+
+                    // Trigger change event to update UI state based on the selected model
+                    // Pass 'silent: true' to avoid showing the "Model switched" toast on initial load
+                    examSelect.dispatchEvent(new CustomEvent('change', { detail: { silent: true } }));
                 }
             },
 
@@ -1967,12 +2003,36 @@
                     modelSelect.addEventListener('change', async (e) => {
                         const modelName = e.target.value;
                         const previousValue = localStorage.getItem('novi_exam_model') || modelName;
+                        const isSilent = e.detail && e.detail.silent;
 
-                        const success = await app.switchModel(modelName, 'exam');
+                        // Update Deep Thinking toggle visibility
+                        if (e.target.selectedIndex >= 0) {
+                            const selectedOption = e.target.options[e.target.selectedIndex];
+                            const enableThinking = selectedOption.getAttribute('data-enable-thinking') === 'true';
+                            console.log(`Selected model: ${modelName}, Deep Thinking supported: ${enableThinking}`);
+
+                            // Update the toggle UI immediately
+                            const thinkingSwitch = document.getElementById('enableThinking');
+                            const thinkingContainer = document.getElementById('deepThinkingContainer');
+
+                            if (thinkingContainer) {
+                                if (enableThinking) {
+                                    thinkingContainer.classList.remove('d-none');
+                                    thinkingContainer.classList.add('d-flex');
+                                } else {
+                                    thinkingContainer.classList.remove('d-flex');
+                                    thinkingContainer.classList.add('d-none');
+                                    if (thinkingSwitch) thinkingSwitch.checked = false;
+                                }
+                            }
+                        }
+
+                        // Call switchModel with silent flag
+                        const success = await app.switchModel(modelName, 'exam', isSilent);
                         if (success) {
                             localStorage.setItem('novi_exam_model', modelName);
                         } else {
-                            // 切换失败，恢复之前的选择
+                            // 之前的选择
                             e.target.value = previousValue;
                         }
                     });
@@ -1985,7 +2045,6 @@
                     // 修正 API 路径：移除 /v1 前缀
                     const apiRoot = app.config.apiBase.replace('/v1', '');
                     const res = await axios.get(`${apiRoot}/question/categories/subjects`);
-
                     if (res.data.code === 200 || res.data.code === 1) {
                         const subjects = res.data.data || [];
                         const select = document.getElementById('examSubject');
@@ -2003,8 +2062,7 @@
                         }
                     }
                 } catch (e) {
-                    console.error("加载科目失败", e);
-                    ui.toast('加载科目数据失败', 'error');
+                    console.error(ui.toast('加载科目数据失败', 'error'));
                 }
             },
 
@@ -2038,6 +2096,8 @@
                 const difficulty = document.querySelector('input[name="examDifficulty"]:checked').value;
                 const quantity = document.getElementById('examQuantity').value;
                 const model = document.getElementById('examModel').value;
+                // 获取深度思考开关状态
+                const enableThinking = document.getElementById('enableThinking').checked;
 
                 document.getElementById('paperLoading').classList.remove('d-none');
                 document.getElementById('paperEmpty').classList.add('d-none');
@@ -2045,7 +2105,7 @@
 
                 try {
                     const res = await axios.post('/questions/generate', {
-                        subject, questionType, theme, difficulty, quantity: parseInt(quantity), model
+                        subject, questionType, theme, difficulty, quantity: parseInt(quantity), model, enableThinking
                     });
 
                     if (res.data.code === 200 || res.data.code === 1) {
@@ -2094,8 +2154,8 @@
                             const typeDisplay = item.questionType === '语法填空' ? '语法填空' : item.questionType;
 
                             return `
-                            <div class="session-item d-flex align-items-center ${this.isEditMode ? 'editing-mode' : ''}"
-                                 onclick="exam.handleItemClick(${item.id}, event)"
+                    <div class="session-item d-flex align-items-center ${this.isEditMode ? 'editing-mode' : ''}"
+                                 onclick="exam.handleItemClick('${item.id}', event)"
                                  data-id="${item.id}">
                                 <div class="form-check me-2 d-none history-checkbox-wrapper">
                                     <input class="form-check-input history-checkbox" type="checkbox" value="${item.id}" onclick="event.stopPropagation(); exam.updateSelectionUI()">
@@ -2105,7 +2165,7 @@
                                         <span class="fw-bold text-truncate" style="max-width: 140px;">${typeDisplay}${themeDisplay}</span>
                                         <div class="d-flex align-items-center">
                                              <span class="small text-muted me-2">${timeStr}</span>
-                                             <i class="bi bi-x btn text-muted p-0 history-delete-btn" style="font-size: 1.1rem; pointer-events: auto;" onclick="exam.deleteRecord(${item.id}, event)"></i>
+                                             <i class="bi bi-x btn text-muted p-0 history-delete-btn" style="font-size: 1.1rem; pointer-events: auto;" onclick="exam.deleteRecord('${item.id}', event)"></i>
                                         </div>
                                     </div>
                                     <div class="small text-muted text-truncate">${item.subject} · ${item.difficulty}</div>
@@ -2208,21 +2268,29 @@
             async deleteSelected() {
                 const checked = document.querySelectorAll('.history-checkbox:checked');
                 if (checked.length === 0) return ui.toast('请先选择记录', 'info');
-                const ids = [...new Set(Array.from(checked).map(cb => cb.value))];
+
+                // Convert to numbers for the backend List<Long>
+                const ids = [...new Set(Array.from(checked).map(cb => parseInt(cb.value)))];
                 const confirmMsg = `确认删除这 ${ids.length} 条记录吗？`;
 
                 ui.confirm(confirmMsg, async () => {
                     try {
-                        const promises = ids.map(id => axios.delete(`/questions/history/${id}`));
-                        await Promise.all(promises);
+                        // Use the batch delete endpoint: DELETE /questions/history with body
+                        await axios.delete('/questions/history', { data: ids });
+
                         ui.toast(`成功删除 ${ids.length} 条记录`, 'success');
-                        if (this.data && ids.includes(String(this.data.recordId))) {
+
+                        // Check if current record is in the deleted list
+                        // Ensure type safety for comparison
+                        if (this.data && ids.includes(Number(this.data.recordId))) {
                             this.reset();
                         }
+
                         this.loadHistory();
                         this.toggleEditMode();
                     } catch (e) {
-                        ui.toast('批量删除过程中出现错误', 'error');
+                        console.error("Batch delete failed", e);
+                        ui.toast('批量删除失败: ' + (e.response?.data?.msg || e.message), 'error');
                         this.loadHistory();
                     }
                 });
@@ -2313,7 +2381,7 @@
                     document.getElementById('tagType').innerText = `包含题型：${questions.length} 大题`;
                     const subtitleEl = document.getElementById('paperSubtitleContainer');
                     subtitleEl.classList.add('d-none');
-                    document.getElementById('tagDiff').innerText = `难度：${meta.difficulty || '标准'}`;
+                    document.getElementById('tagDiff').innerText = `难度：${meta.difficulty || '标准'} `;
                 }
 
                 let contentHtml = '';
@@ -2326,17 +2394,58 @@
                     let partItems = []; // 当前大题的所有小题答案
                     let localAnswerIndex = 0; // 当前大题内的答案数组指针
 
-                    // --- 渲染标题和指导语 ---
-                    const partTitle = q.title || `Part ${index + 1}`;
-                    const scoreDesc = q.score_desc ? `<span class="ms-2 badge bg-light text-secondary border fw-normal">${q.score_desc}</span>` : '';
-                    const instruction = q.instruction ? `<div class="text-muted small mb-3 border-start border-4 border-primary ps-2">${q.instruction}</div>` : '';
-
-                    contentHtml += `<div class="mb-5"><h4 class="fw-bold mb-3">${partTitle}${scoreDesc}</h4>${instruction}`;
-
                     // --- 渲染逻辑 ---
+                    let finalTitle = q.title || `Part ${index + 1} `;
+                    let processedContent = '';
+
                     // 优先判断是否存在 content 且包含特定模板语法，或者是新数据结构
                     if (q.content) {
-                        let processedContent = q.content;
+                        processedContent = q.content;
+
+                        // 0. 智能提取标题 (如果 content 以 title 开头)
+                        // 用户需求：把AI响应的题目大标题，放到现在网页自己渲染的题目大标题的位置
+                        if (q.title) {
+                            const contentTrimmed = processedContent.trim();
+                            const firstLine = contentTrimmed.split('\n')[0].trim();
+
+                            let isTitleMatch = false;
+
+                            // 策略 A: "Part X" 前缀匹配 (最稳健)
+                            // 提取 q.title 中的 "Part X" (支持罗马数字和阿拉伯数字)
+                            const partPrefixRegex = /^(Part\s+([IVX]+|\d+))/i;
+                            const titlePartMatch = q.title.match(partPrefixRegex);
+
+                            if (titlePartMatch) {
+                                // 检查 content 第一行是否也以相同的 "Part X" 开头
+                                const contentPartMatch = firstLine.match(partPrefixRegex);
+                                if (contentPartMatch && contentPartMatch[1].toLowerCase() === titlePartMatch[1].toLowerCase()) {
+                                    isTitleMatch = true;
+                                }
+                            }
+
+                            // 策略 B: 归一化模糊匹配 (处理中文标题或无 Part 的情况)
+                            if (!isTitleMatch) {
+                                // 移除所有标点和空白，转小写
+                                const normalize = (str) => str.replace(/[^\w\u4e00-\u9fa5]/g, '').toLowerCase();
+                                const cleanTitle = normalize(q.title);
+                                const cleanLine = normalize(firstLine);
+
+                                // 如果归一化后，第一行包含标题，或者标题包含第一行 (且长度足够，避免误判 "Part")
+                                if (cleanTitle.length > 2 && cleanLine.length > 2) {
+                                    if (cleanLine.startsWith(cleanTitle) || cleanTitle.startsWith(cleanLine)) {
+                                        isTitleMatch = true;
+                                    }
+                                }
+                            }
+
+                            if (isTitleMatch) {
+                                // 使用 AI 生成的标题 (第一行)
+                                finalTitle = firstLine;
+                                // 从正文中移除第一行
+                                processedContent = contentTrimmed.substring(firstLine.length).trim();
+                            }
+                        }
+
 
                         // 1. 处理 {{index}} 并同步收集答案
                         // 注意：这里同时处理了题目渲染和答案收集，确保序号一致
@@ -2392,14 +2501,14 @@
                             .replace(/{{subtitle:(.*?)}}/g, '<div class="text-center fw-bold my-3 fs-5">$1</div>')
                             // 换行
                             .replace(/{{br}}/g, '<br/>')
-                            // 缩进
-                            .replace(/{{indent}}/g, '<span style="display:inline-block; width: 2em;"></span>')
+                            // 缩进 (兼容有无空格)
+                            .replace(/{{indent}}\s*/g, '<span style="display:inline-block; width: 2em;"></span>')
                             // 短填空 (实义下划线)
                             .replace(/{{short_blank}}/g, '<span class="fw-bold mx-1">________</span>')
                             // 长横线 (实义下划线，用于连词成句等)
                             .replace(/{{long_line}}/g, '<div class="my-2 text-muted">___________________________________________________________________</div>');
 
-                        contentHtml += `<div class="question-content lh-lg text-break">${processedContent}</div>`;
+                        processedContent = `<div class="question-content lh-lg text-break">${processedContent}</div>`;
 
                     } else {
                         // --- 兼容旧版无 content 字段的逻辑 (保留作为 fallback) ---
@@ -2410,42 +2519,47 @@
                                 stemHtml = stemHtml.replace(/\[\[__(\d+)__\]\]/g, (match, id) => {
                                     return `<span class="fw-bold mx-1 text-primary">[${id}]</span><span class="blank-space border-bottom border-dark d-inline-block text-center" style="min-width: 60px; height: 1.5em; vertical-align: bottom;"></span>`;
                                 });
-                                contentHtml += `<div class="question-content lh-lg">${stemHtml}</div>`;
+                                processedContent = `<div class="question-content lh-lg">${stemHtml}</div>`;
                                 if (Array.isArray(q.answers)) {
                                     q.answers.forEach(a => partItems.push({ num: a.index, ans: a.correct, ana: a.analysis }));
                                 }
                                 break;
                             case 'sort_sentence':
                                 const words = q.stem.split('/').map(w => `<span class="badge bg-light text-dark border me-1 mb-1 fw-normal fs-6">${w.trim()}</span>`).join(' ');
-                                contentHtml += `<div class="card bg-light border-0 mb-3"><div class="card-body text-center"><div class="mb-3 d-flex flex-wrap justify-content-center">${words}</div></div></div><div class="mb-2"><strong>Your Answer:</strong></div><div class="border-bottom border-secondary mb-4" style="height: 30px;"></div>`;
+                                processedContent = `<div class="card bg-light border-0 mb-3"><div class="card-body text-center"><div class="mb-3 d-flex flex-wrap justify-content-center">${words}</div></div></div><div class="mb-2"><strong>Your Answer:</strong></div><div class="border-bottom border-secondary mb-4" style="height: 30px;"></div>`;
                                 if (q.answer) partItems.push({ num: index + 1, ans: q.answer.correct, ana: q.answer.analysis });
                                 break;
                             default:
                                 let oldText = (q.article_content || '').replace(/\n/g, '<br>');
-                                contentHtml += `<div class="question-content">${oldText}</div>`;
+                                processedContent = `<div class="question-content">${oldText}</div>`;
                                 if (q.answer) partItems.push({ num: index + 1, ans: typeof q.answer === 'string' ? q.answer : q.answer.correct, ana: q.analysis });
                                 break;
                         }
                     }
 
+                    // --- 延迟渲染标题和内容 ---
+                    const scoreDesc = q.score_desc ? `<span class="ms-2 badge bg-light text-secondary border fw-normal">${q.score_desc}</span>` : '';
+                    const instruction = q.instruction ? `<div class="text-muted small mb-3 border-start border-4 border-primary ps-2">${q.instruction}</div>` : '';
+
+                    contentHtml += `<div class="mb-5"><h4 class="fw-bold mb-3">${scoreDesc}</h4>${instruction}${processedContent}`;
                     contentHtml += `</div>`; // Close Part Div
 
                     // --- 构建该部分的答案表格 ---
                     if (partItems.length > 0) {
                         if (index > 0) answersContainerHtml += '<hr class="my-5">';
 
-                        answersContainerHtml += `<div class="mb-4"><h6 class="fw-bold text-secondary mb-3">${partTitle} 参考答案</h6>`;
+                        answersContainerHtml += `<div class="mb-4"><h6 class="fw-bold text-secondary mb-3">${finalTitle} 参考答案</h6>`;
                         answersContainerHtml += `
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover align-middle mb-0 mobile-optimized-table">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 60px;" class="text-center">#</th>
-                                        <th style="width: 25%;" class="text-center">答案</th>
-                                        <th class="text-start ps-4">解析</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle mb-0 mobile-optimized-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 60px;" class="text-center">#</th>
+                            <th style="width: 25%;" class="text-center">答案</th>
+                            <th class="text-start ps-4">解析</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
 
                         partItems.forEach(item => {
                             answersContainerHtml += `
@@ -2480,29 +2594,96 @@
             },
 
             exportWord() {
-                // 导出逻辑基本保持不变，因为是基于 innerHTML 导出的
                 const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
                 const footer = "</body></html>";
+                // 优化后的 CSS 样式：A4 纸张大小、页边距、字体优化
                 const styles = `
                 <style>
-                    body { font-family: 'Times New Roman', serif; }
-                    .paper-title { text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20px; }
-                    .question-content { text-indent: 0; line-height: 1.5; text-align: justify; margin-bottom: 10px; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
-                    th, td { border: 1px solid #000; padding: 8px; }
-                    th { background-color: #f2f2f2; text-align: center; font-weight: bold; }
-                    td { text-align: left; vertical-align: middle; }
-                    .text-primary { color: #000; font-weight: bold; }
-                    .blank-space { display: inline-block; border-bottom: 1px solid #000; min-width: 50px; }
+                    @page {
+                        size: 21.0cm 29.7cm;
+                        margin: 2.54cm 2.54cm 2.54cm 2.54cm;
+                        mso-page-orientation: portrait;
+                    }
+                    body {
+                        font-family: "Times New Roman", "SimSun", serif;
+                        font-size: 12pt;
+                        line-height: 1.5;
+                    }
+                    .paper-title {
+                        text-align: center;
+                        font-size: 18pt;
+                        font-weight: bold;
+                        margin-bottom: 20px;
+                        font-family: "SimHei", sans-serif;
+                    }
+                    .exam-meta-tag {
+                        display: inline-block;
+                        margin: 0 10px;
+                        font-size: 10.5pt;
+                        color: #555;
+                    }
+                    h4 {
+                        font-size: 14pt;
+                        font-weight: bold;
+                        margin-top: 20px;
+                        margin-bottom: 10px;
+                        font-family: "SimHei", sans-serif;
+                    }
+                    .question-content {
+                        text-indent: 0;
+                        line-height: 1.6;
+                        text-align: justify;
+                        margin-bottom: 10px;
+                        font-size: 12pt;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                    }
+                    th, td {
+                        border: 1px solid #000;
+                        padding: 8px;
+                        font-size: 10.5pt;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                        text-align: center;
+                        font-weight: bold;
+                    }
+                    td {
+                        text-align: left;
+                        vertical-align: middle;
+                    }
+                    .blank-space {
+                        display: inline-block;
+                        border-bottom: 1px solid #000;
+                        min-width: 50px;
+                    }
+                    /* 隐藏不需要导出的元素 */
+                    .d-none {
+                        display: none !important;
+                    }
                 </style>
-                `;
-                const sourceHTML = document.getElementById("paperExportArea").innerHTML;
+            `;
+
+                // 获取内容前先处理一下，移除可能导致乱码或格式错误的元素
+                const exportArea = document.getElementById("paperExportArea");
+                // 克隆节点以避免修改页面显示
+                const clone = exportArea.cloneNode(true);
+
+                // 移除所有 d-none 的元素，防止 Word 错误渲染
+                clone.querySelectorAll('.d-none').forEach(el => el.remove());
+
+                const sourceHTML = clone.innerHTML;
                 const source = header + styles + sourceHTML + footer;
+
                 const blob = new Blob(['\ufeff', source], { type: 'application/msword' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = 'AI智能试卷.doc';
+                link.download = `AI智能试卷_${new Date().toISOString().slice(0, 10)}.doc`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -2579,21 +2760,21 @@
             },
 
             // 通用模型切换函数
-            async switchModel(modelName, context = 'chat') {
+            async switchModel(modelName, context = 'chat', silent = false) {
                 try {
                     const configBase = this.config.apiBase.replace('/v1', '');
                     const res = await axios.post(`${configBase}/model/config/switch/${modelName}`);
 
                     if (res.data.code === 200 || res.data.code === 1) {
-                        ui.toast('模型切换成功', 'success');
+                        if (!silent) ui.toast('模型切换成功', 'success');
                         return true;
                     } else {
-                        ui.toast(res.data.msg || '模型切换失败', 'error');
+                        if (!silent) ui.toast(res.data.msg || '模型切换失败', 'error');
                         return false;
                     }
                 } catch (e) {
                     console.error('Model switch error:', e);
-                    ui.toast('模型切换失败: ' + (e.response?.data?.msg || e.message), 'error');
+                    if (!silent) ui.toast('模型切换失败: ' + (e.response?.data?.msg || e.message), 'error');
                     return false;
                 }
             },
@@ -3044,8 +3225,7 @@
                 const input = document.getElementById('messageInput');
                 const msg = input.value.trim();
                 // 获取选中的 AI 模型
-                const model = document.getElementById('chatModelSelect').value;
-
+                const model = document.getElementById('chatModelSelect').e;
                 if (!msg || this.state.isTyping) return;
 
                 this.addMessageBubble('user', msg);

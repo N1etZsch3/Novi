@@ -61,4 +61,14 @@ public class QuestionGenerationRequest {
     @NotNull(message = "题目数量不能为空")
     @Min(value = 1, message = "题目数量必须至少为1")
     private Integer quantity;
+
+    /**
+     * 是否启用深度思考模式（可选，默认false）
+     * <p>
+     * 启用后AI会进行更深度的推理，可能提高题目质量，但会显著增加响应时间。
+     * 注意：只有支持深度思考的模型（如Gemini 2.0 Flash Thinking）才会真正启用此功能。
+     * 如果当前激活的模型不支持深度思考，系统会自动降级为普通模式。
+     * </p>
+     */
+    private Boolean enableThinking = false;
 }

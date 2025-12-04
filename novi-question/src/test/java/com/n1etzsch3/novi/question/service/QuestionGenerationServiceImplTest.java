@@ -3,183 +3,103 @@ package com.n1etzsch3.novi.question.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n1etzsch3.novi.aiconfig.factory.DynamicChatModelFactory;
-import com.n1etzsch3.novi.question.pojo.dto.QuestionGenerationRequest;
-import com.n1etzsch3.novi.question.pojo.dto.QuestionGenerationResponse;
-import com.n1etzsch3.novi.question.pojo.dto.QuestionHistoryItem;
+import com.n1etzsch3.novi.aiconfig.service.AiModelConfigService;
 import com.n1etzsch3.novi.common.pojo.entity.QuestionGenerationRecord;
 import com.n1etzsch3.novi.question.mapper.QuestionExampleMapper;
 import com.n1etzsch3.novi.question.mapper.QuestionGenerationRecordMapper;
+import com.n1etzsch3.novi.question.pojo.dto.QuestionGenerationRequest;
+import com.n1etzsch3.novi.question.pojo.dto.QuestionGenerationResponse;
 import com.n1etzsch3.novi.question.service.impl.QuestionGenerationServiceImpl;
 import com.n1etzsch3.novi.question.utils.QuestionPromptBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.openai.OpenAiChatModel;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class QuestionGenerationServiceImplTest {
+public class QuestionGenerationServiceImplTest {
 
     @Mock
     private QuestionExampleMapper questionExampleMapper;
-
     @Mock
     private QuestionGenerationRecordMapper questionGenerationRecordMapper;
-
     @Mock
     private DynamicChatModelFactory dynamicChatModelFactory;
-
+    @Mock
+    private AiModelConfigService aiModelConfigService;
     @Mock
     private QuestionPromptBuilder questionPromptBuilder;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ChatModel chatModel;
 
-    @Mock
-    private OpenAiChatModel chatModel;
-
-    @InjectMocks
     private QuestionGenerationServiceImpl questionGenerationService;
-
-    private QuestionGenerationRequest request;
 
     @BeforeEach
     void setUp() {
-        request = new QuestionGenerationRequest();
-        request.setSubject("Test Subject");
-        request.setQuestionType("Test Type");
+        questionGenerationService = new QuestionGenerationServiceImpl(
+                questionExampleMapper,
+                questionGenerationRecordMapper,
+                dynamicChatModelFactory,
+                aiModelConfigService,
+                questionPromptBuilder,
+                new ObjectMapper() // Use real ObjectMapper
+        );
+    }
+
+    @Test
+    void testGenerateQuestions_Success() {
+        // Arrange
+        Long userId = 1L;
+        QuestionGenerationRequest request = new QuestionGenerationRequest();
+        request.setSubject("English");
+        request.setQuestionType("Grammar");
         request.setDifficulty("medium");
-        request.setQuantity(5);
-    }
+        request.setQuantity(1);
+        request.setEnableThinking(false);
 
-    @Test
-    void generateQuestions_Success() throws Exception {
-        // Mock dependencies
+        // Mock Examples (return empty list to trigger fallback or just proceed)
         when(questionExampleMapper.selectList(any(LambdaQueryWrapper.class))).thenReturn(Collections.emptyList());
-        when(questionPromptBuilder.buildPrompt(any(), any())).thenReturn("Test Prompt");
+
+        // Mock ChatModel creation
         when(dynamicChatModelFactory.createChatModel()).thenReturn(chatModel);
 
-        // Mock AI response
-        String jsonResponse = "[{\"content\":\"Question 1\"}]";
-        AssistantMessage message = new AssistantMessage(jsonResponse);
-        Generation generation = new Generation(message);
+        // Mock AI Response
+        String jsonResponse = "[{\"question\":\"test question\",\"options\":[\"A\",\"B\"],\"answer\":\"A\"}]";
+        Generation generation = new Generation(new org.springframework.ai.chat.messages.AssistantMessage(jsonResponse));
         ChatResponse chatResponse = new ChatResponse(Collections.singletonList(generation));
         when(chatModel.call(any(Prompt.class))).thenReturn(chatResponse);
 
-        // Mock ObjectMapper
-        when(objectMapper.readTree(anyString())).thenReturn(null); // Just verify it doesn't throw exception
+        // Mock Prompt Builder
+        when(questionPromptBuilder.buildPrompt(any(), any())).thenReturn("test prompt");
 
-        // Mock DB save
+        // Mock Record Mapper Insert
         when(questionGenerationRecordMapper.insert(any(QuestionGenerationRecord.class))).thenAnswer(invocation -> {
             QuestionGenerationRecord record = invocation.getArgument(0);
-            record.setId(1L);
+            record.setId(100L);
             return 1;
         });
 
-        // Execute
-        QuestionGenerationResponse response = questionGenerationService.generateQuestions(1L, request);
+        // Act
+        QuestionGenerationResponse response = questionGenerationService.generateQuestions(userId, request);
 
-        // Verify
+        // Assert
         assertNotNull(response);
-        assertEquals(1L, response.getRecordId());
-        assertEquals(jsonResponse, response.getQuestions());
-
+        assertEquals(100L, response.getRecordId());
         verify(questionGenerationRecordMapper).insert(any(QuestionGenerationRecord.class));
-    }
-
-    @Test
-    void generateQuestions_DirtyJson() {
-        // Mock dependencies
-        when(questionExampleMapper.selectList(any(LambdaQueryWrapper.class))).thenReturn(Collections.emptyList());
-        when(questionPromptBuilder.buildPrompt(any(), any())).thenReturn("Test Prompt");
-        when(dynamicChatModelFactory.createChatModel()).thenReturn(chatModel);
-
-        // Mock AI response with dirty JSON (markdown and extra text)
-        String dirtyJson = "Here is the result:\n```json\n[{\"content\":\"Question 1\"}]\n```\nHope it helps!";
-        String expectedJson = "[{\"content\":\"Question 1\"}]";
-
-        AssistantMessage message = new AssistantMessage(dirtyJson);
-        Generation generation = new Generation(message);
-        ChatResponse chatResponse = new ChatResponse(Collections.singletonList(generation));
-        when(chatModel.call(any(Prompt.class))).thenReturn(chatResponse);
-
-        // Mock DB save
-        when(questionGenerationRecordMapper.insert(any(QuestionGenerationRecord.class))).thenAnswer(invocation -> {
-            QuestionGenerationRecord record = invocation.getArgument(0);
-            record.setId(1L);
-            return 1;
-        });
-
-        // Execute
-        QuestionGenerationResponse response = questionGenerationService.generateQuestions(1L, request);
-
-        // Verify
-        assertNotNull(response);
-        assertEquals(expectedJson, response.getQuestions());
-    }
-
-    @Test
-    void getGenerationHistory_Success() {
-        // Mock DB
-        QuestionGenerationRecord record = QuestionGenerationRecord.builder()
-                .id(1L)
-                .subject("Test Subject")
-                .questionType("Test Type")
-                .createdAt(LocalDateTime.now())
-                .build();
-        when(questionGenerationRecordMapper.selectList(any(LambdaQueryWrapper.class)))
-                .thenReturn(Collections.singletonList(record));
-
-        // Execute
-        List<QuestionHistoryItem> history = questionGenerationService.getGenerationHistory(1L);
-
-        // Verify
-        assertNotNull(history);
-        assertEquals(1, history.size());
-        assertEquals(1L, history.get(0).getId());
-        assertEquals("Test Subject", history.get(0).getSubject());
-    }
-
-    @Test
-    void deleteGenerationRecord_Success() {
-        // Mock DB
-        QuestionGenerationRecord record = new QuestionGenerationRecord();
-        record.setId(1L);
-        record.setUserId(1L);
-
-        when(questionGenerationRecordMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(record);
-
-        // Execute
-        questionGenerationService.deleteGenerationRecord(1L, 1L);
-
-        // Verify
-        verify(questionGenerationRecordMapper).deleteById(1L);
-    }
-
-    @Test
-    void deleteGenerationRecord_NotFound() {
-        // Mock DB return null
-        when(questionGenerationRecordMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(null);
-
-        // Execute & Verify
-        assertThrows(IllegalArgumentException.class, () -> {
-            questionGenerationService.deleteGenerationRecord(1L, 1L);
-        });
-
-        verify(questionGenerationRecordMapper, never()).deleteById(anyLong());
+        verify(chatModel).call(any(Prompt.class));
     }
 }

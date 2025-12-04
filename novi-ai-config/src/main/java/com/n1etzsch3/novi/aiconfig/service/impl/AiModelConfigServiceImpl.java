@@ -107,6 +107,7 @@ public class AiModelConfigServiceImpl implements AiModelConfigService {
                 config.getId(),
                 config.getModelName(),
                 config.getDescription(),
-                config.getIsActive());
+                config.getIsActive(),
+                config.getEnableThinking());
     }
 }

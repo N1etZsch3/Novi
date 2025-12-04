@@ -66,7 +66,6 @@ public class NoviDatabaseChatMemory implements ChatMemory {
     /**
      * 加载历史记录 (已重构)
      */
-    @Override
     public List<Message> get(String conversationId) {
         // 【关键修改】
         ParsedKey key = parseCompositeKey(conversationId);
@@ -84,6 +83,16 @@ public class NoviDatabaseChatMemory implements ChatMemory {
         return chatMessages.stream()
                 .map(this::toSpringAiMessage)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Message> get(String conversationId, int lastN) {
+        List<Message> allMessages = get(conversationId);
+        if (allMessages.isEmpty()) {
+            return allMessages;
+        }
+        int start = Math.max(0, allMessages.size() - lastN);
+        return allMessages.subList(start, allMessages.size());
     }
 
     /**

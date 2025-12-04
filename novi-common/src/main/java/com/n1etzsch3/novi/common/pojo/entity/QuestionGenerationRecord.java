@@ -64,6 +64,11 @@ public class QuestionGenerationRecord {
     private Integer quantity;
 
     /**
+     * 是否启用深度思考（0:否，1:是）
+     */
+    private Boolean enableThinking;
+
+    /**
      * AI生成的题目内容（JSON格式）
      */
     private String generatedQuestions;

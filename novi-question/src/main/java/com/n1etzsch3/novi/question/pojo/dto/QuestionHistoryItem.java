@@ -53,6 +53,11 @@ public class QuestionHistoryItem {
     private Integer quantity;
 
     /**
+     * 是否使用了深度思考
+     */
+    private Boolean enableThinking;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createdAt;

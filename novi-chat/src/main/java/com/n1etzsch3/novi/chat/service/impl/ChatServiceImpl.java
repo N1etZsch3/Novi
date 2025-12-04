@@ -122,7 +122,7 @@ public class ChatServiceImpl implements ChatService {
         String AIResponse = chatClient.prompt()
                 .messages(systemMessage) // 注入动态系统提示词
                 .user(userMessage)
-                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, compositeKey))
+                .advisors(advisorSpec -> advisorSpec.param("chat_memory_conversation_id", compositeKey))
                 .call()
                 .content();
 
@@ -151,7 +151,7 @@ public class ChatServiceImpl implements ChatService {
         Flux<StreamEvent> contentStream = chatClient.prompt()
                 .messages(systemMessage) // 关键：在此处也注入系统提示词
                 .user(userMessage)
-                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, compositeKey))
+                .advisors(advisorSpec -> advisorSpec.param("chat_memory_conversation_id", compositeKey))
                 .stream()
                 .content()
                 .map(StreamEvent::content);

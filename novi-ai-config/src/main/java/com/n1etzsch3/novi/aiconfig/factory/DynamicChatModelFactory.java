@@ -1,19 +1,22 @@
 package com.n1etzsch3.novi.aiconfig.factory;
 
-import com.n1etzsch3.novi.common.pojo.entity.AiModelConfig;
+import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+import com.n1etzsch3.novi.aiconfig.advisor.ReasoningContentAdvisor;
 import com.n1etzsch3.novi.aiconfig.service.AiModelConfigService;
+import com.n1etzsch3.novi.common.pojo.entity.AiModelConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
- * 动态 OpenAiChatModel 工厂
+ * Dynamic ChatModel Factory
  * <p>
- * 根据数据库中的激活模型配置，动态创建 OpenAiChatModel 实例。
- * 支持模型热切换。
+ * Creates DashScopeChatModel instances based on active database configuration.
+ * Supports hot-reloading.
  * </p>
  *
  * @author N1etzsch3
@@ -26,20 +29,16 @@ public class DynamicChatModelFactory {
 
     private final AiModelConfigService aiModelConfigService;
 
-    private volatile OpenAiChatModel cachedChatModel;
+    private volatile ChatModel cachedChatModel;
     private volatile Long cachedModelId;
 
     /**
-     * 创建或获取 OpenAiChatModel 实例，使用当前激活的模型配置
-     * <p>
-     * 如果激活的模型没有变化，返回缓存的实例。
-     * 如果模型已切换，创建新的实例。
-     * </p>
+     * Create or get ChatModel instance using active configuration
      *
-     * @return OpenAiChatModel 实例
-     * @throws IllegalStateException 如果没有激活的模型配置
+     * @return ChatModel instance
+     * @throws IllegalStateException if no active model found
      */
-    public synchronized OpenAiChatModel createChatModel() {
+    public synchronized ChatModel createChatModel() {
         AiModelConfig activeModel = aiModelConfigService.getActiveModel();
 
         if (activeModel == null) {
@@ -47,42 +46,17 @@ public class DynamicChatModelFactory {
             throw new IllegalStateException("No active AI model found. Please configure one in ai_model_config table.");
         }
 
-        // 如果模型已缓存且未变化，直接返回
+        // Return cached instance if model hasn't changed
         if (cachedChatModel != null && cachedModelId != null && cachedModelId.equals(activeModel.getId())) {
             log.debug("Returning cached ChatModel for: {}", activeModel.getModelName());
             return cachedChatModel;
         }
 
-        log.info("Creating new ChatModel with configuration: {}", activeModel.getModelName());
-        log.debug("Base URL: {}", activeModel.getBaseUrl());
+        log.info("Creating new DashScopeChatModel with configuration: {}", activeModel.getModelName());
 
-        // 创建 OpenAiApi
-        OpenAiApi.Builder apiBuilder = OpenAiApi.builder()
-                .baseUrl(activeModel.getBaseUrl())
-                .apiKey(activeModel.getApiKey())
-                .completionsPath(activeModel.getCompletionsPath());
+        ChatModel chatModel = createDashScopeChatModel(activeModel);
 
-        OpenAiApi openAiApi = apiBuilder.build();
-
-        // 创建聊天选项
-        OpenAiChatOptions chatOptions = OpenAiChatOptions.builder()
-                .model(activeModel.getModelName())
-                .build();
-
-        // 创建 OpenAiChatModel
-        OpenAiChatModel chatModel = OpenAiChatModel.builder()
-                .openAiApi(openAiApi)
-                .defaultOptions(chatOptions)
-                .build();
-
-        // 记录是否需要启用thinking模式（这个标识在数据库中配置）
-        // 注意：enable_thinking 需要在API请求时作为参数传递
-        // 实际启用需要在调用API时传递，此处仅记录配置以便后续使用
-        if (Boolean.TRUE.equals(activeModel.getEnableThinking())) {
-            log.info("Model {} is configured to support thinking mode", activeModel.getModelName());
-        }
-
-        // 更新缓存
+        // Update cache
         cachedChatModel = chatModel;
         cachedModelId = activeModel.getId();
 
@@ -90,11 +64,35 @@ public class DynamicChatModelFactory {
         return chatModel;
     }
 
+    private ChatModel createDashScopeChatModel(AiModelConfig activeModel) {
+        // 1. Create DashScopeApi
+        // Note: DashScopeApi constructor might vary, usually takes apiKey.
+        // If using spring-ai-alibaba-starter, we might need to check available
+        // constructors or builders.
+        // Assuming standard usage: new DashScopeApi(apiKey) or builder.
+        // Since we are manually creating it, we need to be careful with the API class.
+
+        // Using builder if available, or constructor.
+        // Based on common Spring AI patterns:
+        // Create DashScopeApi using builder
+        DashScopeApi dashScopeApi = DashScopeApi.builder()
+                .apiKey(activeModel.getApiKey())
+                .build();
+
+        // Create DashScopeChatOptions
+        DashScopeChatOptions options = DashScopeChatOptions.builder()
+                .withModel(activeModel.getModelName())
+                .build();
+
+        // Create DashScopeChatModel using builder
+        return DashScopeChatModel.builder()
+                .dashScopeApi(dashScopeApi)
+                .defaultOptions(options)
+                .build();
+    }
+
     /**
-     * 刷新模型缓存
-     * <p>
-     * 在模型切换后调用，强制下次获取时重新创建模型实例
-     * </p>
+     * Refresh model cache
      */
     public synchronized void refresh() {
         log.info("Refreshing ChatModel cache");

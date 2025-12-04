@@ -62,6 +62,7 @@ public class AiModelConfig {
      * 是否启用深度思考功能（0:否，1:是）
      * 仅部分模型支持，如 Gemini 2.0 Flash Thinking
      */
+    @com.baomidou.mybatisplus.annotation.TableField("enable_thinking")
     private Boolean enableThinking;
 
     /**

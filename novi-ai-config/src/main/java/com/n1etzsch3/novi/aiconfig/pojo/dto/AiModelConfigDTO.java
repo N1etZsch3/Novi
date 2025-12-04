@@ -37,4 +37,9 @@ public class AiModelConfigDTO {
      * 是否为当前激活模型（0:否，1:是）
      */
     private Boolean isActive;
+
+    /**
+     * 是否启用深度思考功能（0:否，1:是）
+     */
+    private Boolean enableThinking;
 }

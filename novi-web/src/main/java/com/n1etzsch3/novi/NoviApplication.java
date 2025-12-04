@@ -6,12 +6,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude = {
-		org.springframework.ai.model.openai.autoconfigure.OpenAiAudioSpeechAutoConfiguration.class,
-		org.springframework.ai.model.openai.autoconfigure.OpenAiAudioTranscriptionAutoConfiguration.class,
-		org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration.class,
-		org.springframework.ai.model.openai.autoconfigure.OpenAiImageAutoConfiguration.class,
-		org.springframework.ai.model.openai.autoconfigure.OpenAiEmbeddingAutoConfiguration.class,
-		org.springframework.ai.model.openai.autoconfigure.OpenAiModerationAutoConfiguration.class
+		com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeChatAutoConfiguration.class,
+		com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeImageAutoConfiguration.class,
+		com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeAudioTranscriptionAutoConfiguration.class,
+		com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeAudioSpeechAutoConfiguration.class,
+		com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeAgentAutoConfiguration.class,
+		com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeVideoAutoConfiguration.class,
+		com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeRerankAutoConfiguration.class,
+		com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeEmbeddingAutoConfiguration.class
 })
 @ComponentScan(basePackages = {
 		"com.n1etzsch3.novi",
