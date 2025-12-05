@@ -1,0 +1,42 @@
+/* ================= CSS 变量定义 ================= */
+:root {
+    --primary-color: #4e6ef2;
+    --bg-body: #f2f4f7;
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --bg-header: rgba(255, 255, 255, 0.95);
+    --bg-input: #ffffff;
+    --bg-input-focus: #ffffff;
+    --text-main: #1f1f1f;
+    --text-sub: #666666;
+    --border-color: #e5e7eb;
+    --border-input: #e5e7eb;
+
+    --bubble-user-bg: #95ec69;
+    --bubble-user-text: #000000;
+    --bubble-ai-bg: #ffffff;
+    --bubble-ai-text: #1f1f1f;
+
+    --sidebar-width: 280px;
+    --sidebar-width-collapsed: 76px;
+    --toast-top-mobile: 80px;
+}
+
+/* 深色模式 */
+[data-bs-theme="dark"] {
+    --bg-body: #111111;
+    --bg-sidebar: #1e1e1e;
+    --bg-card: #1e1e1e;
+    --bg-header: #1e1e1e;
+    --bg-input: #2c2c2c;
+    --bg-input-focus: #333333;
+    --text-main: #e3e3e3;
+    --text-sub: #aaaaaa;
+    --border-color: #333333;
+    --border-input: #444444;
+
+    --bubble-user-bg: #2b7c38;
+    --bubble-user-text: #e3e3e3;
+    --bubble-ai-bg: #2c2c2c;
+    --bubble-ai-text: #e3e3e3;
+}

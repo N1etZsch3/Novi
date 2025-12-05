@@ -204,12 +204,12 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
 
                 // 构建 Prompt 和 Options
                 Prompt prompt;
-                if (enableThinking) {
+                if (enableThinking && chatModel instanceof com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel) {
                     // DashScope 深度思考模式必须使用流式调用，并且需要特定的 Options
+                    com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel dashScopeChatModel = (com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel) chatModel;
                     com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions options = com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions
                             .builder()
-                            .withModel(((com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel) chatModel)
-                                    .getDefaultOptions().getModel())
+                            .withModel(dashScopeChatModel.getDefaultOptions().getModel())
                             .withEnableThinking(true)
                             .withEnableSearch(false) // 思考模式建议关闭搜索
                             .build();
@@ -219,24 +219,6 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
                     // 使用流式调用并聚合结果
                     // 注册 ReasoningContentAdvisor 以提取思考过程
                     StringBuilder contentBuilder = new StringBuilder();
-
-                    // 注意：这里我们使用 ChatClient 的底层 ChatModel.stream() 方法
-                    // 如果能用 ChatClient 会更方便，但这里直接用了 ChatModel
-                    // 我们手动处理流
-
-                    // 由于 ChatModel.stream() 返回 Flux<ChatResponse>，我们需要订阅它
-                    // 并且我们需要处理 Advisor。ChatModel 本身不直接支持 Advisor 链式调用，
-                    // 通常 Advisor 是 ChatClient 的特性。
-                    // 如果 DynamicChatModelFactory 返回的是 ChatModel，我们可能需要手动处理 Advisor
-                    // 或者我们应该在 Factory 里把 Advisor 包装进去 (如果 ChatModel 支持的话，但 ChatModel 只是接口)
-                    //
-                    // 修正：ChatModel 接口本身不支持 Advisor。Advisor 是 ChatClient 的概念。
-                    // 但我们可以手动执行 Advisor 的逻辑，或者简单点，直接从 Flux 的元数据里提取。
-                    // 既然我们已经写了 ReasoningContentAdvisor，最好是用 ChatClient。
-                    // 但为了最小化改动，我们先直接从流中提取。
-
-                    // 实际上，Spring AI Alibaba 的 Deep Thinking 内容在流式响应的 metadata 中。
-                    // 我们直接消费流。
 
                     chatModel.stream(prompt)
                             .doOnNext(chatResponse -> {
@@ -273,6 +255,10 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
                     return jsonContent;
 
                 } else {
+                    if (enableThinking) {
+                        log.warn(
+                                "Deep thinking requested but model is not DashScopeChatModel. Falling back to standard call.");
+                    }
                     // 普通模式，可以使用 call 或 stream
                     prompt = new org.springframework.ai.chat.prompt.Prompt(promptText);
                     ChatResponse response = chatModel.call(prompt);

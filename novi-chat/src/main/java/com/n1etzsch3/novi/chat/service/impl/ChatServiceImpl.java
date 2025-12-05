@@ -20,6 +20,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -44,7 +45,6 @@ import java.util.UUID;
  */
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
     private final ChatClient chatClient;
@@ -53,6 +53,25 @@ public class ChatServiceImpl implements ChatService {
     private final UserAccountMapper userAccountMapper;
     private final UserPreferenceService userPreferenceService;
     private final AiPromptConfigService aiPromptConfigService;
+    private final ChatMemory chatMemory;
+
+    public ChatServiceImpl(
+            ChatClient chatClient, // Inject the ChatClient bean from ChatConfig (with MessageChatMemoryAdvisor)
+            ObjectMapper objectMapper,
+            ChatSessionMapper chatSessionMapper,
+            UserAccountMapper userAccountMapper,
+            UserPreferenceService userPreferenceService,
+            AiPromptConfigService aiPromptConfigService,
+            ChatMemory chatMemory) {
+        // Use injected ChatClient which has MessageChatMemoryAdvisor configured
+        this.chatClient = chatClient;
+        this.objectMapper = objectMapper;
+        this.chatSessionMapper = chatSessionMapper;
+        this.userAccountMapper = userAccountMapper;
+        this.userPreferenceService = userPreferenceService;
+        this.aiPromptConfigService = aiPromptConfigService;
+        this.chatMemory = chatMemory;
+    }
 
     /**
      * 辅助方法：为聊天记忆创建复合键。
@@ -122,7 +141,7 @@ public class ChatServiceImpl implements ChatService {
         String AIResponse = chatClient.prompt()
                 .messages(systemMessage) // 注入动态系统提示词
                 .user(userMessage)
-                .advisors(advisorSpec -> advisorSpec.param("chat_memory_conversation_id", compositeKey))
+                .advisors(MessageChatMemoryAdvisor.builder(chatMemory).conversationId(compositeKey).build())
                 .call()
                 .content();
 
@@ -151,7 +170,7 @@ public class ChatServiceImpl implements ChatService {
         Flux<StreamEvent> contentStream = chatClient.prompt()
                 .messages(systemMessage) // 关键：在此处也注入系统提示词
                 .user(userMessage)
-                .advisors(advisorSpec -> advisorSpec.param("chat_memory_conversation_id", compositeKey))
+                .advisors(MessageChatMemoryAdvisor.builder(chatMemory).conversationId(compositeKey).build())
                 .stream()
                 .content()
                 .map(StreamEvent::content);

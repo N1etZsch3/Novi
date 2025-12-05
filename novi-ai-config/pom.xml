@@ -21,14 +21,16 @@
             <artifactId>novi-common</artifactId>
         </dependency>
 
-        <!-- Spring AI -->
+        <!-- Spring AI - only alibaba-dashscope to avoid version conflicts -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
         </dependency>
+        
+        <!-- WebFlux for WebClient (used by OpenAI-compatible client) -->
         <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
         <!-- OkHttp -->

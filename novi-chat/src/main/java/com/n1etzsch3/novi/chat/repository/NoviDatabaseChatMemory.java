@@ -63,43 +63,6 @@ public class NoviDatabaseChatMemory implements ChatMemory {
         this.chatMemoryMapper = chatMemoryMapper;
     }
 
-    /**
-     * 加载历史记录 (已重构)
-     */
-    public List<Message> get(String conversationId) {
-        // 【关键修改】
-        ParsedKey key = parseCompositeKey(conversationId);
-        if (key == null || key.userId == null) {
-            log.warn("NoviDatabaseChatMemory.get: 未找到用户ID，返回空列表 (Key: {})", conversationId);
-            return Collections.emptyList();
-        }
-
-        List<ChatMessage> chatMessages = chatMemoryMapper.selectList(
-                new LambdaQueryWrapper<ChatMessage>()
-                        .eq(ChatMessage::getUserId, key.userId)
-                        .eq(ChatMessage::getSessionId, key.sessionId)
-                        .orderByAsc(ChatMessage::getId));
-
-        return chatMessages.stream()
-                .map(this::toSpringAiMessage)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Message> get(String conversationId, int lastN) {
-        List<Message> allMessages = get(conversationId);
-        if (allMessages.isEmpty()) {
-            return allMessages;
-        }
-        int start = Math.max(0, allMessages.size() - lastN);
-        return allMessages.subList(start, allMessages.size());
-    }
-
-    /**
-     * 保存新消息 (已重构)
-     * MessageChatMemoryAdvisor 会在 adviseResponse 后调用此方法，
-     * 传入的 'messages' 列表仅包含 (User, Assistant) 的新消息对。
-     */
     @Override
     public void add(String conversationId, List<Message> messages) {
         // 【关键修改】
@@ -119,9 +82,34 @@ public class NoviDatabaseChatMemory implements ChatMemory {
         }
     }
 
-    /**
-     * 清理会话 (已重构)
-     */
+    public List<Message> get(String conversationId, int lastN) {
+        // 【关键修改】
+        ParsedKey key = parseCompositeKey(conversationId);
+        if (key == null || key.userId == null) {
+            log.warn("NoviDatabaseChatMemory.get: 未找到用户ID，返回空列表 (Key: {})", conversationId);
+            return Collections.emptyList();
+        }
+
+        List<ChatMessage> chatMessages = chatMemoryMapper.selectList(
+                new LambdaQueryWrapper<ChatMessage>()
+                        .eq(ChatMessage::getUserId, key.userId)
+                        .eq(ChatMessage::getSessionId, key.sessionId)
+                        .orderByAsc(ChatMessage::getId));
+
+        List<Message> springMessages = chatMessages.stream()
+                .map(this::toSpringAiMessage)
+                .collect(Collectors.toList());
+
+        if (lastN > 0 && springMessages.size() > lastN) {
+            return springMessages.subList(springMessages.size() - lastN, springMessages.size());
+        }
+        return springMessages;
+    }
+
+    public List<Message> get(String conversationId) {
+        return get(conversationId, -1);
+    }
+
     @Override
     public void clear(String conversationId) {
         // 【关键修改】

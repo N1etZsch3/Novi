@@ -1,0 +1,115 @@
+/* ================= 基础样式 ================= */
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-body);
+    font-family: -apple-system, "Noto Sans SC", "Microsoft YaHei", BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: background-color 0.3s;
+    color: var(--text-main);
+}
+
+/* 表单控件 */
+.form-control,
+.form-select {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-input);
+    color: var(--text-main);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--bg-input-focus);
+    border-color: var(--primary-color);
+    color: var(--text-main);
+    box-shadow: 0 0 0 3px rgba(78, 110, 242, 0.25);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 128, 128, 0.4);
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    padding: 0.5rem;
+    background-color: var(--bg-card);
+}
+
+.dropdown-item {
+    border-radius: 0.5rem;
+    padding: 0.6rem 1rem;
+    transition: all 0.2s;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: rgba(78, 110, 242, 0.08);
+    color: var(--primary-color);
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: rgba(78, 110, 242, 0.15);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.dropdown-divider {
+    border-top-color: var(--border-color);
+    opacity: 0.5;
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 滑入动画 */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 淡出动画 */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}

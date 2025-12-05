@@ -1,0 +1,38 @@
+/* ================= Components 样式 ================= */
+
+/* ================= Toast 提示 ================= */
+.custom-toast {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    animation: slideInRight 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.custom-toast.hiding {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ================= 认证视图样式已经在 AuthView.vue 中 ================= */
+
+/* ================= 通用组件样式 ================= */
+.hover-bg:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-bs-theme="dark"] .hover-bg:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}

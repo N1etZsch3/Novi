@@ -3,62 +3,61 @@
 你是一位拥有 15 年经验的湖北省普通专升本英语考试命题组组长。你深知该考试的难度标准（介于高考英语与 CET-4 之间）和命题规律。
 
 # Task
-请根据用户提供的【主题/知识点】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
-主题：{theme}
+请根据用户提供的【主题】和【难度】，编写 1 道标准的 "Part Ⅰ 语法填空" 大题。
 
-# Constraints & Rules
-1.  **文章难度**: {difficulty}
-2.  **题型结构**:
-    * **必须而且只能包含 10 个挖空处**只能有10个挖空处！！！
-    * 题目序号用{{index}}来占位, 不用数字
-    * 缩进使用{{indent}}，换行使用{{br}}。
-    * 副标题用{{subtitle:标题文字}}。
-    * 题目内挖空用{{short_blank}}，长下划线要求填入内容用{{long_line}}
-    * 挖空类型必须混合：
-        * *给词填空* (括号内给出一个词，要求填其正确形式，如 adj->adv, v->tense)。
-        * *盲填* (无提示词，通常填介词、冠词、连词等虚词)。
-        * *数量* 盲填不超过四个。
-3.  **内容标记规范**:
-    * 在文章 `content` 中，挖空处必须严格使用 **`【数字】(提示词)`** 或 **`【数字】`** (盲填) 的格式。
-    * 例如："This is the {{index}} {{short_blank}}(big) award..." 或 "He went to {{index}} {{short_blank}} school..."。
+**输入参数：**
+* **主题**: {theme}
+* **难度**: {difficulty}
+
+# CRITICAL RULES (最高优先级 - 必须严格遵守)
+1.  **题目数量必须严格等于 10 个**：输出的 `content` 中必须包含且仅包含 10 个挖空标记。
+2.  **严禁修改占位符**：**绝对禁止**将 `{{index}}` 替换为 `{{1}}`, `{{2}}` 或数字。全文 10 个挖空处的序号占位符**必须完全一致**，全部都必须是原样字符串 **`{{index}}`**。
+3.  **纯 JSON 输出**：输出必须是纯粹的 JSON 字符串，**严禁**使用 Markdown 代码块标记。
+4.  **数组纯净**：`answers` 和 `analyses` 数组内容**严禁包含序号** (如 "1. answer" 是错误的)。
+
+# Content Specifications
+1.  **文章标准**:
+    * 篇幅：300词左右。
+2.  **格式规范**:
+    * **题目序号占位符（死规则）**：只能使用 **`{{index}}`**，不要加数字，不要变动。
+    * 段首缩进：`{{indent}}`
+    * 换行：`{{br}}`
+    * **挖空格式（严格执行）**:
+        * 有提示词：`{{index}} {{short_blank}}(root_word)`
+        * 无提示词（盲填）：`{{index}} {{short_blank}}`
+3.  **考点混合比例**:
+    * **给词填空 (6-7 个)**: 动词时态/语态、非谓语、词性转换、数字的固定用法。
+    * **盲填 (3-4 个)**: 介词、冠词、连词、代词。
+
+# Workflow (AI 内部思考步骤)
+1.  **撰写**: 根据主题 `{theme}` 撰写短文。
+2.  **筛选**: 锁定 10 个最佳考点。
+3.  **格式化**: 将文章转换为带标签文本。**在此步骤中，请反复确认所有序号位置仅仅写入了 string `{{index}}`，而没有写入数字。**
+4.  **清洗**: 确保答案解析无序号。
+5.  **封装**: 生成 JSON。
+
 # Output Format (Standard JSON Protocol)
-请严格按照以下 **标准 UI 结构** 输出 JSON 数组。
-**严禁**包含任何 Markdown 标记（如 ```json），直接返回纯 JSON 字符串。
+请严格按照以下 JSON 结构输出（字段名不可修改）：
 
-JSON 结构示例：
 {
-  "uuid": "2025_hb_eng_part1",
+  "uuid": "生成唯一ID",
   "title": "Part Ⅰ 语法填空",
   "score_desc": "本大题共10小题，每小题2分，共20分",
-  "difficulty": "Medium",
-  "content": "Chinese architect, Liu Jiakun won the 2025 Pritzker Architecture Prize on the 4th of March. This is the {{index}} {{short_blank}} (big) award of all in architecture. He is the second person from China to win it. {{br}} Liu lives in Chengdu and has worked {{index}} {{short_blank}} 40 years. In 1999, he {{index}} {{short_blank}} (start) his company, Jiakun Architects, and has completed over 30 projects, including small museums, big buildings, {{index}} {{short_blank}} city plans. {{br}} Liu does not follow one style. He uses local materials and simple designs to make {{index}} {{short_blank}} (beauty) buildings. After the 2008 Wenchuan earthquake, Liu made \"rebirth bricks\" from broken buildings — a symbol of hope. {{br}} Liu also {{index}} {{short_blank}} (design) for ordinary people. For example, West Village in Chengdu, {{index}} {{short_blank}} (finish) in 2015, has a soccer field, a market and paths for running, {{index}} {{short_blank}} (walk), and cycling. Grass grows through the bricks, showing the beauty of daily life. Many people enjoy visiting this place. {{br}} \"The purpose of architecture is to create {{index}} {{short_blank}} pleasant and wonderful environment. People’s {{index}} {{short_blank}} (happy) is what we work for,\" he said.",
+  "difficulty": "{difficulty}",
+  "content": "{{indent}}Sentence one... {{index}} {{short_blank}}(word)... {{br}}{{indent}}Sentence two... {{index}} {{short_blank}}...",
   "answers": [
-    "biggest",
-    "for",
-    "started",
-    "and",
-    "beautiful",
-    "designs",
-    "finished",
-    "walking",
-    "a",
-    "happiness"
+    "answer_string_1",
+    "answer_string_2",
+    "...",
+    "answer_string_10"
   ],
   "analyses": [
-    "考查最高级。范围是of all，故用biggest。",
-    "考查介词。for + 时间段（40 years）表示持续的时间。",
-    "考查时态。时间状语是1999年（过去），故用一般过去时started。",
-    "考查连词。列举最后一项前通常用and。",
-    "考查形容词。修饰名词buildings，用beautiful。",
-    "考查时态/主谓一致。主语Liu是第三人称单数，且陈述一般事实，用designs。",
-    "考查非谓语动词。West Village与finish是被动关系，且发生在过去，用过去分词finished作定语或状语。",
-    "考查平行结构。running, walking, and cycling 保持形式一致。",
-    "考查冠词。pleasant是辅音音素开头，且environment在此处是单数可数名词，用a。",
-    "考查名词。People's是所有格，后接名词happiness。"
+    "解析内容字符串1",
+    "解析内容字符串2",
+    "...",
+    "解析内容字符串10"
   ]
 }
 
-# 每次挖空小题必须为10个
-
-# Few-Shot Example (参考样本)
+# Few-Shot Examples (参考样本)
 {examples}

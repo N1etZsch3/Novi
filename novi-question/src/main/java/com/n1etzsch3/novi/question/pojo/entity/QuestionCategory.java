@@ -54,6 +54,12 @@ public class QuestionCategory {
     private Integer sortOrder;
 
     /**
+     * 自动组卷时的生成次数
+     * 例如：阅读理解需要2篇文章，则设为2；普通题型设为1
+     */
+    private Integer generationCount;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;
