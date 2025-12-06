@@ -154,6 +154,14 @@ function formatTime(timestamp) {
   if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`
   return date.toLocaleDateString()
 }
+function resetEditMode() {
+  isEditMode.value = false
+  selectedSessions.value = []
+}
+
+defineExpose({
+  resetEditMode
+})
 </script>
 
 <style scoped>

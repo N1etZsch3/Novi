@@ -50,13 +50,13 @@ novi:
 # 配置事务管理日志级别
 logging:
   level:
-    org.springframework.jdbc.support.JdbcTransactionManager: DEBUG
+    org.springframework.jdbc.support.JdbcTransactionManager: INFO
     # 开启 Spring AI 核心日志
-    org.springframework.ai: DEBUG
+    org.springframework.ai: INFO
 
     # 开启 Spring 默认 HTTP 客户端 (WebClient) 的详细日志
     # 这将打印出完整的请求和响应内容，包括 URL、Headers 和 Body
-    org.springframework.web.reactive.function.client.ExchangeFunctions: DEBUG
+    org.springframework.web.reactive.function.client.ExchangeFunctions: INFO
 
 
 # 配置云对象存储服务

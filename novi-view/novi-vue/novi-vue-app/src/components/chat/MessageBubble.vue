@@ -1,5 +1,5 @@
 <template>
-  <div class="message-row" :class="role">
+  <div class="message-row" :class="[role, { 'animate-in': shouldAnimate }]" ref="messageRef">
     <!-- 头像 -->
     <div :class="['avatar', role === 'user' ? 'avatar-user' : 'avatar-ai']">
       <i :class="role === 'user' ? 'bi bi-person-fill' : 'bi bi-stars'"></i>
@@ -7,7 +7,7 @@
     
     <!-- 消息气泡 -->
     <div 
-      v-if="content"
+      v-if="content || typewriterContent"
       :class="['message-bubble', role, 'markdown-body']"
       :id="bubbleId"
       v-html="renderedContent"
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useMarkdown } from '@/composables/useMarkdown'
 
 const props = defineProps({
@@ -38,18 +38,39 @@ const props = defineProps({
   bubbleId: {
     type: String,
     default: ''
+  },
+  isTyping: {
+    type: Boolean,
+    default: false
+  },
+  typewriterContent: {
+    type: String,
+    default: ''
   }
 })
 
 const { render } = useMarkdown()
 
+const messageRef = ref(null)
+const shouldAnimate = ref(true)
+
+// 组件挂载后移除动画类，避免重复播放
+onMounted(() => {
+  setTimeout(() => {
+    shouldAnimate.value = false
+  }, 400)
+})
+
 const renderedContent = computed(() => {
-  if (!props.content) return ''
-  return render(props.content)
+  // 打字状态下使用 typewriterContent，否则使用 content
+  const text = props.isTyping ? props.typewriterContent : props.content
+  if (!text) return ''
+  return render(text)
 })
 </script>
 
 <style scoped>
+/* Copied from novi-v5.html */
 .message-row {
   display: flex;
   margin-bottom: 1.5rem;
@@ -70,6 +91,12 @@ const renderedContent = computed(() => {
   flex-shrink: 0;
   font-size: 1.2rem;
   overflow: hidden;
+  transition: none; /* Reset transition */
+}
+
+/* Reset hover effect from previous iteration */
+.avatar:hover {
+  transform: none;
 }
 
 .message-row.assistant .avatar {
@@ -92,40 +119,44 @@ const renderedContent = computed(() => {
 }
 
 .message-bubble {
-  max-width: 80%;
-  padding: 12px 18px;
-  border-radius: 16px;
+  max-width: 75%;
+  padding: 10px 16px;
+  border-radius: 8px;
   font-size: 1rem;
   line-height: 1.6;
-  word-wrap: break-word;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  word-wrap: break-word; /* Ensure wrapping */
   position: relative;
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+  /* Adaptive Width (Required for Vue implementation to match V5 behavior) */
+  width: fit-content;
+  min-width: 0;
 }
 
 .message-bubble.assistant {
-  background: var(--bg-card);
-  color: var(--text-main);
-  border-top-left-radius: 4px;
-  border: 1px solid var(--border-color);
+  background: #ffffff;
+  color: #1f1f1f;
+}
+
+[data-bs-theme="dark"] .message-bubble.assistant {
+  background: #2c2c2c;
+  color: #e3e3e3;
 }
 
 .message-bubble.user {
-  background: linear-gradient(135deg, #4e6ef2, #2b55e8);
-  color: #fff !important;
+  background: #95ec69; /* WeChat Green */
+  color: #000000 !important;
   order: 1;
-  border-top-right-radius: 4px;
-  box-shadow: 0 4px 12px rgba(78, 110, 242, 0.3);
+}
+
+[data-bs-theme="dark"] .message-bubble.user {
+  background: #2b7c38;
+  color: #e3e3e3 !important;
 }
 
 .message-bubble.user :deep(*) {
   color: inherit !important;
   margin-bottom: 0;
-}
-
-[data-bs-theme="dark"] .message-bubble.assistant {
-  background: #2b2d31;
-  border-color: #3f4148;
 }
 
 /* Loading Animation */
@@ -148,7 +179,6 @@ const renderedContent = computed(() => {
   background-color: var(--text-sub);
   border-radius: 50%;
   animation: bounce 1.4s infinite ease-in-out both;
-  opacity: 0.6;
 }
 
 .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
@@ -157,5 +187,40 @@ const renderedContent = computed(() => {
 @keyframes bounce {
   0%, 80%, 100% { transform: scale(0); }
   40% { transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  /* novi-v5.html doesn't have specific mobile media query for bubble width but let's keep it safe */
+}
+
+/* 消息入场动画 - 更丝滑 */
+.message-row.animate-in.user {
+  animation: slideFromRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.message-row.animate-in.assistant {
+  animation: slideFromLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 </style>

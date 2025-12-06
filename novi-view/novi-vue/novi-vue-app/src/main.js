@@ -9,6 +9,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import '@/assets/styles/variables.css'
 import '@/assets/styles/base.css'
 import '@/assets/styles/components.css'
+import 'github-markdown-css/github-markdown-light.css'
 
 const app = createApp(App)
 const pinia = createPinia()

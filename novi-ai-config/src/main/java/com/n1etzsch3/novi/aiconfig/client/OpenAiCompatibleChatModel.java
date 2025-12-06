@@ -73,13 +73,33 @@ public class OpenAiCompatibleChatModel implements ChatModel {
                 .uri(completionsPath)
                 .bodyValue(request)
                 .accept(MediaType.TEXT_EVENT_STREAM)
-                .retrieve()
-                .bodyToFlux(String.class)
-                .filter(line -> line.startsWith("data:") && !line.contains("[DONE]"))
-                .map(line -> line.substring(5).trim())
-                .filter(json -> !json.isEmpty())
-                .map(this::parseStreamChunk)
-                .filter(Objects::nonNull)
+                .exchangeToFlux(response -> {
+                    if (response.statusCode().isError()) {
+                        return response.createException().flatMapMany(Flux::error);
+                    }
+                    log.info("Stream Connected. Status: {}, Headers: {}", response.statusCode(),
+                            response.headers().asHttpHeaders());
+                    return response.bodyToFlux(String.class);
+                })
+                .doOnSubscribe(s -> log.info("Stream subscription started"))
+                .filter(chunk -> {
+                    String trimmed = chunk.trim();
+                    return !trimmed.isEmpty() && !"[DONE]".equals(trimmed);
+                })
+                .map(chunk -> {
+                    String trimmed = chunk.trim();
+                    // In case some implementations still send "data:" prefix
+                    if (trimmed.startsWith("data:")) {
+                        return trimmed.substring(5).trim();
+                    }
+                    return trimmed;
+                })
+                .<ChatResponse>handle((chunk, sink) -> {
+                    ChatResponse response = parseStreamChunk(chunk);
+                    if (response != null) {
+                        sink.next(response);
+                    }
+                })
                 .onErrorResume(e -> {
                     log.error("Error in stream", e);
                     return Flux.error(new RuntimeException("Stream error: " + e.getMessage(), e));
@@ -162,17 +182,10 @@ public class OpenAiCompatibleChatModel implements ChatModel {
                     }
 
                     // Handle reasoning_content if present (for thinking models)
-                    // We append it to content for now so it's not lost. Default spring AI might
-                    // structure this differently in future.
+                    // User requested to ignore reasoning content and only return final result.
+                    // So we explicitly ignore "reasoning_content" field here.
                     if (delta.has("reasoning_content") && !delta.get("reasoning_content").isNull()) {
-                        String reasoning = delta.get("reasoning_content").asText();
-                        // You might want to format reasoning differently, e.g. wrapped in tags, but for
-                        // now just append.
-                        // Or maybe preprend? Usually reasoning comes first.
-                        // But since this is a stream, we just append whatever comes.
-                        // NOTE: If both are present, we might want a separator, but usually they stream
-                        // sequentially.
-                        content = reasoning + content;
+                        log.debug("Skipping reasoning content chunk");
                     }
 
                     if (content != null && !content.isEmpty()) {

@@ -50,8 +50,9 @@
 
         <!-- 右侧内容 -->
         <div class="col-lg-9">
-          <!-- 个人资料标签页 -->
-          <div v-show="activeTab === 'profile'">
+          <transition name="tab-fade" mode="out-in">
+            <!-- 个人资料标签页 -->
+            <div v-if="activeTab === 'profile'" key="profile">
             <!-- 个人信息卡片 -->
             <div class="settings-card">
               <h5 class="fw-bold mb-4">个人信息</h5>
@@ -141,78 +142,79 @@
             </div>
           </div>
 
-          <!-- AI设定标签页 -->
-          <div v-show="activeTab === 'persona'">
-            <!-- 核心性格卡片 -->
-            <div class="settings-card">
-              <h5 class="fw-bold mb-4">核心性格</h5>
-              <div class="row row-cols-2 row-cols-lg-3 g-3 mb-4">
-                <div 
-                  v-for="persona in personalities" 
-                  :key="persona.configKey"
-                  class="col"
-                >
+            <!-- AI设定标签页 -->
+            <div v-else-if="activeTab === 'persona'" key="persona">
+              <!-- 核心性格卡片 -->
+              <div class="settings-card">
+                <h5 class="fw-bold mb-4">核心性格</h5>
+                <div class="row row-cols-2 row-cols-lg-3 g-3 mb-4">
                   <div 
-                    class="persona-card"
-                    :class="{ selected: selectedPersona === persona.configKey }"
-                    @click="selectedPersona = persona.configKey"
+                    v-for="persona in personalities" 
+                    :key="persona.configKey"
+                    class="col"
                   >
-                    <i :class="getPersonaIcon(persona.configKey)" class="persona-icon"></i>
-                    <div class="persona-name">{{ (persona.description || persona.configKey).split('性格')[0] }}</div>
-                    <div class="small text-muted mt-2 text-truncate" style="font-size: 0.8rem; opacity: 0.8;">
-                      {{ persona.configValue }}
+                    <div 
+                      class="persona-card"
+                      :class="{ selected: selectedPersona === persona.configKey }"
+                      @click="selectedPersona = persona.configKey"
+                    >
+                      <i :class="getPersonaIcon(persona.configKey)" class="persona-icon"></i>
+                      <div class="persona-name">{{ (persona.description || persona.configKey).split('性格')[0] }}</div>
+                      <div class="small text-muted mt-2 text-truncate" style="font-size: 0.8rem; opacity: 0.8;">
+                        {{ persona.configValue }}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div v-if="selectedPersona === 'custom'" class="mt-3">
-                <label class="form-label small fw-bold text-muted">自定义 Prompt</label>
-                <textarea 
-                  class="form-control rounded-3" 
-                  v-model="customPersona"
-                  rows="3"
-                  placeholder="输入你想要的 Prompt..."
-                ></textarea>
-              </div>
-            </div>
-
-            <!-- 交互偏好卡片 -->
-            <div class="settings-card">
-              <h5 class="fw-bold mb-4">交互偏好</h5>
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label small fw-bold text-muted">回复风格</label>
-                  <CustomSelect 
-                    v-model="preferences.tone" 
-                    :options="toneOptions" 
-                  />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label small fw-bold text-muted">语言</label>
-                  <CustomSelect 
-                    v-model="preferences.language" 
-                    :options="languageOptions" 
-                  />
-                </div>
-                <div class="col-12">
-                  <label class="form-label small fw-bold text-muted">如何称呼你</label>
-                  <input 
-                    type="text" 
+                <div v-if="selectedPersona === 'custom'" class="mt-3">
+                  <label class="form-label small fw-bold text-muted">自定义 Prompt</label>
+                  <textarea 
                     class="form-control rounded-3" 
-                    v-model="preferences.addressName"
-                  >
+                    v-model="customPersona"
+                    rows="3"
+                    placeholder="输入你想要的 Prompt..."
+                  ></textarea>
                 </div>
               </div>
-              <div class="mt-4 text-end">
-                <button 
-                  class="btn btn-primary rounded-pill px-4"
-                  @click="handleSavePreferences"
-                >
-                  应用设置
-                </button>
+
+              <!-- 交互偏好卡片 -->
+              <div class="settings-card">
+                <h5 class="fw-bold mb-4">交互偏好</h5>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label small fw-bold text-muted">回复风格</label>
+                    <CustomSelect 
+                      v-model="preferences.tone" 
+                      :options="toneOptions" 
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-bold text-muted">语言</label>
+                    <CustomSelect 
+                      v-model="preferences.language" 
+                      :options="languageOptions" 
+                    />
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold text-muted">如何称呼你</label>
+                    <input 
+                      type="text" 
+                      class="form-control rounded-3" 
+                      v-model="preferences.addressName"
+                    >
+                  </div>
+                </div>
+                <div class="mt-4 text-end">
+                  <button 
+                    class="btn btn-primary rounded-pill px-4"
+                    @click="handleSavePreferences"
+                  >
+                    应用设置
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          </transition>
         </div>
       </div>
     </div>

@@ -25,17 +25,19 @@
             <span>{{ selectedModelName }}</span>
             <i class="bi bi-chevron-down small opacity-75"></i>
           </button>
-          <ul class="dropdown-menu model-dropdown-menu shadow-lg rounded-4 p-2" :class="{ show: isOpen }">
-            <li v-for="model in models" :key="model.id">
-              <a
-                :class="['dropdown-item', { active: selectedModel === model.id }]"
-                href="#"
-                @click.prevent="selectModel(model.id)"
-              >
-                {{ model.name }}
-              </a>
-            </li>
-          </ul>
+          <transition name="dropdown">
+            <ul v-if="isOpen" class="dropdown-menu model-dropdown-menu shadow-lg rounded-4 p-2 show">
+              <li v-for="model in models" :key="model.id">
+                <a
+                  :class="['dropdown-item', { active: selectedModel === model.id }]"
+                  href="#"
+                  @click.prevent="selectModel(model.id)"
+                >
+                  {{ model.name }}
+                </a>
+              </li>
+            </ul>
+          </transition>
         </div>
 
         <div class="input-actions">
@@ -213,11 +215,10 @@ function resetHeight() {
   justify-content: space-between;
   align-items: center;
   padding-top: 8px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 [data-bs-theme="dark"] .input-toolbar {
-  border-top-color: rgba(255, 255, 255, 0.05);
+  /* 保持一致的样式 */
 }
 
 .model-selector-btn {

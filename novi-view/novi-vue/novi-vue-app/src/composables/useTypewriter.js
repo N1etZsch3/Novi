@@ -1,77 +1,86 @@
-// 导入 useMarkdown
-import { useMarkdown } from './useMarkdown'
+import { ref } from 'vue'
 
-// 打字机效果组合式函数
+/**
+ * 打字机效果组合式函数
+ * 使用 Vue 响应式数据实现逐字显示效果
+ */
 export function useTypewriter() {
-    let currentElement = null
-    let queue = ''
-    let isTyping = false
+    // 当前显示的内容（逐字增加）
+    const displayedContent = ref('')
+    // 完整的待显示内容
+    const fullContent = ref('')
+    // 是否正在打字
+    const isActive = ref(false)
+    // 定时器ID
     let intervalId = null
-    let rawContent = ''
 
-    const start = (element) => {
-        currentElement = element
-        queue = ''
-        rawContent = ''
-        isTyping = true
+    /**
+     * 开始打字机效果
+     */
+    function start() {
+        displayedContent.value = ''
+        fullContent.value = ''
+        isActive.value = true
     }
 
-    const push = (text) => {
-        if (!currentElement) return
+    /**
+     * 推送新内容到队列
+     * @param {string} text - 要添加的文本
+     */
+    function push(text) {
+        if (!text) return
+        fullContent.value += text
 
-        queue += text
-        rawContent += text
-
-        if (!intervalId && isTyping) {
+        // 如果没有正在运行的定时器且处于激活状态，开始处理队列
+        if (!intervalId && isActive.value) {
             processQueue()
         }
     }
 
-    const processQueue = () => {
-        if (!currentElement) return
-
+    /**
+     * 处理队列，逐字显示
+     */
+    function processQueue() {
         intervalId = setInterval(() => {
-            if (queue.length === 0) {
+            // 如果已显示完所有内容，停止定时器
+            if (displayedContent.value.length >= fullContent.value.length) {
                 clearInterval(intervalId)
                 intervalId = null
                 return
             }
 
-            // 从队列中取出字符
-            const char = queue[0]
-            queue = queue.slice(1)
-
-            // 更新元素内容
-            const { render } = useMarkdown()
-            currentElement.innerHTML = render(rawContent.slice(0, rawContent.length - queue.length))
-
-            // 滚动到底部
-            const chatWindow = document.getElementById('chatWindow')
-            if (chatWindow) {
-                chatWindow.scrollTop = chatWindow.scrollHeight
-            }
-        }, 20) // 每20ms打一个字符
+            // 每次增加一个字符
+            displayedContent.value = fullContent.value.slice(0, displayedContent.value.length + 1)
+        }, 20) // 每20ms显示一个字符
     }
 
-    const stop = () => {
-        isTyping = false
+    /**
+     * 停止打字机效果，立即显示全部内容
+     */
+    function stop() {
+        isActive.value = false
         if (intervalId) {
             clearInterval(intervalId)
             intervalId = null
         }
+        // 立即显示所有内容
+        displayedContent.value = fullContent.value
+    }
 
-        // 显示所有剩余内容
-        if (currentElement && rawContent) {
-            const { render } = useMarkdown()
-            currentElement.innerHTML = render(rawContent)
-        }
-
-        queue = ''
+    /**
+     * 获取最终完整内容
+     */
+    function getFullContent() {
+        return fullContent.value
     }
 
     return {
+        displayedContent,
+        fullContent,
+        isActive,
         start,
         push,
-        stop
+        stop,
+        getFullContent
     }
 }

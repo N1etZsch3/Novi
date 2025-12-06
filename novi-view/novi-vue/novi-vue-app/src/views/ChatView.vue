@@ -33,7 +33,13 @@
       />
 
       <!-- 聊天窗口 -->
-      <ChatWindow ref="chatWindowRef" :messages="messages" />
+      <ChatWindow 
+        ref="chatWindowRef" 
+        :messages="messages" 
+        :typing-message-id="typingMessageId"
+        :typewriter-content="typewriter.displayedContent.value"
+        :auto-scroll-on-load="autoScrollOnLoad"
+      />
 
       <!-- 输入区 -->
       <ChatInput
@@ -51,6 +57,14 @@
       v-model="isFullScreenOpen"
       :text="fullScreenText"
       @confirm="handleFullScreenConfirm"
+    />
+    
+    <ConfirmModal
+      v-model="showConfirmModal"
+      :title="confirmTitle"
+      :message="confirmMessage"
+      :type="confirmType"
+      @confirm="handleConfirmAction"
     />
   </div>
 </template>
@@ -87,6 +101,8 @@ const models = ref([])
 const selectedModel = ref('')
 const apiMode = ref('stream')
 const isTyping = ref(false)
+const typingMessageId = ref(null)
+const autoScrollOnLoad = ref(true)
 
 const chatWindowRef = ref(null)
 const chatInputRef = ref(null)
@@ -174,6 +190,14 @@ async function loadSessions() {
 async function selectSession(sessionId) {
   try {
     currentSessionId.value = sessionId
+    // 加载历史记录时不自动滚动到底部，让消息从左上角开始显示
+    autoScrollOnLoad.value = false
+    
+    // 移动端自动关闭侧边栏
+    if (isMobile.value) {
+      isSidebarOpen.value = false
+    }
+    
     const res = await getSessionHistory(sessionId)
     if (res.code === 200 || res.code === 1) {
       messages.value = (res.data || []).map(m => ({
@@ -184,9 +208,12 @@ async function selectSession(sessionId) {
     } else {
       error(res.msg || '加载会话失败')
     }
+    // 加载完成后重置，以便新消息仍会滚动到底部
+    autoScrollOnLoad.value = true
   } catch (err) {
     console.error(err)
     error('加载会话历史失败')
+    autoScrollOnLoad.value = true
   }
 }
 
@@ -221,7 +248,8 @@ async function sendMessage(msg) {
   })
 
   isTyping.value = true
-  typewriter.start(document.getElementById(aiMessageId))
+  typingMessageId.value = aiMessageId
+  typewriter.start()
 
   try {
     const payload = {
@@ -243,7 +271,14 @@ async function sendMessage(msg) {
       messages.value.splice(index, 1)
     }
   } finally {
+    // 同步最终内容到消息
+    const msg = messages.value.find(m => m.id === typingMessageId.value)
+    if (msg) {
+      msg.content = typewriter.getFullContent()
+    }
+    
     isTyping.value = false
+    typingMessageId.value = null
     typewriter.stop()
     await loadSessions()
   }
@@ -273,10 +308,6 @@ async function handleStreamMessage(payload, messageId) {
         const evt = JSON.parse(line.slice(5))
         if (evt.eventType === 'CONTENT') {
           typewriter.push(evt.content)
-          // Accumulate content locally but DON'T update Vue ref immediately
-          // This allows typewriter to handle the DOM updates separately
-          const msg = messages.value.find(m => m.id === messageId)
-          if (msg) msg._tempContent = (msg._tempContent || '') + evt.content
         } else if (evt.eventType === 'METADATA') {
           currentSessionId.value = evt.sessionId
         }
@@ -286,12 +317,7 @@ async function handleStreamMessage(payload, messageId) {
     }
   }
   
-  // Stream finished, sync final content to Vue state
-  const msg = messages.value.find(m => m.id === messageId)
-  if (msg && msg._tempContent) {
-    msg.content = msg._tempContent
-    delete msg._tempContent
-  }
+  // Stream finished - content will be synced in finally block
 }
 
 // 处理普通消息
@@ -299,8 +325,7 @@ async function handleNormalMessage(payload, messageId) {
   const res = await sendMessageApi(payload)
   if (res.code === 200 || res.code === 1) {
     typewriter.push(res.data.response)
-    const msg = messages.value.find(m => m.id === messageId)
-    if (msg) msg.content = res.data.response
+    // Content will be synced in finally block
     
     if (res.data.sessionId) {
       currentSessionId.value = res.data.sessionId
@@ -310,20 +335,90 @@ async function handleNormalMessage(payload, messageId) {
   }
 }
 
+// 导入 useAuthStore
+import { useAuthStore } from '@/stores/auth'
+import ConfirmModal from '@/components/common/ConfirmModal.vue'
+
+// Modal State
+const showConfirmModal = ref(false)
+const confirmTitle = ref('')
+const confirmMessage = ref('')
+const confirmType = ref('primary')
+let pendingConfirmAction = null
+
+function openConfirmModal(title, message, type = 'primary', action) {
+  confirmTitle.value = title
+  confirmMessage.value = message
+  confirmType.value = type
+  pendingConfirmAction = action
+  showConfirmModal.value = true
+}
+
+function handleConfirmAction() {
+  if (pendingConfirmAction) pendingConfirmAction()
+  pendingConfirmAction = null
+}
+
 // 删除会话
 async function deleteSession(sessionId) {
-  if (!confirm('确认删除此会话？')) return
-  
-  try {
-    await deleteSessionApi(sessionId)
-    if (currentSessionId.value === sessionId) {
-      startNewChat()
+  openConfirmModal('删除会话', '确认删除此会话？此操作无法撤销。', 'danger', async () => {
+    try {
+      await deleteSessionApi(sessionId)
+      if (currentSessionId.value === sessionId) {
+        startNewChat()
+      }
+      await loadSessions()
+      success('删除成功')
+    } catch (err) {
+      error('删除失败')
     }
-    await loadSessions()
-    success('删除成功')
-  } catch (err) {
-    error('删除失败')
-  }
+  })
+}
+
+// 批量删除会话
+// 批量删除会话
+async function deleteSelectedSessions(ids) {
+  if (!ids || ids.length === 0) return
+  
+  openConfirmModal('批量删除', `确认删除这 ${ids.length} 条会话吗？`, 'danger', async () => {
+    try {
+      const promises = ids.map(id => deleteSessionApi(id))
+      const results = await Promise.allSettled(promises)
+      
+      // Count success (fulfilled) AND 404s (already deleted) as success
+      // If rejected, check reason. If 404, valid.
+      let successCount = 0
+      results.forEach(r => {
+        if (r.status === 'fulfilled') successCount++
+        else if (r.reason?.response?.status === 404) successCount++ // Treat 404 as success
+      })
+      
+      await loadSessions()
+      
+      if (ids.includes(currentSessionId.value)) {
+        startNewChat()
+      }
+      
+      if (successCount > 0) {
+        success(`已删除 ${successCount} 条会话`)
+      } else {
+        // If all failed with non-404, show error. But likely minimal chance.
+        error('删除操作完成')
+      }
+      
+      // Reset edit mode
+      if (sessionListRef.value && sessionListRef.value.resetEditMode) {
+        sessionListRef.value.resetEditMode()
+      }
+    } catch (err) {
+      console.error('Batch delete logic error:', err)
+      // Even on error, try to reload and reset
+      await loadSessions()
+      if (sessionListRef.value && sessionListRef.value.resetEditMode) {
+        sessionListRef.value.resetEditMode()
+      }
+    }
+  })
 }
 
 // 切换模型
@@ -341,34 +436,6 @@ async function selectModel(modelId) {
   } catch (err) {
     console.error('切换模型失败:', err)
     error('切换模型失败')
-  }
-}
-
-// 批量删除会话
-// 批量删除会话
-async function deleteSelectedSessions(ids) {
-  if (!ids || ids.length === 0) return
-  
-  console.log('Batch deleting IDs:', ids)
-  if (!confirm(`确认删除这 ${ids.length} 条会话吗？`)) return
-
-  try {
-    // novi-v5.html uses loop with Promise.all
-    const promises = ids.map(id => deleteSessionApi(id))
-    await Promise.all(promises)
-    
-    // If current session deleted, new chat
-    if (ids.includes(currentSessionId.value)) {
-      startNewChat()
-    }
-    await loadSessions()
-    success(`成功删除 ${ids.length} 条会话`)
-    
-    // Reset edit mode
-    sessionListRef.value?.resetEditMode()
-  } catch (err) {
-    console.error(err)
-    error('批量删除失败')
   }
 }
 
@@ -400,9 +467,6 @@ function switchMode(mode) {
     router.push('/exam')
   }
 }
-
-// 导入 useAuthStore
-import { useAuthStore } from '@/stores/auth'
 </script>
 
 <style scoped>

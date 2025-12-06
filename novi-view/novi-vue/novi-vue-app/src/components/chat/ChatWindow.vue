@@ -17,6 +17,8 @@
         :role="message.role"
         :content="message.content"
         :bubble-id="message.id"
+        :is-typing="message.id === typingMessageId"
+        :typewriter-content="message.id === typingMessageId ? typewriterContent : ''"
       />
     </div>
   </div>
@@ -30,14 +32,35 @@ const props = defineProps({
   messages: {
     type: Array,
     default: () => []
+  },
+  typingMessageId: {
+    type: String,
+    default: null
+  },
+  typewriterContent: {
+    type: String,
+    default: ''
+  },
+  // 是否在加载时自动滚动到底部（加载历史记录时为 false）
+  autoScrollOnLoad: {
+    type: Boolean,
+    default: true
   }
 })
 
 const chatWindowRef = ref(null)
 
-// 自动滚动到底部
-watch(() => props.messages.length, async () => {
+// 消息数量变化时根据条件滚动到底部
+watch(() => props.messages.length, async (newLen, oldLen) => {
   await nextTick()
+  // 只在新增消息时滚动（newLen > oldLen），或者明确要求自动滚动时
+  if (props.autoScrollOnLoad || (oldLen !== undefined && newLen > oldLen)) {
+    scrollToBottom()
+  }
+})
+
+// 打字内容变化时滚动到底部
+watch(() => props.typewriterContent, () => {
   scrollToBottom()
 })
 
@@ -56,26 +79,30 @@ defineExpose({
 .chat-window {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 1.5rem 1rem;
-  scroll-behavior: smooth;
+  /* 不使用 smooth scroll，避免与消息动画冲突 */
 }
 
 .chat-container {
-  max-width: 850px;
+  max-width: 850px; /* Aligned exactly with ChatInput.vue */
   margin: 0 auto;
   width: 100%;
   padding-bottom: 2rem;
+  /* 防止动画时产生额外的渲染区域 */
+  overflow: hidden;
 }
 
 .avatar-ai {
-  background: var(--bg-card);
+  background: #ffffff;
   color: var(--primary-color);
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+  box-shadow: none; /* simple */
 }
 </style>

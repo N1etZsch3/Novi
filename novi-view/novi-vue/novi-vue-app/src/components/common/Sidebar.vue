@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar" :class="{ 'mobile-open': mobileOpen }">
+  <aside class="sidebar" :class="{ 'mobile-open': mobileOpen, 'collapsed': collapsed }">
     <!-- 头部区域 -->
     <div class="p-3 d-flex align-items-center flex-shrink-0">
       <button 
@@ -101,19 +101,34 @@ function handleLogout() {
   flex-direction: column;
   height: 100vh;
   flex-shrink: 0;
-  transition: width 0.3s ease, transform 0.3s ease;
+  /* 更丝滑的动画曲线 */
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: hidden;
 }
 
 .text-label {
   white-space: nowrap;
   opacity: 1;
-  transition: opacity 0.2s;
+  transition: opacity 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* V5 Exact Match for Collapsed State */
+.sidebar.collapsed {
+  width: var(--sidebar-width-collapsed);
 }
 
 .sidebar.collapsed .text-label {
-  opacity: 0;
-  pointer-events: none;
+  display: none !important;
+}
+
+/* Adjust new chat button when collapsed */
+.sidebar.collapsed :deep(.btn-new-chat) {
+  padding: 0;
+  justify-content: center;
+}
+.sidebar.collapsed :deep(.btn-new-chat i) {
+  margin-right: 0 !important;
 }
 
 @media (max-width: 768px) {
@@ -152,7 +167,7 @@ function handleLogout() {
   border-radius: 0.75rem;
   cursor: pointer;
   color: var(--text-sub);
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   font-weight: 500;
 }
 
