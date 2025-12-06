@@ -1,11 +1,11 @@
 <template>
   <Teleport to="body">
     <transition name="modal">
-      <div v-if="modelValue" class="modal-wrapper">
+      <div v-if="modelValue" class="modal-wrapper" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1060;">
         <!-- Backdrop -->
-        <div class="modal-backdrop fade show" @click="cancel"></div>
+        <div class="modal-backdrop fade show" style="z-index: 1060;" @click="cancel"></div>
         <!-- Modal Container -->
-        <div class="modal fade show" style="display: block;" tabindex="-1" aria-modal="true" role="dialog">
+        <div class="modal fade show" style="display: block; z-index: 1065;" tabindex="-1" aria-modal="true" role="dialog">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content text-center p-5 border-0 shadow-lg rounded-5" style="background-color: var(--bg-card); color: var(--text-main);">
               <div class="mb-4">
@@ -63,9 +63,3 @@ function confirm() {
   emit('update:modelValue', false)
 }
 </script>
-
-<style scoped>
-/* Ensure modal sits above everything */
-.modal { z-index: 1055; }
-.modal-backdrop { z-index: 1050; }
-</style>

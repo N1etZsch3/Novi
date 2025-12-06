@@ -75,9 +75,19 @@ public class DynamicChatModelFactory {
     }
 
     private boolean isDashScopeModel(AiModelConfig config) {
+        // Check if using OpenAI-compatible mode first
+        // compatible-mode URLs should use OpenAiCompatibleChatModel, not
+        // DashScopeChatModel
+        // because DashScopeChatModel uses internal native API paths and ignores custom
+        // base_url
+        if (config.getBaseUrl() != null && config.getBaseUrl().contains("compatible-mode")) {
+            log.debug("Detected compatible-mode URL, will use OpenAI-compatible client: {}", config.getBaseUrl());
+            return false;
+        }
+
         // Simple heuristic: check if the model name or description implies
-        // DashScope/Qwen
-        // Or if the base URL matches DashScope's URL
+        // DashScope/Qwen - use native DashScope API
+        // Or if the base URL matches DashScope's URL (but not compatible-mode)
         if (config.getBaseUrl() != null && config.getBaseUrl().contains("dashscope")) {
             return true;
         }
