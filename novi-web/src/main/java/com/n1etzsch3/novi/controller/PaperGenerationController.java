@@ -50,10 +50,15 @@ public class PaperGenerationController {
     @PostMapping(value = "/generate", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter generatePaper(@RequestBody @Validated PaperGenerationRequest request) {
         Long userId = LoginUserContext.getUserId();
-        log.info("Received paper generation request from user: {}, subjectId: {}, questionTypes: {}",
-                userId, request.getSubjectId(), request.getPaperConfig().size());
+        log.info(
+                "Received paper generation request from user: {}, subjectId: {}, questionTypes: {}, enableThinking: {}",
+                userId, request.getSubjectId(),
+                request.getPaperConfig() != null ? request.getPaperConfig().size() : "Auto",
+                request.getEnableThinking());
 
-        SseEmitter emitter = new SseEmitter(5 * 60 * 1000L); // 5分钟超时
+        // 深度思考模式使用30分钟超时，普通模式使用5分钟
+        long timeoutMs = Boolean.TRUE.equals(request.getEnableThinking()) ? 30 * 60 * 1000L : 5 * 60 * 1000L;
+        SseEmitter emitter = new SseEmitter(timeoutMs);
 
         // 设置超时和完成回调
         emitter.onTimeout(() -> {

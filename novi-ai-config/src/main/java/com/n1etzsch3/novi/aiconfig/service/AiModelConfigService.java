@@ -56,4 +56,16 @@ public interface AiModelConfigService {
      * @return 所有模型配置DTO列表
      */
     List<AiModelConfigDTO> listAllModelsDTO();
+
+    /**
+     * 根据模型名称获取模型配置（内部使用）
+     * <p>
+     * 此方法返回完整的配置信息，包含 API Key 等敏感信息，
+     * 仅供系统内部组件使用，不应暴露给外部API。
+     * </p>
+     *
+     * @param modelName 模型名称
+     * @return 模型配置，如果不存在则返回 null
+     */
+    AiModelConfig getModelByName(String modelName);
 }

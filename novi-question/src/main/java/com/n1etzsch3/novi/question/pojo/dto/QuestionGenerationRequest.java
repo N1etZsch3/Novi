@@ -71,4 +71,12 @@ public class QuestionGenerationRequest {
      * </p>
      */
     private Boolean enableThinking = false;
+
+    /**
+     * 指定使用的AI模型名称（可选）
+     * <p>
+     * 为空时使用数据库中的激活模型
+     * </p>
+     */
+    private String model;
 }

@@ -79,15 +79,61 @@ public class AiModelConfigServiceImpl implements AiModelConfigService {
      */
     @Override
     public AiModelConfig getActiveModel() {
-        AiModelConfig activeModel = aiModelConfigMapper.selectOne(
+        // Use selectList instead of selectOne to prevent TooManyResultsException
+        List<AiModelConfig> activeModels = aiModelConfigMapper.selectList(
                 new LambdaQueryWrapper<AiModelConfig>()
                         .eq(AiModelConfig::getIsActive, true));
 
-        if (activeModel == null) {
-            log.warn("No active AI model found in database, please configure one.");
+        if (activeModels == null || activeModels.isEmpty()) {
+            log.warn("No active AI model found in database. Attempting to auto-activate the first available model.");
+
+            // Query for any model
+            List<AiModelConfig> allModels = aiModelConfigMapper
+                    .selectList(new LambdaQueryWrapper<AiModelConfig>().last("LIMIT 1"));
+
+            if (allModels != null && !allModels.isEmpty()) {
+                AiModelConfig fallbackModel = allModels.get(0);
+                log.info("Auto-activating model: {}", fallbackModel.getModelName());
+
+                // Activate this model
+                fallbackModel.setIsActive(true);
+                aiModelConfigMapper.updateById(fallbackModel);
+
+                // Ensure others are deactivated if relying on activateModelByName logic
+                // elsewhere?
+                // But for safety, let's just use the mapper's atomic activation if possible.
+                // Or just updating this one is enough if we assume others are 0.
+                // Better use activateModelByName to be clean, but that requires name.
+                aiModelConfigMapper.activateModelByName(fallbackModel.getModelName());
+
+                // Refetch to be sure or just return modified object (updated active status)
+                // Returning modified object is faster but might miss DB triggers (unlikely
+                // here).
+                // Let's just return the object with true.
+                fallbackModel.setIsActive(true);
+                return fallbackModel;
+            }
+
+            log.error("No AI models configured in database at all.");
+            return null;
         }
 
-        return activeModel;
+        if (activeModels.size() > 1) {
+            log.warn("Found {} active AI models in database. Using the first one: {}",
+                    activeModels.size(), activeModels.get(0).getModelName());
+        }
+
+        return activeModels.get(0);
+    }
+
+    @Override
+    public AiModelConfig getModelByName(String modelName) {
+        if (modelName == null || modelName.isBlank()) {
+            return null;
+        }
+        return aiModelConfigMapper.selectOne(
+                new LambdaQueryWrapper<AiModelConfig>()
+                        .eq(AiModelConfig::getModelName, modelName));
     }
 
     /**

@@ -37,4 +37,12 @@ public class ChatRequest {
      * </p>
      */
     private String sessionId;
+
+    /**
+     * 用户选择的 AI 模型名称（可选）。
+     * <p>
+     * 如果为空，将使用数据库中的激活模型。
+     * </p>
+     */
+    private String model;
 }

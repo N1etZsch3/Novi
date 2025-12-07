@@ -66,7 +66,7 @@ public class PaperGenerationServiceImpl implements PaperGenerationService {
 
             CompletableFuture<QuestionTypeResult> future = CompletableFuture.supplyAsync(() -> {
                 try {
-                    return generateQuestionType(userId, config, request.getEnableThinking());
+                    return generateQuestionType(userId, config, request.getEnableThinking(), request.getModel());
                 } catch (Exception e) {
                     log.error("Failed to generate question type: {}", config.getQuestionTypeCode(), e);
                     return QuestionTypeResult.builder()
@@ -205,8 +205,9 @@ public class PaperGenerationServiceImpl implements PaperGenerationService {
     /**
      * 生成单个题型
      */
-    private QuestionTypeResult generateQuestionType(Long userId, PaperConfigItem config, Boolean enableThinking) {
-        log.info("Generating question type: {} for user: {}", config.getQuestionTypeCode(), userId);
+    private QuestionTypeResult generateQuestionType(Long userId, PaperConfigItem config, Boolean enableThinking,
+            String model) {
+        log.info("Generating question type: {} for user: {}, model: {}", config.getQuestionTypeCode(), userId, model);
 
         try {
             // 1. 查询题型信息
@@ -223,13 +224,14 @@ public class PaperGenerationServiceImpl implements PaperGenerationService {
             QuestionCategory subject = questionCategoryMapper.selectById(questionType.getParentId());
 
             // 3. 构建出题请求
-            QuestionGenerationRequest questionRequest = new QuestionGenerationRequest(
-                    subject.getName(), // 科目名称
-                    questionType.getName(), // 题型名称 (fix: 之前错误地传入了code)
-                    config.getTheme(),
-                    config.getDifficulty(),
-                    config.getQuantity(),
-                    enableThinking);
+            QuestionGenerationRequest questionRequest = new QuestionGenerationRequest();
+            questionRequest.setSubject(subject.getName());
+            questionRequest.setQuestionType(questionType.getName());
+            questionRequest.setTheme(config.getTheme());
+            questionRequest.setDifficulty(config.getDifficulty());
+            questionRequest.setQuantity(config.getQuantity());
+            questionRequest.setEnableThinking(enableThinking);
+            questionRequest.setModel(model);
 
             // 4. 调用出题服务
             QuestionGenerationResponse response = questionGenerationService.generateQuestions(userId, questionRequest);

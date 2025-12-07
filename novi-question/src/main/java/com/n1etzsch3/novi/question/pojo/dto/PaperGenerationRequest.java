@@ -39,6 +39,12 @@ public class PaperGenerationRequest {
     private List<PaperConfigItem> paperConfig;
 
     /**
+     * 指定使用的AI模型名称（可选）
+     * 为空时使用数据库中的激活模型
+     */
+    private String model;
+
+    /**
      * 是否启用深度思考模式（可选，默认false）
      */
     private Boolean enableThinking = false;

@@ -74,6 +74,37 @@ public class DynamicChatModelFactory {
         return chatModel;
     }
 
+    /**
+     * Create ChatModel by model name (for per-request model selection).
+     * <p>
+     * Unlike the no-arg version, this does NOT cache the model instance
+     * since it's meant for per-request usage where different requests may
+     * use different models.
+     * </p>
+     *
+     * @param modelName the model name to use, if null/blank falls back to active
+     *                  model
+     * @return ChatModel instance
+     */
+    public ChatModel createChatModel(String modelName) {
+        if (modelName == null || modelName.isBlank()) {
+            return createChatModel(); // fallback to active model
+        }
+
+        AiModelConfig config = aiModelConfigService.getModelByName(modelName);
+        if (config == null) {
+            log.warn("Requested model '{}' not found, falling back to active model", modelName);
+            return createChatModel();
+        }
+
+        log.debug("Creating ChatModel for requested model: {}", modelName);
+        if (isDashScopeModel(config)) {
+            return createDashScopeChatModel(config);
+        } else {
+            return createOpenAiChatModel(config);
+        }
+    }
+
     private boolean isDashScopeModel(AiModelConfig config) {
         // Check if using OpenAI-compatible mode first
         // compatible-mode URLs should use OpenAiCompatibleChatModel, not
@@ -129,7 +160,8 @@ public class DynamicChatModelFactory {
                 activeModel.getBaseUrl(),
                 activeModel.getApiKey(),
                 activeModel.getModelName(),
-                activeModel.getCompletionsPath());
+                activeModel.getCompletionsPath(),
+                activeModel.getEnableThinking() != null && activeModel.getEnableThinking());
     }
 
     /**

@@ -68,7 +68,8 @@ class QuestionGenerationControllerTest {
         request.setDifficulty("medium");
         request.setQuantity(5);
 
-        QuestionGenerationResponse response = new QuestionGenerationResponse(1L, "[]");
+        QuestionGenerationResponse response = new QuestionGenerationResponse(1L, "[]", "Subject", "Type", "Theme",
+                "Medium", 1);
         when(questionGenerationService.generateQuestions(eq(1L), any(QuestionGenerationRequest.class)))
                 .thenReturn(response);
 
@@ -109,7 +110,8 @@ class QuestionGenerationControllerTest {
 
     @Test
     void getRecordDetail_Success() throws Exception {
-        QuestionGenerationResponse response = new QuestionGenerationResponse(1L, "[]");
+        QuestionGenerationResponse response = new QuestionGenerationResponse(1L, "[]", "Subject", "Type", "Theme",
+                "Medium", 1);
         when(questionGenerationService.getRecordDetail(1L, 1L)).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/questions/history/1"))

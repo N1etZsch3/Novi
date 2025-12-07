@@ -12,6 +12,7 @@ import com.n1etzsch3.novi.common.pojo.dto.StreamEvent;
 import com.n1etzsch3.novi.common.pojo.entity.ChatSession;
 import com.n1etzsch3.novi.common.pojo.entity.UserAccount;
 import com.n1etzsch3.novi.aiconfig.service.AiPromptConfigService;
+import com.n1etzsch3.novi.aiconfig.factory.DynamicChatModelFactory;
 import com.n1etzsch3.novi.chat.service.ChatService;
 import com.n1etzsch3.novi.user.service.UserPreferenceService;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,7 @@ import java.util.UUID;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatClient chatClient;
+    private final DynamicChatModelFactory dynamicChatModelFactory;
     private final ObjectMapper objectMapper;
     private final ChatSessionMapper chatSessionMapper;
     private final UserAccountMapper userAccountMapper;
@@ -56,21 +58,37 @@ public class ChatServiceImpl implements ChatService {
     private final ChatMemory chatMemory;
 
     public ChatServiceImpl(
-            ChatClient chatClient, // Inject the ChatClient bean from ChatConfig (with MessageChatMemoryAdvisor)
+            ChatClient chatClient,
+            DynamicChatModelFactory dynamicChatModelFactory,
             ObjectMapper objectMapper,
             ChatSessionMapper chatSessionMapper,
             UserAccountMapper userAccountMapper,
             UserPreferenceService userPreferenceService,
             AiPromptConfigService aiPromptConfigService,
             ChatMemory chatMemory) {
-        // Use injected ChatClient which has MessageChatMemoryAdvisor configured
         this.chatClient = chatClient;
+        this.dynamicChatModelFactory = dynamicChatModelFactory;
         this.objectMapper = objectMapper;
         this.chatSessionMapper = chatSessionMapper;
         this.userAccountMapper = userAccountMapper;
         this.userPreferenceService = userPreferenceService;
         this.aiPromptConfigService = aiPromptConfigService;
         this.chatMemory = chatMemory;
+    }
+
+    /**
+     * 根据请求的模型名称获取对应的 ChatClient
+     * <p>
+     * 如果请求指定了模型，则创建一个使用该模型的临时 ChatClient；
+     * 否则使用默认的 chatClient（使用数据库中的激活模型）。
+     * </p>
+     */
+    private ChatClient getChatClientForModel(String modelName) {
+        if (modelName == null || modelName.isBlank()) {
+            return chatClient;
+        }
+        log.info("Using per-request model: {}", modelName);
+        return ChatClient.builder(dynamicChatModelFactory.createChatModel(modelName)).build();
     }
 
     /**
@@ -137,15 +155,19 @@ public class ChatServiceImpl implements ChatService {
         SessionInfo sessionInfo = getOrCreateSession(userId, request.getSessionId(), userMessage);
         String compositeKey = createCompositeKey(userId, sessionInfo.sessionId());
 
-        // 3. 调用 AI
-        String AIResponse = chatClient.prompt()
-                .messages(systemMessage) // 注入动态系统提示词
+        // 3. 获取要使用的 ChatClient（支持请求指定模型）
+        ChatClient clientToUse = getChatClientForModel(request.getModel());
+
+        // 4. 调用 AI
+        String AIResponse = clientToUse.prompt()
+                .messages(systemMessage)
                 .user(userMessage)
                 .advisors(MessageChatMemoryAdvisor.builder(chatMemory).conversationId(compositeKey).build())
                 .call()
                 .content();
 
-        log.info("Blocking call completed for user: {}, session: {}", userId, sessionInfo.sessionId());
+        log.info("Blocking call completed for user: {}, session: {}, model: {}",
+                userId, sessionInfo.sessionId(), request.getModel());
         return new ChatResponse(AIResponse, sessionInfo.sessionId(), sessionInfo.title());
     }
 
@@ -166,14 +188,34 @@ public class ChatServiceImpl implements ChatService {
         StreamEvent metadataEvent = StreamEvent.metadata(sessionIdToUse, sessionInfo.title());
         Flux<StreamEvent> metadataStream = Flux.just(metadataEvent);
 
-        // 4. AI 内容流 - 注入系统消息
-        Flux<StreamEvent> contentStream = chatClient.prompt()
-                .messages(systemMessage) // 关键：在此处也注入系统提示词
+        // 4. 获取要使用的 ChatClient（支持请求指定模型）
+        ChatClient clientToUse = getChatClientForModel(request.getModel());
+
+        // 5. AI 内容流 - 注入系统消息
+        Flux<StreamEvent> contentStream = clientToUse.prompt()
+                .messages(systemMessage)
                 .user(userMessage)
                 .advisors(MessageChatMemoryAdvisor.builder(chatMemory).conversationId(compositeKey).build())
                 .stream()
-                .content()
-                .map(StreamEvent::content);
+                .chatResponse()
+                .<StreamEvent>handle((chatResponse, sink) -> {
+                    if (chatResponse.getResults().isEmpty()) {
+                        return; // Skip empty results
+                    }
+                    org.springframework.ai.chat.model.Generation generation = chatResponse.getResult();
+                    Object reasoningObj = generation.getMetadata().get("reasoning_content");
+                    String reasoning = reasoningObj instanceof String ? (String) reasoningObj : null;
+
+                    if (StringUtils.hasText(reasoning)) {
+                        sink.next(new StreamEvent("REASONING", null, reasoning, null, null));
+                    } else {
+                        String content = generation.getOutput().getText();
+                        if (StringUtils.hasText(content)) {
+                            sink.next(StreamEvent.content(content));
+                        }
+                        // If no content, just don't emit anything (skip)
+                    }
+                });
 
         // 5. 合并并序列化
         return Flux.concat(metadataStream, contentStream)

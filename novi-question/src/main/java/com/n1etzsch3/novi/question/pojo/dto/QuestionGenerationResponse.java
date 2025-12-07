@@ -36,4 +36,11 @@ public class QuestionGenerationResponse {
      * </p>
      */
     private String questions;
+
+    // Metadata fields
+    private String subject;
+    private String questionType;
+    private String theme;
+    private String difficulty;
+    private Integer quantity;
 }

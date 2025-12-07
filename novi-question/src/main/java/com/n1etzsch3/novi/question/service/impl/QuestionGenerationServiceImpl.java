@@ -18,6 +18,7 @@ import com.n1etzsch3.novi.question.utils.QuestionPromptBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,19 +78,19 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         List<Object> allQuestions = new java.util.ArrayList<>();
         int quantity = request.getQuantity();
 
-        // 检查是否应该启用深度思考
-        boolean shouldEnableThinking = shouldEnableThinking(request.getEnableThinking());
-        log.info("Deep thinking enabled: {}", shouldEnableThinking);
+        // 检查是否应该启用深度思考 (需要检查指定的模型或活跃模型)
+        boolean shouldEnableThinking = shouldEnableThinking(request.getEnableThinking(), request.getModel());
+        log.info("Deep thinking enabled: {}, model: {}", shouldEnableThinking, request.getModel());
 
         // 创建单题请求对象 (用于构建提示词)
-        QuestionGenerationRequest singleRequest = new QuestionGenerationRequest(
-                request.getSubject(),
-                request.getQuestionType(),
-                request.getTheme(),
-                request.getDifficulty(),
-                1, // 强制每次只生成1道
-                shouldEnableThinking // 传递深度思考配置
-        );
+        QuestionGenerationRequest singleRequest = new QuestionGenerationRequest();
+        singleRequest.setSubject(request.getSubject());
+        singleRequest.setQuestionType(request.getQuestionType());
+        singleRequest.setTheme(request.getTheme());
+        singleRequest.setDifficulty(request.getDifficulty());
+        singleRequest.setQuantity(1); // 强制每次只生成1道
+        singleRequest.setEnableThinking(shouldEnableThinking);
+        singleRequest.setModel(request.getModel());
 
         for (int i = 0; i < quantity; i++) {
             try {
@@ -97,8 +98,8 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
                 String promptText = questionPromptBuilder.buildPrompt(singleRequest, examples);
                 log.info("Generating question {}/{}. Prompt: {}", i + 1, quantity, promptText);
 
-                // 调用AI (带重试，传递深度思考配置)
-                String jsonContent = callAiWithRetry(promptText, shouldEnableThinking);
+                // 调用AI (带重试，传递深度思考配置和模型名)
+                String jsonContent = callAiWithRetry(promptText, shouldEnableThinking, request.getModel());
 
                 // 解析并添加到总列表
                 // AI返回的是一个数组，我们需要把里面的元素取出来放进总列表
@@ -147,34 +148,55 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         questionGenerationRecordMapper.insert(record);
         log.info("Saved question generation record with ID: {}", record.getId());
 
+        log.info("Returning response with metadata - Subject: {}, Type: {}, Theme: {}, Questions Length: {}",
+                record.getSubject(), record.getQuestionType(), record.getTheme(), finalJson.length());
+
         // 5. 返回结果
-        return new QuestionGenerationResponse(record.getId(), finalJson);
+        return new QuestionGenerationResponse(
+                record.getId(),
+                finalJson,
+                record.getSubject(),
+                record.getQuestionType(),
+                record.getTheme(),
+                record.getDifficulty(),
+                record.getQuantity());
     }
 
     /**
      * 检查是否应该启用深度思考
      * <p>
-     * 只有当用户请求启用深度思考，且当前激活的模型支持深度思考时，才返回true
+     * 只有当用户请求启用深度思考，且指定的模型（或活跃模型）支持深度思考时，才返回true
      * </p>
      *
      * @param requestEnableThinking 用户请求是否启用深度思考
+     * @param modelName             用户指定的模型名称（可为空，为空时使用活跃模型）
      * @return 是否应该启用深度思考
      */
-    private boolean shouldEnableThinking(Boolean requestEnableThinking) {
+    private boolean shouldEnableThinking(Boolean requestEnableThinking, String modelName) {
         // 如果用户没有请求启用深度思考，直接返回false
         if (requestEnableThinking == null || !requestEnableThinking) {
             return false;
         }
 
-        // 检查当前激活的模型是否支持深度思考
-        AiModelConfig activeModel = aiModelConfigService.getActiveModel();
-        if (activeModel == null || !Boolean.TRUE.equals(activeModel.getEnableThinking())) {
-            log.warn("Deep thinking requested but current model '{}' does not support it. Falling back to normal mode.",
-                    activeModel != null ? activeModel.getModelName() : "None");
+        // 获取要使用的模型配置
+        AiModelConfig targetModel;
+        if (modelName != null && !modelName.isBlank()) {
+            targetModel = aiModelConfigService.getModelByName(modelName);
+            if (targetModel == null) {
+                log.warn("Specified model '{}' not found, falling back to active model", modelName);
+                targetModel = aiModelConfigService.getActiveModel();
+            }
+        } else {
+            targetModel = aiModelConfigService.getActiveModel();
+        }
+
+        if (targetModel == null || !Boolean.TRUE.equals(targetModel.getEnableThinking())) {
+            log.warn("Deep thinking requested but model '{}' does not support it. Falling back to normal mode.",
+                    targetModel != null ? targetModel.getModelName() : "None");
             return false;
         }
 
-        log.info("Deep thinking enabled for model: {}", activeModel.getModelName());
+        log.info("Deep thinking enabled for model: {}", targetModel.getModelName());
         return true;
     }
 
@@ -183,16 +205,10 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
      *
      * @param promptText     提示词文本
      * @param enableThinking 是否启用深度思考
+     * @param modelName      指定的模型名称（可为空）
      * @return AI生成的JSON内容
      */
-    /**
-     * 调用AI并带有重试机制
-     *
-     * @param promptText     提示词文本
-     * @param enableThinking 是否启用深度思考
-     * @return AI生成的JSON内容
-     */
-    private String callAiWithRetry(String promptText, boolean enableThinking) {
+    private String callAiWithRetry(String promptText, boolean enableThinking, String modelName) {
         int maxRetries = 1;
         int attempt = 0;
         Exception lastException = null;
@@ -200,7 +216,10 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
         while (attempt <= maxRetries) {
             try {
                 attempt++;
-                org.springframework.ai.chat.model.ChatModel chatModel = dynamicChatModelFactory.createChatModel();
+                // 使用指定的模型或活跃模型
+                org.springframework.ai.chat.model.ChatModel chatModel = (modelName != null && !modelName.isBlank())
+                        ? dynamicChatModelFactory.createChatModel(modelName)
+                        : dynamicChatModelFactory.createChatModel();
 
                 // 构建 Prompt 和 Options
                 Prompt prompt;
@@ -256,12 +275,20 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
 
                 } else {
                     if (enableThinking) {
-                        log.warn(
-                                "Deep thinking requested but model is not DashScopeChatModel. Falling back to standard call.");
+                        log.info("Deep thinking enabled using OpenAiCompatibleChatModel.");
                     }
                     // 普通模式，可以使用 call 或 stream
                     prompt = new org.springframework.ai.chat.prompt.Prompt(promptText);
                     ChatResponse response = chatModel.call(prompt);
+
+                    // Log thinking content if available
+                    if (enableThinking && response.getResults() != null && !response.getResults().isEmpty()) {
+                        Generation gen = response.getResults().get(0);
+                        if (gen.getMetadata() != null && gen.getMetadata().containsKey("reasoning_content")) {
+                            log.debug("Thinking (Generic): {}", (Object) gen.getMetadata().get("reasoning_content"));
+                        }
+                    }
+
                     String rawContent = response.getResults().get(0).getOutput().getText();
                     log.info("AI Raw Content Length: {}", rawContent != null ? rawContent.length() : 0);
 
@@ -309,7 +336,14 @@ public class QuestionGenerationServiceImpl implements QuestionGenerationService 
             throw new IllegalArgumentException("记录不存在或无权访问");
         }
 
-        return new QuestionGenerationResponse(record.getId(), record.getGeneratedQuestions());
+        return new QuestionGenerationResponse(
+                record.getId(),
+                record.getGeneratedQuestions(),
+                record.getSubject(),
+                record.getQuestionType(),
+                record.getTheme(),
+                record.getDifficulty(),
+                record.getQuantity());
     }
 
     @Override
