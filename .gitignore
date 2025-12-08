@@ -37,4 +37,9 @@ build/
 logs/
 *.log
 
+### Mac OS ###
 .DS_Store
+
+### Tests ###
+src/test/
+**/src/test/

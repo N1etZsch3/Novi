@@ -459,6 +459,51 @@ Response:
 }
 ```
 
+## 9️⃣ 套卷生成 API
+
+**Base Path**: `/api/v1/papers`
+
+| 方法   | 路径        | 功能           |
+| ------ | ----------- | -------------- |
+| POST   | `/generate` | 生成套卷 (SSE) |
+| GET    | `/history`  | 获取历史记录   |
+| GET    | `/{paperId}`| 获取套卷详情   |
+| DELETE | `/{paperId}`| 删除套卷       |
+
+### 9.1 生成套卷
+
+```http
+POST /api/v1/papers/generate
+Authorization: Bearer <token>
+Content-Type: application/json
+Accept: text/event-stream
+
+{
+  "subjectId": 1,
+  "paperName": "英语模拟卷一",
+  "enableThinking": true
+}
+
+Response (SSE Events):
+event: question
+data: {...}
+event: complete
+data: {"status": "SUCCESS"}
+```
+
+### 9.2 获取套卷列表
+
+```http
+GET /api/v1/papers/history
+Authorization: Bearer <token>
+
+Response:
+{
+  "code": 200,
+  "data": [...]
+}
+```
+
 ## 🔍 错误码说明
 
 | 错误码 | 说明              |

@@ -15,6 +15,7 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 - **鉴权安全**: Spring Security + JWT (Json Web Token)
 - **JSON 处理**: Jackson
 - **构建工具**: Maven
+- **前端框架**：Vue 3 + Vite + Bootstrap 5 (novi-vue-app)
 
 ---
 
@@ -42,35 +43,62 @@ Novi 是一个基于 **Spring Boot 3** 和 **Spring AI** 构建的智能对话�
 - **历史回溯**：随时加载查看任意会话的完整历史记录。
 - **软删除**：支持逻辑删除会话，保障数据安全。
 
+### 4. 🧠 AI 智能出题 (AI Question Generation)
+- **多维度定制**：支持选择科目、题型、难度、数量和主题。
+- **深度思考模式**：启用后 AI 将进行更深层次的推理，生成高质量题目。
+- **套卷生成**：支持生成包含多种题型的完整试卷 (`Paper Generation`)。
+- **历史记录**：自动保存生成的题目和套卷，方便随时回看。
+
 ---
 
 ## 🚀 快速开始 (Quick Start)
 
 ### 1. 环境准备
-- JDK 21+ (推荐 JDK 21)
-- MySQL 8.0+
-- Maven 3.8+
+- **Java**: JDK 21+
+- **Database**: MySQL 8.0+
+- **Node.js**: v18+ (用于前端)
+- **Python**: 3.x (用于初始化脚本)
 
-### 2. 数据库配置
-请在 MySQL 中创建一个名为 `novi` 的数据库，并依次执行 `src/main/resources/static/` 下的 SQL 脚本：
-1. `user_account.sql` (用户表)
-2. `chat_session.sql` (会话元数据表)
-3. `chat_message.sql` (消息内容表)
-4. `user_memory.sql` (用户画像/事实记忆表)
+### 2. 项目初始化
+我们提供了一键初始化脚本，用于配置数据库连接、执行 SQL 迁移、配置 AI 模型并生成 `.env` 文件。
 
-### 3. 配置文件
-设置环境变量：
-
-```env
-SPRING_DATASOURCE_URL=""
-SPRING_DATASOURCE_USERNAME=""
-SPRING_DATASOURCE_PASSWORD=""
-JWT_SECRET_KEY=""
+**Mac / Linux**:
+```bash
+# 添加执行权限 (仅需一次)
+chmod +x script/setup.sh
+# 运行
+./script/setup.sh
 ```
 
-### 4. 启动项目
+**Windows**:
+```bat
+script\setup.bat
+```
 
-运行 `NoviApplication.java` 的 `main` 方法。 服务默认启动在端口: `8080`。
+> 脚本运行过程中会提示您输入 MySQL 连接信息以及 AI 模型配置（BaseURL, API Key 等）。
+
+### 3. 启动后端 (Backend)
+后端服务运行在 `8080` 端口。请确保 `.env` 文件已成功生成。
+
+**使用 Maven**:
+```bash
+# 在项目根目录执行
+mvn clean spring-boot:run -pl novi-web
+```
+
+**或者使用 IDE**:
+打开 `novi-web/src/main/java/com/n1etzsch3/novi/web/NoviApplication.java` 并运行 `main` 方法。
+
+### 4. 启动前端 (Frontend)
+前端页面默认运行在 `5173` 端口。
+
+```bash
+cd novi-vue-app
+npm install  # 安装依赖 (仅需一次)
+npm run dev  # 启动开发服务器
+```
+
+启动成功后，访问: [http://localhost:5173](http://localhost:5173)
 
 ## 📂 目录结构
 
@@ -81,5 +109,6 @@ Novi (Root)
 ├── novi-chat        # 聊天模块：聊天 Service, Mapper, Repository (ChatMemory), DTO
 ├── novi-question    # 出题模块：AI出题 Service, Mapper, DTO
 ├── novi-ai-config   # AI配置模块：模型与提示词配置 Service, Mapper, Factory, DTO
-└── novi-web         # Web模块：启动类, 控制器(Controller), 全局配置(Config), 资源文件(Resources)
+├── novi-web         # Web模块：启动类, 控制器(Controller), 全局配置(Config), 资源文件(Resources)
+└── novi-vue-app     # 前端模块：基于 Vue 3 + Vite 构建的现代化 Web 客户端
 ```
