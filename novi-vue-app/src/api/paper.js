@@ -21,6 +21,14 @@ export function deletePaper(id) {
     })
 }
 
+export function deletePapers(ids) {
+    return request({
+        url: '/v1/papers',
+        method: 'delete',
+        data: ids
+    })
+}
+
 /**
  * SSE Stream Generation
  * @param {Object} data Request payload

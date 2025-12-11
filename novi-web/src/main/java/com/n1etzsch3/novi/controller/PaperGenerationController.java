@@ -115,4 +115,18 @@ public class PaperGenerationController {
         paperGenerationService.deletePaper(paperId, userId);
         return Result.success(null);
     }
+
+    /**
+     * 批量删除套卷记录
+     *
+     * @param paperIds 套卷ID列表
+     * @return 成功提示
+     */
+    @DeleteMapping
+    public Result<Void> deletePapers(@RequestBody List<Long> paperIds) {
+        Long userId = LoginUserContext.getUserId();
+        log.info("Batch deleting papers for user: {}, count: {}", userId, paperIds.size());
+        paperGenerationService.deletePapers(paperIds, userId);
+        return Result.success(null);
+    }
 }

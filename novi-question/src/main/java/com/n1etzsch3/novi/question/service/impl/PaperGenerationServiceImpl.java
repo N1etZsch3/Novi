@@ -467,4 +467,20 @@ public class PaperGenerationServiceImpl implements PaperGenerationService {
         paperGenerationRecordMapper.deleteById(paperId);
         log.info("Deleted paper with ID: {}", paperId);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deletePapers(List<Long> paperIds, Long userId) {
+        if (paperIds == null || paperIds.isEmpty()) {
+            return;
+        }
+
+        // 批量删除，确保只能删除自己的数据
+        paperGenerationRecordMapper.delete(
+                new LambdaQueryWrapper<PaperGenerationRecord>()
+                        .in(PaperGenerationRecord::getId, paperIds)
+                        .eq(PaperGenerationRecord::getUserId, userId));
+
+        log.info("Deleted papers for user: {}, count: {}", userId, paperIds.size());
+    }
 }

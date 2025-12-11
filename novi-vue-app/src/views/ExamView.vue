@@ -4,7 +4,7 @@
     <Sidebar current-mode="exam" :collapsed="isSidebarCollapsed" :mobile-open="isSidebarOpen"
       @toggle-sidebar="toggleSidebar" @switch-mode="switchMode">
       <ExamHistoryList ref="historyListRef" :history="history" :selected-id="currentRecordId" @select="loadRecord"
-        @delete="deleteRecord" @batch-delete="deleteBatchRecords" />
+        :collapsed="isSidebarCollapsed" @delete="deleteRecord" @batch-delete="deleteBatchRecords" @new-question="resetPaper" />
     </Sidebar>
 
     <!-- Mobile Overlay -->

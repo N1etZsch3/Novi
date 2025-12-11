@@ -51,4 +51,12 @@ public interface PaperGenerationService {
      * @param userId  用户ID
      */
     void deletePaper(Long paperId, Long userId);
+
+    /**
+     * 批量删除套卷记录
+     *
+     * @param paperIds 套卷ID列表
+     * @param userId   用户ID
+     */
+    void deletePapers(List<Long> paperIds, Long userId);
 }

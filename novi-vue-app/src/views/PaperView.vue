@@ -4,7 +4,7 @@
     <Sidebar current-mode="paper" :collapsed="isSidebarCollapsed" :mobile-open="isSidebarOpen"
       @toggle-sidebar="toggleSidebar" @switch-mode="switchMode">
       <PaperHistoryList ref="historyListRef" :history="history" :selected-id="currentRecordId" @select="loadRecord"
-        @delete="deleteRecord" />
+        :collapsed="isSidebarCollapsed" @delete="deleteRecord" @batch-delete="deleteBatchRecords" @new-paper="resetPaper" />
     </Sidebar>
 
     <!-- Mobile Overlay -->
@@ -56,22 +56,32 @@
         />
       </div>
     </main>
+
+    <!-- Confirm Modal -->
+    <ConfirmModal
+      v-model="showConfirmModal"
+      :title="confirmTitle"
+      :message="confirmMessage"
+      :type="confirmType"
+      @confirm="handleConfirmAction"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
 import { useThemeStore } from '@/stores/theme'
 import { useRouter } from 'vue-router'
 import Sidebar from '@/components/common/Sidebar.vue'
 import PaperHistoryList from '@/components/paper/PaperHistoryList.vue'
 import PaperConfigPanel from '@/components/paper/PaperConfigPanel.vue'
 import PaperPreviewPanel from '@/components/paper/PaperPreviewPanel.vue'
+import ConfirmModal from '@/components/common/ConfirmModal.vue'
 
 import { getSubjects } from '@/api/exam'
 import { getModelList, switchModel as switchModelApi } from '@/api/model'
 import { getProfile } from '@/api/auth'
-import { getPaperHistory, getPaperDetail, deletePaper, generatePaperStream } from '@/api/paper'
+import { getPaperHistory, getPaperDetail, deletePaper, deletePapers, generatePaperStream } from '@/api/paper'
 import { useUserStore } from '@/stores/user'
 import { useToast } from '@/composables/useToast'
 
@@ -103,6 +113,13 @@ const config = ref({
 })
 
 const historyListRef = ref(null)
+
+// Modal State
+const showConfirmModal = ref(false)
+const confirmTitle = ref('')
+const confirmMessage = ref('')
+const confirmType = ref('primary')
+let pendingConfirmAction = null
 
 // Init
 onMounted(async () => {
@@ -227,14 +244,49 @@ async function loadRecord(id) {
     } catch (e) { error('加载记录失败') }
 }
 
+function openConfirmModal(title, message, type = 'primary', action) {
+    confirmTitle.value = title
+    confirmMessage.value = message
+    confirmType.value = type
+    pendingConfirmAction = action
+    showConfirmModal.value = true
+}
+
+function handleConfirmAction() {
+    const action = pendingConfirmAction
+    pendingConfirmAction = null
+    // Defer action execution to next tick to avoid recursive updates
+    if (action) {
+        nextTick(() => {
+            action()
+        })
+    }
+}
+
 async function deleteRecord(id) {
-    if(!confirm('确认删除？')) return
-    try {
-        await deletePaper(id)
-        success('删除成功')
-        if (currentRecordId.value === id) resetPaper()
-        await loadHistory()
-    } catch (e) { error('删除失败') }
+    openConfirmModal('删除记录', '确认删除这条套卷记录吗？此操作无法撤销。', 'danger', async () => {
+        try {
+            await deletePaper(id)
+            success('删除成功')
+            if (currentRecordId.value === id) resetPaper()
+            await loadHistory()
+        } catch (e) { error('删除失败') }
+    })
+}
+
+async function deleteBatchRecords(ids) {
+    openConfirmModal('批量删除', `确认删除这 ${ids.length} 条记录吗？`, 'danger', async () => {
+        try {
+            await deletePapers(ids)
+            success(`成功删除 ${ids.length} 条记录`)
+            if (ids.includes(currentRecordId.value)) {
+                resetPaper()
+            }
+            await loadHistory()
+            // Reset edit mode
+            if (historyListRef.value) historyListRef.value.resetEditMode()
+        } catch (e) { error('批量删除失败') }
+    })
 }
 
 function resetPaper() {

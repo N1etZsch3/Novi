@@ -1,8 +1,21 @@
 <template>
   <div class="d-flex flex-column flex-grow-1 overflow-hidden" style="min-height: 0; position: relative;">
+    <!-- New Question Button -->
+    <div class="px-3 mb-3 mt-2 flex-shrink-0">
+      <button
+        class="btn btn-primary w-100 rounded-pill py-2 shadow-sm btn-new-chat d-flex align-items-center justify-content-center"
+        @click="$emit('new-question')"
+        :title="collapsed ? '新试题' : ''"
+      >
+        <i class="bi bi-plus-lg" :class="{ 'me-2': !collapsed }"></i>
+        <span v-if="!collapsed" class="text-label">新试题</span>
+      </button>
+    </div>
+
+    <div class="d-flex flex-column flex-grow-1 overflow-hidden history-list-content" :class="{ 'collapsed': collapsed }">
     <!-- Header Actions -->
     <div
-      class="px-3 mb-2 mt-2 small text-muted text-label fw-bold flex-shrink-0 d-flex justify-content-between align-items-center"
+      class="px-3 mb-2 small text-muted text-label fw-bold flex-shrink-0 d-flex justify-content-between align-items-center"
       style="min-height: 32px;">
       <span id="historyHeaderTitle">生成历史</span>
 
@@ -59,6 +72,7 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
@@ -69,10 +83,14 @@ const props = defineProps({
   history: {
     type: Array,
     default: () => []
+  },
+  collapsed: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emit = defineEmits(['select', 'delete', 'batch-delete'])
+const emit = defineEmits(['select', 'delete', 'batch-delete', 'new-question'])
 
 const isEditMode = ref(false)
 const selectedIds = ref([])
@@ -159,5 +177,34 @@ defineExpose({
 .session-item.item-selected {
     background-color: rgba(78, 110, 242, 0.15) !important;
     border-color: rgba(78, 110, 242, 0.3) !important;
+}
+
+.history-list-content {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
+              visibility 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+}
+
+.history-list-content.collapsed {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s, visibility 0.1s;
+  pointer-events: none;
+}
+
+.history-delete-btn {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.session-item:hover .history-delete-btn {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .history-delete-btn {
+        opacity: 1;
+    }
 }
 </style>
